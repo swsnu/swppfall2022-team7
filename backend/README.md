@@ -1,6 +1,6 @@
 # SPRINT backend
 
-## How to implement
+## How to run backend
 
 Before type below, you need to add .env file to backend directory.
 <pre><code>> pwd
