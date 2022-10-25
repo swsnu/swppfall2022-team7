@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # for environ setting
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(
-    env_file=os.path.join(BASE_DIR, '.env')
+    env_file=os.path.join(BASE_DIR, '..', '.env')
 )
 
 # Quick-start development settings - unsuitable for production

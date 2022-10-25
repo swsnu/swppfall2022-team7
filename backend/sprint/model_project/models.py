@@ -24,7 +24,7 @@ class Task(models.Model):
     content = models.TextField()
     assignee = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     until_at = models.DateTimeField()
     
 class Comment(models.Model):
