@@ -7,6 +7,7 @@ Before type below, you need to add .env file to backend directory.
 (swppfall2022-team7)/backend
 > pip install -r requirements.txt
 > cd sprint
+> python manage.py migrate
 > python manage.py runserver</code></pre>
 
 ## Test
