@@ -103,9 +103,9 @@ unsafe-load-any-extension=no
 #verbose=
 
 disable=
-      C0114,
-      C0115,
-      C0116,
+      C0114, # Module docstring
+      C0115, # Class docstring
+      C0116, # Function docstring
       W0611,
       W0511, 
       W0613, # Unused arguments
