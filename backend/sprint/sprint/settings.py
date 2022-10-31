@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'api_reaction',
     'api_task',
     'api_user',
-    'api_user_detail',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -30,9 +30,45 @@ def change(request):
     # TODO
     return HttpResponse(status=200)
 
-def info(request):
+def info(request, user_id:int):
     '''
     [GET] Get User info
+    '''
+    # TODO
+    return HttpResponse(status=200)
+
+def timetable(request, user_id:int):
+    '''
+    [GET] Get timetable of the user
+    [POST] Create new timetable for the user
+    [PUT] Change timetable of the user
+    '''
+    # TODO
+    return HttpResponse(status=200)
+
+def noti(request, user_id:int):
+    '''
+    [GET] Get notification of the user
+    [POST] Create notification for the user
+    '''
+    # TODO
+    return HttpResponse(status=200)
+
+def noti_detail(request, noti_id:int):
+    '''
+    [GET] Get the detail of the noti
+    [PUT] Change status of the noti
+    [DELETE] Delete the notification
+    '''
+    # TODO
+    return HttpResponse(status=200)
+
+def image(request, user_id:int):
+    '''
+    [GET] Get the image of the user
+    [POST] Set User image
+    [PUT] Change User image
+    [DELETE] Delete User image
     '''
     # TODO
     return HttpResponse(status=200)
