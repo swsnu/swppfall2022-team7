@@ -55,5 +55,10 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.10",
     "ts-jest": "^29.0.3"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "!src/index.tsx"
+    ]
   }
 }
