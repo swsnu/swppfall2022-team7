@@ -106,8 +106,9 @@ disable=
       C0114,
       C0115,
       W0611,
-      W0511,
-      W0613,
+      W0511, 
+      W0613, # Unused arguments
+      R0801, # Duplicate lines 
 
 [BASIC]
 
