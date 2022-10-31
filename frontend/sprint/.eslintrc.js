@@ -22,7 +22,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/semi": [2, "always"],
     "@typescript-eslint/triple-slash-reference": "off",
-    
+    "react/react-in-jsx-scope": "off"
   },
   settings: {
     react: {

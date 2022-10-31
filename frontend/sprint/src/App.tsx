@@ -1,26 +1,10 @@
-import React, { ReactElement } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import '@scss/Root.scss';
+import { routes } from '@routes/routerconfig';
+import { useRoutes } from 'react-router-dom';
+import { ReactElement } from 'react';
 
-function App (): ReactElement {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: () => ReactElement | null = () => {
+  return useRoutes(routes);
+};
 
 export default App;
