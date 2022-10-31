@@ -105,6 +105,7 @@ unsafe-load-any-extension=no
 disable=
       C0114,
       C0115,
+      C0116,
       W0611,
       W0511, 
       W0613, # Unused arguments
