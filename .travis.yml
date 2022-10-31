@@ -17,7 +17,7 @@ jobs:
     - pip install -r requirements.txt
     script:
     - cd sprint
-    - pylint **/*.py --load-plugins pylint-django
+    - pylint **/*.py --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
     - cd ../.. && sonar-scanner

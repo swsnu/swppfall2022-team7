@@ -77,7 +77,9 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint-django
+init-hook="import sys; import os; from pylint.config import find_pylintrc; sys.path.append(os.path.dirname(find_pylintrc()))"
+load-plugins=pylint_django
+django-settings-module=sprint.settings
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -100,6 +102,10 @@ unsafe-load-any-extension=no
 # In verbose mode, extra non-checker-related info will be displayed.
 #verbose=
 
+disable=
+      C0114,
+      C0115,
+      W0611,
 
 [BASIC]
 
