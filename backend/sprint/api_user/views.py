@@ -1,6 +1,8 @@
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
+@require_http_methods(['POST'])
 def signup(request):
     '''
     [POST] User sign up
@@ -8,6 +10,7 @@ def signup(request):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['POST'])
 def signin(request):
     '''
     [POST] User log in
@@ -15,6 +18,7 @@ def signin(request):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET'])
 def signout(request):
     '''
     [GET] User log out
@@ -22,6 +26,7 @@ def signout(request):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['PUT', 'DELETE'])
 def change(request):
     '''
     [PUT] Change User setting
@@ -30,6 +35,7 @@ def change(request):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET'])
 def info(request, user_id:int):
     '''
     [GET] Get User info
@@ -37,6 +43,7 @@ def info(request, user_id:int):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET', 'POST', 'PUT'])
 def timetable(request, user_id:int):
     '''
     [GET] Get timetable of the user
@@ -46,6 +53,7 @@ def timetable(request, user_id:int):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET', 'POST'])
 def noti(request, user_id:int):
     '''
     [GET] Get notification of the user
@@ -54,6 +62,7 @@ def noti(request, user_id:int):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET', 'PUT', 'DELETE'])
 def noti_detail(request, noti_id:int):
     '''
     [GET] Get the detail of the noti
@@ -63,6 +72,7 @@ def noti_detail(request, noti_id:int):
     # TODO
     return HttpResponse(status=200)
 
+@require_http_methods(['GET', 'POST', 'PUT', 'DELETE'])
 def image(request, user_id:int):
     '''
     [GET] Get the image of the user
