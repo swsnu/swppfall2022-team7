@@ -3,6 +3,10 @@ jobs:
   include:
   - language: python
     python: 3.9.6
+    branches:
+      only:
+        - main
+        - /dev-backend.*/
     addons:
       sonarcloud:
         organization: swsnu
@@ -23,6 +27,10 @@ jobs:
     - cd .. && sonar-scanner
   - language: node_js
     node_js: 14
+    branches:
+      only:
+        - main
+        - /dev-frontend.*/
     addons:
       sonarcloud:
         organization: swsnu
