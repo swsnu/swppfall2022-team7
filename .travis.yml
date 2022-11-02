@@ -1,12 +1,10 @@
 dist: bionic
 jobs:
   include:
-  - language: python
+  - name: backend test
+    if: branch = main OR branch =~ /^dev-backend.*$/
+    language: python
     python: 3.9.6
-    branches:
-      only:
-        - main
-        - /dev-backend.*/
     addons:
       sonarcloud:
         organization: swsnu
@@ -25,7 +23,9 @@ jobs:
     - coverage run --source='.' manage.py test
     - coverage xml
     - cd .. && sonar-scanner
-  - language: node_js
+  - name: frontend test
+    if: branch = main OR branch = /^dev-frontend.*$/
+    language: node_js
     node_js: 14
     branches:
       only:
