@@ -20,7 +20,7 @@ jobs:
     - pylint **/*.py --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
-    - cd ../.. && sonar-scanner
+    - sonar-scanner
   - language: node_js
     node_js: 14
     addons:
@@ -35,5 +35,5 @@ jobs:
     script:
     - ./node_modules/.bin/eslint src
     - yarn test --coverage --watchAll=false
-    - cd ../.. && sonar-scanner
+    - sonar-scanner
 
