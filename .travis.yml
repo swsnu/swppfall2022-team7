@@ -1,7 +1,9 @@
 dist: bionic
 jobs:
   include:
-  - language: python
+  - name: backend test
+    if: branch = main OR branch =~ /^dev-backend.*$/
+    language: python
     python: 3.9.6
     addons:
       sonarcloud:
@@ -20,9 +22,15 @@ jobs:
     - pylint **/*.py --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
-    - cd ../.. && sonar-scanner
-  - language: node_js
+    - cd .. && sonar-scanner
+  - name: frontend test
+    if: branch = main OR branch = /^dev-frontend.*$/
+    language: node_js
     node_js: 14
+    branches:
+      only:
+        - main
+        - /dev-frontend.*/
     addons:
       sonarcloud:
         organization: swsnu
@@ -35,5 +43,5 @@ jobs:
     script:
     - ./node_modules/.bin/eslint src
     - yarn test --coverage --watchAll=false
-    - cd ../.. && sonar-scanner
+    - cd .. && sonar-scanner
 
