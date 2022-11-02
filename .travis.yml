@@ -43,10 +43,8 @@ jobs:
   - name: main branch test
     if: branch = main
     language: python
-    python: 
-    - "3.9.6"
-    node_js: 
-    - "14"
+    python: "3.9.6"
+    node_js: 14
     addons:
       sonarcloud:
         organization: swsnu
@@ -61,17 +59,22 @@ jobs:
     install:
     - cd backend
     - pip install -r requirements.txt
+    - pip install coveralls
     - cd ../frontend/sprint
     - yarn install
+    - yarn global add coveralls
+    - gem install coveralls-lcov
     - cd ../..
     script:
+    - cd frontend/sprint
+    - ./node_modules/.bin/eslint src
+    - yarn test --coverage --watchAll=false
+    - coveralls-lcov -v -n coverage/lcov.info > ../coverage.json
+    - cd ../..
     - cd backend/sprint
     - pylint **/*.py --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
-    - cd ../..
-    - cd frontend/sprint
-    - ./node_modules/.bin/eslint src
-    - yarn test --coverage --watchAll=false
+    - coveralls --merge=../../frontend/coverage.json
     - cd ../..
     - sonar-scanner
