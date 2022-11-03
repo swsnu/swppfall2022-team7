@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 class Project(models.Model):
     name = models.CharField(max_length=100)
     subject = models.CharField(max_length=100)
+    manager = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class UserProject(models.Model):
@@ -22,7 +23,7 @@ class Task(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     content = models.TextField()
-    assignee = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    assignee = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     until_at = models.DateTimeField()

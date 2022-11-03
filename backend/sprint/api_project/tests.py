@@ -13,7 +13,7 @@ class ProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_m_project(self):
         client = Client()
@@ -33,7 +33,7 @@ class ProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_m_project_detail(self):
         client = Client()

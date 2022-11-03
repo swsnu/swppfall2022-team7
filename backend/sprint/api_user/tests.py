@@ -13,7 +13,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
 
     def test_signin(self):
         client = Client()
@@ -23,7 +23,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
 
     def test_signout(self):
         client = Client()
@@ -33,7 +33,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_change(self):
         client = Client()
