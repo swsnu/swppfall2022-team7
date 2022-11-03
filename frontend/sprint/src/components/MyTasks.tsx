@@ -1,5 +1,18 @@
 import { Badge, List, Tabs } from 'antd';
 
+const dummyTaskList = [
+  {
+    task: 'Play League of Legends',
+    project: 'Project 1',
+    status: 'current'
+  },
+  {
+    task: 'Play Overwatch 2',
+    project: 'Project 2',
+    status: 'current'
+  }
+];
+
 const MyTasks: React.FC = () => {
   return (
     <Tabs
@@ -13,8 +26,16 @@ const MyTasks: React.FC = () => {
           key: 'ongoing',
           children: (
             <List
-              dataSource={[1, 2, 3]}
-              renderItem={item => <List.Item>{item}</List.Item>}
+              dataSource={dummyTaskList}
+              renderItem={(item, i) => (
+                <List.Item key={i}>
+                  <List.Item.Meta
+                    title={item.task}
+                    description={item.project}
+                  />
+                  <div>{item.status}</div>
+                </List.Item>
+              )}
             />
           )
         },
