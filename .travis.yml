@@ -74,7 +74,7 @@ jobs:
     - coveralls --merge=../../frontend/coverage.json
     - cd ../..
     - sonar-scanner
-    - name: deploy branch test
+  - name: deploy branch test
     if: branch = deploy
     language: python
     python: "3.9.6"
