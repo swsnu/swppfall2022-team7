@@ -1,0 +1,26 @@
+.header{
+    background-color: white;
+    border-bottom: 1px solid #DDDDDD;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    justify-content: space-between;
+    .header-logo{
+        font-size: 20px;
+        font-weight: bold;
+        .logo-icon{
+            margin-right: 5px;
+            color: #1890ff;
+        }
+    }
+    .header-user-menu{
+        display: flex;
+        align-items: center;
+        .bell-icon{
+            font-size: 20px;
+        }
+        .avatar{
+            font-size: 20px;
+            margin-left: 30px;
+        }
+    }
+}

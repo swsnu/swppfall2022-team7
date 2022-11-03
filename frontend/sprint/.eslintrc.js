@@ -3,11 +3,11 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true,
+    jest: true
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript',
+    'standard-with-typescript'
   ],
   overrides: [
   ],
@@ -20,13 +20,14 @@ module.exports = {
     'react'
   ],
   rules: {
-    "@typescript-eslint/semi": [2, "always"],
-    "@typescript-eslint/triple-slash-reference": "off",
-    
+    semi: 'off',
+    '@typescript-eslint/semi': [2, 'always'],
+    '@typescript-eslint/triple-slash-reference': 'off',
+    'react/react-in-jsx-scope': 'off'
   },
   settings: {
     react: {
       version: 'detect'
     }
   }
-}
+};
