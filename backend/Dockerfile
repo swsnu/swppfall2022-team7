@@ -5,8 +5,6 @@ ENV TZ=Asia/Seoul
 
 EXPOSE 8000
 
-COPY .env ./
-
 RUN pip install --upgrade pip
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
