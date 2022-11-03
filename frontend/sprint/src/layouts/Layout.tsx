@@ -3,7 +3,7 @@ import Header from '@components/Header';
 
 const Layout: React.FC = () => {
   return (
-    <div>
+    <div className="layout">
       <Header />
       <Outlet />
     </div>

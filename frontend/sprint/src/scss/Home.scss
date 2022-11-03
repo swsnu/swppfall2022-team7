@@ -1,0 +1,14 @@
+.home{
+  display: flex;
+  flex: 1;
+  flex-flow: column;
+  padding: 0 50px;
+
+  .title-bar{
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px 0;
+  }
+}
