@@ -1,19 +1,48 @@
+import json
+
 from django.test import TestCase, Client
+from django.contrib.auth.models import User
 
 # Create your tests here.
 class UserTestCase(TestCase):
     def setUp(self):
         self.url = '/user/'
+        user1 = User.objects.create_user(
+            username = 'un1',
+            password = 'pw1',
+            email = 'email1@gmail.com'
+        )    
+        user2 = User.objects.create_user(
+            username = 'un2',
+            password = 'pw2',
+            email = 'email2@gmail.com'
+        ) 
 
     def test_signup(self):
         client = Client()
         url = self.url+'signup/'
         # Wrong Method Test
+        client.get(self.url+'token/')
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
         self.assertEqual(response.status_code, 400)
+        
+        response = client.post(url, data = json.dumps({
+            "username": "seokwoo",
+            "email": "poding84@snu.ac.kr",
+            "password": "1"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        
+        # Duplicate user
+        response = client.post(url, data = json.dumps({
+            "username": "seokwoo",
+            "email": "poding84@snu.ac.kr",
+            "password": "1"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 401)
 
     def test_signin(self):
         client = Client()
@@ -24,6 +53,20 @@ class UserTestCase(TestCase):
         # Right Test
         response = client.post(url)
         self.assertEqual(response.status_code, 400)
+        
+        response = client.post(url, data = json.dumps({
+            "email": "email1@gmail.com",
+            "password": "pw1"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+        
+        # Wrong password
+        response = client.post(url, data = json.dumps({
+            "email": "email1@gmail.com",
+            "password": "pw2"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+        
 
     def test_signout(self):
         client = Client()
@@ -34,7 +77,15 @@ class UserTestCase(TestCase):
         # Right Test
         response = client.get(url)
         self.assertEqual(response.status_code, 401)
-
+        
+        response = client.post(self.url+'signin/', data = json.dumps({
+            "email": "email1@gmail.com",
+            "password": "pw1"
+        }), content_type='application/json')
+        
+        response = client.get(url)
+        self.assertEqual(response.status_code, 204)
+        
     def test_change(self):
         client = Client()
         url = self.url+'change/'
