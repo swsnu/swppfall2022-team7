@@ -1,25 +1,29 @@
-import { EllipsisOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col } from 'antd';
-
-const { Meta } = Card;
+import { CopyOutlined } from '@ant-design/icons';
+import { Avatar, Col } from 'antd';
 
 const ProjectCard: React.FC = () => {
   return (
     <Col xs={24} sm={12} md={8} lg={6}>
-      <Card
-        className="project-card"
-        hoverable
-        actions={[
-          <StarOutlined key="star" />,
-          <EllipsisOutlined key="ellipsis" />
-        ]}
-      >
-        <Meta
-          title="Project 1"
-          description="Subject 1"
-          avatar={<Avatar>K</Avatar>}
-        />
-      </Card>
+      <div className="project-card">
+        <div className="project-name">
+          Project 1
+        </div>
+        <div className="last-edited">
+          Updated: 1 hour ago
+        </div>
+        <div className="info-tab">
+          <Avatar.Group>
+            <Avatar size="small" className="avatar" style={{ backgroundColor: '#06c' }}>K</Avatar>
+            <Avatar size="small" className="avatar" style={{ backgroundColor: 'orange' }}>S</Avatar>
+            <Avatar size="small" className="avatar" style={{ backgroundColor: 'green' }}>H</Avatar>
+            <Avatar size="small" className="avatar">+5</Avatar>
+          </Avatar.Group>
+          <div className="task-badge">
+            <CopyOutlined />
+            5
+          </div>
+        </div>
+      </div>
     </Col>
   );
 };
