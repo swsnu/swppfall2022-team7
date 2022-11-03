@@ -4,11 +4,18 @@
   flex-flow: column;
   padding: 0 50px;
 
-  .title-tab{
+  .project-title-tab{
     display: flex;
     justify-content: space-between;
     font-size: 22px;
     font-weight: bold;
     padding: 20px 0;
+  }
+  .task-title-tab{
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px 0 10px 0;
   }
 }
