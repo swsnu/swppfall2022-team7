@@ -36,4 +36,6 @@ Before type below, you need to add .env file to backend directory.
 
 ## Test
 
-go to http://localhost:8000
+<pre><code>> cd backend/sprint
+> chmod +x test.sh
+> ./test.sh</code></pre>
