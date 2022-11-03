@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'sprint.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sprint',
+        'USER': 'sprint',
+        'PASSWORD': 'sprint',
+        'HOST': '52.79.76.13',
+        'PORT': 3306,
     }
 }
 
