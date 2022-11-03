@@ -13,7 +13,6 @@ jobs:
     before_install:
     - cd backend
     - openssl aes-256-cbc -K $encrypted_5613be1f4963_key -iv $encrypted_5613be1f4963_iv -in .env.enc -out ../backend/.env -d
-    - tar xvf env.tar
     install:
     - pip install -r requirements.txt
     script:
@@ -52,7 +51,6 @@ jobs:
     before_install:
     - cd backend
     - openssl aes-256-cbc -K $encrypted_5613be1f4963_key -iv $encrypted_5613be1f4963_iv -in .env.enc -out ../backend/.env -d
-    - tar xvf env.tar
     - cd ..
     install:
     - cd backend
@@ -89,7 +87,6 @@ jobs:
     before_install:
     - cd backend
     - openssl aes-256-cbc -K $encrypted_5613be1f4963_key -iv $encrypted_5613be1f4963_iv -in .env.enc -out ../backend/.env -d
-    - tar xvf env.tar
     - cd ..
     install:
     - cd backend
