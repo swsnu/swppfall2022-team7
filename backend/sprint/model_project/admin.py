@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Project, UserProject, Meeting, Task, Comment, Reaction, Document, DocumentSpace, TaskDocumentSpace
+from .models import (
+    Project, UserProject, Meeting, Task, Comment,
+    Reaction, Document, DocumentSpace, TaskDocumentSpace
+)
 
 # Register your models here.
 
