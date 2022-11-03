@@ -1,0 +1,16 @@
+.auto-option{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  .avatar{
+    display: flex;
+    align-items: center;
+    .profile-image{
+      margin-right: 8px;
+    }
+  }
+  .email{
+    color: #00000073;
+  }
+}
