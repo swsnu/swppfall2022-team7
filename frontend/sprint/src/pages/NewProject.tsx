@@ -1,6 +1,6 @@
 const NewProject: React.FC = () => {
   return (
-    <div>
+    <div className="new-project">
       New Project
     </div>
   );

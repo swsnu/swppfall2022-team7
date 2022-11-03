@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 const Home: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <div className='home'>
-      <div className='project-title-tab'>
+    <div className="home">
+      <div className="project-title-tab">
         Projects
-        <Button type='primary' onClick={() => navigate('new-project')}>
+        <Button type="primary" onClick={() => navigate('new-project')}>
           New Project
         </Button>
       </div>
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         <ProjectCard />
         <ProjectCard />
       </Row>
-      <div className='task-title-tab'>
+      <div className="task-title-tab">
         My Tasks
       </div>
       <MyTasks />
