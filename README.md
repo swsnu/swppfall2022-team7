@@ -36,6 +36,8 @@ Before type below, you need to add .env file to backend directory.
 
 ## Test
 
+* test.sh : pylint & coverage test
+
 <pre><code>> cd backend/sprint
 > chmod +x test.sh
 > ./test.sh</code></pre>
