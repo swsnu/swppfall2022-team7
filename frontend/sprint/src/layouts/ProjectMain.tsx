@@ -1,7 +1,7 @@
 import { AppstoreOutlined, AuditOutlined, CalendarOutlined, HomeOutlined, PieChartOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
-import ProjectIntro from '@components/ProjectIntro';
 import { Menu, MenuProps } from 'antd';
 import React, { useState } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -36,29 +36,36 @@ const items: MenuProps['items'] = [
 
 const ProjectMain: React.FC = () => {
   const [menuSelected, setMenuSelected] = useState('1');
+  const navigate = useNavigate();
+  const { projectId } = useParams();
 
   const onClick: MenuProps['onClick'] = e => {
     setMenuSelected(e.key);
+    if (projectId === undefined) return;
+    if (e.key === '1') navigate(`/projects/${projectId}`);
+    else if (e.key === '3') navigate(`/projects/${projectId}/tasks/1`);
+    else navigate(`/projects/${projectId}`);
   };
 
   return (
     <div className="project-main">
-      <Menu
-        onClick={onClick}
-        style={{ width: 256, height: '100%' }}
-        defaultSelectedKeys={['1']}
-        mode="inline"
-        items={items}
-        className="project-main-menu"
-        selectedKeys={[menuSelected]}
-      />
-      <div className="project-main-right">
-        {
-          {
-            1: <ProjectIntro />
-          }[menuSelected]
-        }
+      <div className="project-main-left">
+        <div className="project-intro">
+          <div className="project-name">Summary of <br></br>Thousands Brains</div>
+          <div className="project-subject">Scientific Tech and Writing</div>
+        </div>
+        <Menu
+          title='Header'
+          onClick={onClick}
+          style={{ width: 256, height: 'calc(100% - 100px)' }}
+          defaultSelectedKeys={['1']}
+          mode="inline"
+          items={items}
+          className="project-main-menu"
+          selectedKeys={[menuSelected]}
+        />
       </div>
+      <Outlet />
     </div>
   );
 };

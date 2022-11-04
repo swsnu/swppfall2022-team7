@@ -1,27 +1,23 @@
-.project-intro{
+.task-detail{
   display: flex;
   flex-direction: column;
   padding: 10px 0px 0px 13px;
   width: 100%;
-  .project-info{
+  .task-info{
     display: flex;
     color: #BBBBBB;
     font-size: 14px;
     font-weight: bold;
   }
-  .project-header{
+  .task-header{
     font-size: 32px;
     font-weight: bold;
     margin-top: 20px;
   }
-  .project-description{
+  .task-description{
     margin-top: 14px;
     font-size: 15px;
     font-weight: 500;
     color: #111111;
-  }
-  .member-container{
-    display: flex;
-    width: 100%;
   }
 }
