@@ -1,30 +1,47 @@
-from django.http import HttpResponse, JsonResponse
+import json
+
+from django.contrib.auth import logout, login
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+from utility.custom_decorator import (
+    return_bad_request_if_anonymous,
+    return_bad_request_if_exception
+)
+from .tools.account import create_user, get_user
 
 # Create your views here.
+
+#
 @require_http_methods(['POST'])
-def signup(request):
-    '''
-    [POST] User sign up
-    '''
-    # TODO
-    return HttpResponse(status=200)
+@return_bad_request_if_exception
+def signup(request: HttpRequest):
+    data=json.loads(request.body.decode())
+    user=create_user(data)
+    if user is not None :
+        return JsonResponse(status=200, data={
+            "id" : user.id,
+            "username" : user.username,
+            "email" : user.email
+        })
+    return HttpResponse(status=401)
 
 @require_http_methods(['POST'])
+@return_bad_request_if_exception
 def signin(request):
-    '''
-    [POST] User log in
-    '''
-    # TODO
-    return HttpResponse(status=200)
+    data=json.loads(request.body.decode())
+    user=get_user(data)
+    if user is not None:
+        login(request, user)
+        return HttpResponse(status=204)
+    return HttpResponse(status=401)
 
 @require_http_methods(['GET'])
+@return_bad_request_if_anonymous
 def signout(request):
-    '''
-    [GET] User log out
-    '''
-    # TODO
-    return HttpResponse(status=200)
+    logout(request)
+    return HttpResponse(status=204)
 
 @require_http_methods(['PUT', 'DELETE'])
 def change(request):
@@ -110,3 +127,8 @@ def m_image(request, user_id:int):
     '''
     # TODO
     return HttpResponse(status=200)
+
+@ensure_csrf_cookie
+@require_http_methods(['GET'])
+def token(request):
+    return HttpResponse(status=204)
