@@ -9,7 +9,7 @@ class ProjectTestCase(TestCase):
         self.url = '/project/'
         self.login_url = '/user/signin/'
 
-        user1 = get_user_model().objects.create_user(
+        self.user1 = get_user_model().objects.create_user(
             username = 'un1',
             password = 'pw1',
             email = 'email1@gmail.com'
@@ -20,21 +20,21 @@ class ProjectTestCase(TestCase):
             email = 'email2@gmail.com'
         )
 
-        project1 = Project.objects.create(
+        self.project1 = Project.objects.create(
             name="pn",
             subject="sj",
-            manager=user1
+            manager=self.user1
         )
 
         UserProject.objects.create(
-            user=user1,
-            project=project1
+            user=self.user1,
+            project=self.project1
         )
 
     def test_project(self):
         client = Client()
-        url = self.url+'1/'
-        url2 = self.url+'10/'
+        url = self.url+str(self.user1.pk)+'/'
+        url2 = self.url+'0/'
         # Wrong Method Test
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
@@ -66,8 +66,8 @@ class ProjectTestCase(TestCase):
 
     def test_project_detail(self):
         client = Client()
-        url = self.url+'detail/1/'
-        url2 = self.url+'detail/10/'
+        url = self.url+'detail/'+str(self.project1.pk)+'/'
+        url2 = self.url+'detail/0/'
         # Wrong Method Test
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
