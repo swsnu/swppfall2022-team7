@@ -39,13 +39,13 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
 
   const actions = [
     <Tooltip key="comment-basic-like" title="Like">
-      <span onClick={like}>
+      <span className="likeButton" onClick={like}>
         {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
         <span className="comment-action">{likes}</span>
       </span>
     </Tooltip>,
     <Tooltip key="comment-basic-dislike" title="Dislike">
-      <span onClick={dislike}>
+      <span className="dislikeButton" onClick={dislike}>
         {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
         <span className="comment-action">{dislikes}</span>
       </span>

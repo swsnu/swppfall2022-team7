@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import TaskDetail from './TaskDetail';
 
 const mockComment = jest.fn();
@@ -17,5 +17,32 @@ describe('task detail test', () => {
   });
   it('should render without error', () => {
     render(AD);
+  });
+  it('should handle save after edit', () => {
+    const { container } = render(AD);
+    const editButton = screen.getByText('Edit');
+    fireEvent.click(editButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: "asdf" }});
+    fireEvent.change(inputs[1], { target: { value: "asdf" }});
+    const saveButton = screen.getByText("Save");
+    fireEvent.click(saveButton);
+  });
+  it('should handel cancel after edit', () => {
+    const { container } = render(AD);
+    const editButton = screen.getByText('Edit');
+    fireEvent.click(editButton);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: "asdf" }});
+    fireEvent.change(inputs[1], { target: { value: "asdf" }});
+    const cancelButton = screen.getByText("Cancel");
+    fireEvent.click(cancelButton);
+  });
+  it('should handle like and dislike', () => {
+    const {container} = render(AD);
+    const likes = container.getElementsByClassName('likeButton');
+    fireEvent.click(likes[0]);
+    const dislikes = container.getElementsByClassName('dislikeButton');
+    fireEvent.click(dislikes[0]);
   })
 });
