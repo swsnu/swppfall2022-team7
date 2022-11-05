@@ -20,7 +20,7 @@ env:
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
 jobs:
-  SSH:
+  backend-test:
     runs-on: ubuntu-latest
 
     steps:

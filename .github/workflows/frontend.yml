@@ -1,58 +1,59 @@
-# name: frontend test
+name: frontend test
 
-# # Controls when the workflow will run
-# on:
-#   # Triggers the workflow on push or pull request events but only for the main branch
-#   push:
-#     branches:
-#       - 'dev-frontend.*'
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - 'dev-backend**'
 
-# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# env:
-#   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-#   SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#   DEBUG: ${{ secrets.DEBUG }}
-#   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-#   DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-#   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-#   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-#   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  DEBUG: ${{ secrets.DEBUG }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
-# jobs:
-#   SSH:
-#     runs-on: ubuntu-latest
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-#       - name: Set up Python3.9.6
-#         uses: actions/setup-python@v2
-#         with:
-#           python-version: 3.9.6
+      - name: Set up Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
 
-#       - name: Install
-#         run: |
-#           cd backend
-#           pip install -r requirements.txt
-#           cd sprint
-#           pylint **/*.py --load-plugins pylint_django
-#           coverage run --source='.' manage.py test --keepdb
-#           coverage xml
-#           cd .. && sonar-scanner
+      - name: Install
+        run: |
+          cd frontend
+          cd sprint
+          yarn install
+          ./node_modules/.bin/eslint src
+          yarn test --coverage --watchAll=false
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: /github/workspace/backend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: 14
-
-#       - name: Upload the result to Slack
-#         uses: 8398a7/action-slack@v3
-#         with:
-#           status: ${{ job.status }}
-#           author_name: Github Action Test
-#           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-#         env:
-#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-#         if: always() # Pick up events even if the job fails or is canceled.
+      - name: Upload the result to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Github Action Test
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
