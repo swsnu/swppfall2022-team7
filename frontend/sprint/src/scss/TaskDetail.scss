@@ -1,0 +1,141 @@
+.task-detail{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px 0px 0px;
+  width: 100%;
+  .task-info{
+    display: flex;
+    color: #BBBBBB;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .task-name{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 20px;
+    height: 50px;
+    .edit-name{
+      height: 30px;
+      border: 2px #777777 solid;
+      color: #777777;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 7px;
+      width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .edit-name:hover{
+      cursor: pointer;
+      border-color: #222222;
+      color: #222222;
+    }
+  }
+  .edit-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .edit-name-container{
+      height: 50px;
+      display: flex;
+      margin-top: 20px;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      .edit-name-button-container{
+        display: flex;
+        width: 200px;
+        height: 40px;
+        justify-content: flex-end;
+        align-items: center;
+        .edit-name-save{
+          height: 30px;
+          border: 2px #777777 solid;
+          color: #777777;
+          font-size: 13px;
+          font-weight: 600;
+          border-radius: 7px;
+          width: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .edit-name-save:hover{
+          cursor: pointer;
+          border-color: #222222;
+          color: #222222;
+        }
+        .edit-name-cancel{
+          height: 25px;
+          color: #555555;
+          font-size: 12px;
+          font-weight: 600;
+          width: 70px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .edit-name-cancel:hover{
+          cursor: pointer;
+          border-color: #222222;
+          color: #222222;
+        }
+      }
+    }
+  }
+  .task-content{
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111111;
+  }
+  .bottom-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 50px;
+    width: 100%;
+    .comment-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 50%;
+      .comment-header{
+        display: flex;
+        border-bottom: 2px #dddddd solid;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .comment-box{
+        padding: 10px 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 5px;
+        width: 100%;
+        margin: 4px 0;
+        .comment-author{
+          font-weight: 600;
+          color: #555555;
+          padding-right: 10px;
+          border-right: 2px solid #aaaaaa;
+        }
+        .comment-content{
+          color: #222222;
+          padding-left: 15px;
+        }
+      }
+      .comment-box:hover{
+        cursor: pointer;
+        background-color: #f0f0f0;
+      }
+    }
+  }
+}
