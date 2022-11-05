@@ -2,7 +2,7 @@
     display: flex;
     flex: 1;
     flex-flow: column;
-    padding: 0 50px;
+    padding: 0 50px 20px 50px;
 
     .title-tab{
         font-size: 22px;
@@ -42,6 +42,10 @@
         input{
             margin-bottom: 15px;
         }
+    }
+
+    .invite-list{
+        margin: 15px 0;
     }
 
     .submit{

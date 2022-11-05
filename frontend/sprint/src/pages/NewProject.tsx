@@ -1,5 +1,5 @@
 import AutoOption from '@components/AutoOption';
-import { AutoComplete, Button, Divider, Input } from 'antd';
+import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
 import { useState } from 'react';
 
 const NewProject: React.FC = () => {
@@ -58,7 +58,20 @@ const NewProject: React.FC = () => {
               Invite
             </Button>
           </div>
-          {inviteList.map(email => <div key={email}>{email}</div>)}
+          <List
+            className="invite-list"
+            itemLayout="horizontal"
+            dataSource={inviteList}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar>K</Avatar>}
+                  title="Seokwoo Choi"
+                  description="poding84@snu.ac.kr"
+                />
+              </List.Item>
+            )}
+          />
         </div>
       </div>
       <div className="submit">
