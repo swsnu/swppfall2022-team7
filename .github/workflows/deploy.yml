@@ -1,0 +1,52 @@
+name: deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - 'deploy'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  SSH:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python3.9.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.6
+
+      - name: Set up Environment Variables
+        run: |
+          export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          export DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build
+        run: |
+          cd builder
+          python3 build_backend.py
+
+      # - name: Run scripts in server
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     key: ${{ secrets.SSH_KEY }}
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USER }}
+      #     script: |
+      #       cd /home/ubuntu/conf
+      #       sh fr.sh
+      
+      - name: Upload the result to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Github Action Test
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
