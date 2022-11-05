@@ -10,7 +10,10 @@ from utility.custom_decorator import (
 from model_user.tools.user_manage import get_user_by_id
 from model_project.tools.project_manage import get_project_by_id
 
-from .tools.project import get_project_list, get_project_detail, create_project, edit_project, add_project_member, delete_project_member
+from .tools.project import (
+    get_project_list, get_project_detail, create_project,
+    edit_project, add_project_member, delete_project_member
+)
 
 # Create your views here.
 @require_http_methods(['GET'])
@@ -30,9 +33,7 @@ def user_project(request, user_id:int):
 def m_project(request: HttpRequest):
     data=json.loads(request.body.decode())
     project = create_project(data, request.user)
-    if project is not None:
-        return JsonResponse(status=204, data=project)
-    return HttpResponse(status=401)
+    return JsonResponse(status=204, data=project)
 
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
@@ -47,10 +48,10 @@ def project_detail(request, project_id:int):
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
 def m_project_detail(request: HttpRequest, project_id:int):
-    user = request.user
+    # user = request.user
     project = get_project_by_id(project_id)
     # TODO: Check that the user has enough authority
-    
+
     if project is None:
         return HttpResponse(status=401)
     if request.method == 'PUT' :
@@ -64,10 +65,10 @@ def m_project_detail(request: HttpRequest, project_id:int):
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_anonymous
 def m_member(request, project_id:int, member_id: int):
-    user = request.user
+    # user = request.user
     project = get_project_by_id(project_id)
     # TODO: Check that the user has enough authority
-    
+
     if project is None:
         return HttpResponse(status=401)
     if request.method == 'PUT' :
