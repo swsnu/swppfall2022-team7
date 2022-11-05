@@ -38,6 +38,10 @@ jobs:
         with:
           node-version: 14
 
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
       - name: Install
         run: |
           cd backend
