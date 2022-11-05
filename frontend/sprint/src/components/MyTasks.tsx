@@ -19,7 +19,7 @@ const MyTasks: React.FC = () => {
       style={{
         paddingBottom: 20
       }}
-      defaultActiveKey='ongoing'
+      defaultActiveKey="ongoing"
       items={[
         {
           label: <span>Ongoing&nbsp;<Badge count={1}/></span>,
