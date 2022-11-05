@@ -113,28 +113,67 @@
         font-weight: 600;
         font-size: 20px;
       }
-      .comment-box{
-        padding: 10px 20px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border-radius: 5px;
-        width: 100%;
-        margin: 4px 0;
-        .comment-author{
-          font-weight: 600;
-          color: #555555;
-          padding-right: 10px;
-          border-right: 2px solid #aaaaaa;
-        }
-        .comment-content{
-          color: #222222;
-          padding-left: 15px;
-        }
-      }
       .comment-box:hover{
         cursor: pointer;
         background-color: #f0f0f0;
+      }
+    }
+    .documents-container{
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      padding-left: 10px;
+      .document-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px #dddddd solid;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+        margin-bottom: 10px;
+        .document-confirm{
+          font-size: 11px;
+        }
+      }
+      .document-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        .document-left{
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          border-right: 2px #dddddd solid;
+          padding-right: 10px;
+          width: 40%;
+          .document-uploaded{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: flex-start;
+            align-items: flex-start;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            .file-info{
+              display: flex;
+              width: 100%;
+              font-size: 9px;
+              color: #aaaaaa;
+              justify-content: space-between;
+            }
+          }
+        }
+        .document-right{
+          display: flex;
+          width: 60%;
+          flex-direction: column;
+          align-items: flex-end;
+          justify-content: flex-start;
+          padding: 0 10px;
+        }
       }
     }
   }
