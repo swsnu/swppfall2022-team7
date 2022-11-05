@@ -1,11 +1,11 @@
-name: frontend test
+name: build
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
-      - 'dev-frontend**'
+      - 'main'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 env:
@@ -20,12 +20,17 @@ env:
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
 jobs:
-  frontend-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up Python3.9.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.6
 
       - name: Set up Node.js 14
         uses: actions/setup-node@v1
@@ -34,11 +39,24 @@ jobs:
 
       - name: Install
         run: |
-          cd frontend
-          cd sprint
+          cd backend
+          pip install -r requirements.txt
+          pip install coveralls
+          cd ../frontend/sprint
           yarn install
+          yarn global add coveralls
+          gem install coveralls-lcov
+          cd ../..
+          cd frontend/sprint
           ./node_modules/.bin/eslint src
           yarn test --coverage --watchAll=false
+          coveralls-lcov -v -n coverage/lcov.info > ../coverage.json
+          cd ../..
+          cd backend/sprint
+          pylint **/*.py --load-plugins pylint_django
+          coverage run --source='.' manage.py test --keepdb
+          coverage xml
+          coveralls --merge=../../frontend/coverage.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
