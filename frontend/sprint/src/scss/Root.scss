@@ -6,7 +6,25 @@
 @import 'MemberCard.scss';
 @import 'TaskCard.scss';
 @import 'TaskDetail.scss';
+@import 'Home.scss';
+@import 'ProjectCard.scss';
+@import 'NewProject.scss';
+@import 'AutoOption.scss';
+@import 'Notification.scss';
 
 *{
     font-family: 'Lato', sans-serif;
+    box-sizing: border-box;
+}
+
+#root{
+    height: 100%;
+    min-height: 100%;
+}
+
+.layout{
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-flow: column;
 }
