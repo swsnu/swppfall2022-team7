@@ -21,7 +21,7 @@ jobs:
     - coverage xml
     - cd .. && sonar-scanner
   - name: frontend test
-    if: branch = /^dev-frontend.*$/
+    if: branch =~ /^dev-frontend.*$/
     language: node_js
     node_js: 14
     addons:
