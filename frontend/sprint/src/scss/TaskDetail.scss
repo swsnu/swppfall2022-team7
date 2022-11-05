@@ -94,4 +94,48 @@
     font-weight: 500;
     color: #111111;
   }
+  .bottom-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 50px;
+    width: 100%;
+    .comment-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 50%;
+      .comment-header{
+        display: flex;
+        border-bottom: 2px #dddddd solid;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .comment-box{
+        padding: 10px 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: 5px;
+        width: 100%;
+        margin: 4px 0;
+        .comment-author{
+          font-weight: 600;
+          color: #555555;
+          padding-right: 10px;
+          border-right: 2px solid #aaaaaa;
+        }
+        .comment-content{
+          color: #222222;
+          padding-left: 15px;
+        }
+      }
+      .comment-box:hover{
+        cursor: pointer;
+        background-color: #f0f0f0;
+      }
+    }
+  }
 }
