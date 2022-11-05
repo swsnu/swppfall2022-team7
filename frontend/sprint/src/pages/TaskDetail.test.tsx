@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import TaskDetail from './TaskDetail';
 
-const mockComment = jest.fn();
 jest.mock('antd', () => ({...jest.requireActual('antd'), }))
 
 describe('task detail test', () => {
@@ -19,7 +18,7 @@ describe('task detail test', () => {
     render(AD);
   });
   it('should handle save after edit', () => {
-    const { container } = render(AD);
+    render(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
@@ -28,8 +27,8 @@ describe('task detail test', () => {
     const saveButton = screen.getByText("Save");
     fireEvent.click(saveButton);
   });
-  it('should handel cancel after edit', () => {
-    const { container } = render(AD);
+  it('should handld cancel after edit', () => {
+    render(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
