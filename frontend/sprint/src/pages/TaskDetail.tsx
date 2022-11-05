@@ -1,4 +1,4 @@
-import { Input, Avatar, Comment, Tooltip } from 'antd';
+import { Input, Avatar, Comment, Tooltip, Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, createElement } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
@@ -73,14 +73,14 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
               <div className="edit-name-container">
                 <Input defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 <div className="edit-name-button-container">
-                  <div className="edit-name-save" onClick={onSaveClicked}>Save</div>
-                  <div className="edit-name-cancel" onClick={onCancelClicked}>Cancel</div>
+                  <Button onClick={onSaveClicked}>Save</Button>
+                  <Button type='text' onClick={onCancelClicked}>Cancel</Button>
                 </div>
               </div>
               <TextArea className="task-content" rows={10} defaultValue={taskInfo.content} onChange={(e) => { setEditedContent(e.target.value); }}/>
             </div>
           : <div>
-              <div className="task-name">Task: {taskInfo.name}<div className="edit-name" onClick={() => setEdit(true)}>Edit</div></div>
+              <div className="task-name">Task: {taskInfo.name}<Button onClick={() => setEdit(true)}>Edit</Button></div>
               <div className="task-content">{taskInfo.content}</div>
             </div>
       }

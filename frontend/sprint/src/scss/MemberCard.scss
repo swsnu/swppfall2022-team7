@@ -1,7 +1,3 @@
-::-webkit-scrollbar{
-  width: 0px;
-}
-
 .member-card-container{
   width: 250px;
   height: 200px;
@@ -10,7 +6,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border-radius: 15px;
+  border-radius: 2px;
   border: 1px #d0d0d0 solid;
   padding: 20px 10px 0px 10px;
   transition: box-shadow 0.3s;
@@ -41,5 +37,5 @@
 
 .member-card-container:hover{
   cursor: pointer;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 8px 16px -8px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
