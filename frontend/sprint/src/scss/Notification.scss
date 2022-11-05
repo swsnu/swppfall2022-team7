@@ -1,0 +1,20 @@
+.notification{
+  position: absolute;
+  z-index: 2;
+  right: 50px;
+  top: 64px;
+  display: flex;
+  flex-flow: column;
+  width: 360px;
+  border-radius: 20px;
+  padding: 24px;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+  .notification-title{
+    font-weight: bold;
+    font-size: 18px;
+    line-height: initial;
+    padding-bottom: 24px;
+  }
+}
