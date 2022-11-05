@@ -44,6 +44,8 @@ const ProjectMain: React.FC = () => {
     if (projectId === undefined) return;
     if (e.key === '1') navigate(`/projects/${projectId}`);
     else if (e.key === '3') navigate(`/projects/${projectId}/tasks/1`);
+    else if (e.key === '4') navigate(`/projects/${projectId}/tasks/2`);
+    else if (e.key === '5') navigate(`/projects/${projectId}/tasks/3`);
     else navigate(`/projects/${projectId}`);
   };
 

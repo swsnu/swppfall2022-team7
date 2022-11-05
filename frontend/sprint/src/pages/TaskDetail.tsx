@@ -1,22 +1,56 @@
-const TaskDetail: React.FC = () => {
+import { Input } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
+import { useState, useEffect } from 'react';
+
+interface TaskDetailProps {
+  taskName: string
+  taskContent: string
+}
+
+const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDetailProps) => {
+  const [edit, setEdit] = useState(false);
+  const [editedName, setEditedName] = useState(taskName);
+  const [taskInfo, setTaskInfo] = useState({ name: taskName, content: taskContent });
+  const [editedContent, setEditedContent] = useState(taskContent);
+
+  useEffect(() => {
+    setTaskInfo({ name: taskName, content: taskContent });
+    setEditedName(taskName);
+    setEditedContent(taskContent);
+    setEdit(false);
+  }, [taskName]);
+
+  const onSaveClicked = (): void => {
+    setTaskInfo({ name: editedName, content: editedContent });
+    setEdit(false);
+  };
+
+  const onCancelClicked = (): void => {
+    setEdit(false);
+    setEditedName(taskName);
+    setEditedContent(taskContent);
+  };
+
   return (
     <div className="task-detail">
-      <div className="task-info">Summary of Thousands Brains: Scientific Tech and Writing: Write First Draft</div>
-      <div className="task-name">Description</div>
-      <div className="task-description">Lorem Ipsum is simply dummy text of t
-      he printing and typesetting industry. Lorem Ipsu
-      m has been the industry&#39;s standard dum
-      my text ever since the 1500s, when an unkno
-      wn printer took a galley of type and scram
-      bled it to make a type specimen book. It h
-      as survived not only five centuries, but a
-      lso the leap into electronic typesetting, rem
-      aining essentially unchanged. It was popular
-      ised in the 1960s with the release of Letras
-      et sheets containing Lorem Ipsum passages, an
-      d more recently with desktop publishing soft
-      ware like Aldus PageMaker including vers
-      ions of Lorem Ipsum.</div>
+      <div className="task-info">Summary of Thousands Brains: Scientific Tech and Writing: {taskInfo.name}</div>
+      {
+        edit
+          ? <div className="edit-container">
+              <div className="edit-name-container">
+                <Input defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
+                <div className="edit-name-button-container">
+                  <div className="edit-name-save" onClick={onSaveClicked}>Save</div>
+                  <div className="edit-name-cancel" onClick={onCancelClicked}>Cancel</div>
+                </div>
+              </div>
+              <TextArea className="task-content" rows={10} defaultValue={taskInfo.content} onChange={(e) => { setEditedContent(e.target.value); }}/>
+            </div>
+          : <div>
+              <div className="task-name">Task: {taskInfo.name}<div className="edit-name" onClick={() => setEdit(true)}>Edit</div></div>
+              <div className="task-content">{taskInfo.content}</div>
+            </div>
+      }
     </div>
   );
 };
