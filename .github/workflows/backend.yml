@@ -45,16 +45,16 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         with:
           projectBaseDir: /github/workspace/backend
-        args: >
-            -Dsonar.organization=swsnu_swppfall2022-team7
-            -Dsonar.projectKey=swsnu
-            -Dsonar.projectName=swppfall2022-team7
-            -Dsonar.projectVersion=1.0
-            -Dsonar.python.coverage.reportPaths=sprint/coverage.xml
-            -Dsonar.sources=sprint
-            -Dsonar.tests=sprint
-            -Dsonar.exclusions=sprint/**/migrations/*
-            -Dsonar.test.inclusions=sprint/**/tests.py
+          args: >
+              -Dsonar.organization=swsnu_swppfall2022-team7
+              -Dsonar.projectKey=swsnu
+              -Dsonar.projectName=swppfall2022-team7
+              -Dsonar.projectVersion=1.0
+              -Dsonar.python.coverage.reportPaths=sprint/coverage.xml
+              -Dsonar.sources=sprint
+              -Dsonar.tests=sprint
+              -Dsonar.exclusions=sprint/**/migrations/*
+              -Dsonar.test.inclusions=sprint/**/tests.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

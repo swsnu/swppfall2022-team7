@@ -62,17 +62,17 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         with:
           projectBaseDir: /github/workspace
-        args: >
-            -Dsonar.organization=swsnu_swppfall2022-team7
-            -Dsonar.projectKey=swsnu
-            -Dsonar.projectName=swppfall2022-team7
-            -Dsonar.projectVersion=1.0
-            -Dsonar.python.coverage.reportPaths=backend/sprint/coverage.xml
-            -Dsonar.javascript.lcov.reportPaths=frontend/sprint/coverage/lcov.info
-            -Dsonar.sources=backend/sprint,frontend/sprint/src
-            -Dsonar.tests=backend/sprint,frontend/sprint/src
-            -Dsonar.test.exclusions=backend/sprint/**/migrations/*,frontend/sprint/src/index.tsx,frontend/sprint/src/serviceWorker.js
-            -Dsonar.test.inclusions=backend/sprint/**/tests.py,frontend/sprint/src/**/*.test.tsx,frontend/sprint/src/**/*.test.ts
+          args: >
+              -Dsonar.organization=swsnu_swppfall2022-team7
+              -Dsonar.projectKey=swsnu
+              -Dsonar.projectName=swppfall2022-team7
+              -Dsonar.projectVersion=1.0
+              -Dsonar.python.coverage.reportPaths=backend/sprint/coverage.xml
+              -Dsonar.javascript.lcov.reportPaths=frontend/sprint/coverage/lcov.info
+              -Dsonar.sources=backend/sprint,frontend/sprint/src
+              -Dsonar.tests=backend/sprint,frontend/sprint/src
+              -Dsonar.test.exclusions=backend/sprint/**/migrations/*,frontend/sprint/src/index.tsx,frontend/sprint/src/serviceWorker.js
+              -Dsonar.test.inclusions=backend/sprint/**/tests.py,frontend/sprint/src/**/*.test.tsx,frontend/sprint/src/**/*.test.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
