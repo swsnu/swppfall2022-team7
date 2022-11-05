@@ -97,19 +97,9 @@ class ProjectTestCase(TestCase):
         response = client.put(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_member(self):
-        client = Client()
-        url = self.url+'member/1/'
-        # Wrong Method Test
-        response = client.post(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-
     def test_m_member(self):
         client = Client()
-        url = self.url+'member/1/m/'
+        url = self.url+'member/1/m/1'
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
