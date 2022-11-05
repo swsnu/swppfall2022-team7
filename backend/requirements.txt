@@ -8,6 +8,7 @@ gunicorn==20.1.0
 isort==5.10.1
 lazy-object-proxy==1.7.1
 mccabe==0.7.0
+mysqlclient==2.1.1
 platformdirs==2.5.2
 pylint==2.15.5
 pylint-django==2.5.3
