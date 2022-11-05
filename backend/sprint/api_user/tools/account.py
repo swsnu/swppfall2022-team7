@@ -17,3 +17,10 @@ def get_user(data: dict) :
         return None
     user=authenticate(username=user.first().username, password=password)
     return user
+
+def send_invite_email(user_email: str) :
+    print(f"send user email with email `{user_email}`")
+    """
+    TODO: send invite email
+    """
+    return

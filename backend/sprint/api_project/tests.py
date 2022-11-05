@@ -5,6 +5,12 @@ from django.contrib.auth import get_user_model
 from model_project.models import UserProject, Project
 # Create your tests here.
 class ProjectTestCase(TestCase):
+    def login(self, client) :
+        client.post(self.login_url, data = json.dumps({
+            "email": "email1@gmail.com",
+            "password": "pw1"
+        }), content_type='application/json')
+        return client
     def setUp(self):
         self.url = '/project/'
         self.login_url = '/user/signin/'
@@ -14,7 +20,7 @@ class ProjectTestCase(TestCase):
             password = 'pw1',
             email = 'email1@gmail.com'
         )
-        get_user_model().objects.create_user(
+        self.user2 = get_user_model().objects.create_user(
             username = 'un2',
             password = 'pw2',
             email = 'email2@gmail.com'
@@ -56,13 +62,24 @@ class ProjectTestCase(TestCase):
 
     def test_m_project(self):
         client = Client()
-        url = self.url+'1/m/'
+        url = self.url+'m/'
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
+
+        client = self.login(client)
+        response = client.post(url, data = {
+            "name": "name",
+            "subject": "subject",
+            "member_list": [
+                "email2@gmail.com",
+                "nonexist@email.com"
+            ]
+        }, content_type='application/json')
+        self.assertEqual(response.status_code, 204)
 
     def test_project_detail(self):
         client = Client()
@@ -89,30 +106,62 @@ class ProjectTestCase(TestCase):
 
     def test_m_project_detail(self):
         client = Client()
-        url = self.url+'detail/1/m/'
+        url = self.url+f'detail/{self.project1.pk}/m/'
+        url2 = self.url+'detail/0/m/'
+
+        proj = Project.objects.create(
+            name="pn2",
+            subject="sj2",
+            manager=self.user1
+        )
+        url3 = self.url+f'detail/{proj.pk}/m/'
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.put(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
-    def test_member(self):
-        client = Client()
-        url = self.url+'member/1/'
-        # Wrong Method Test
-        response = client.post(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        response = client.post(self.login_url, data = json.dumps({
+            "email": "email1@gmail.com",
+            "password": "pw1"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.put(url, data = json.dumps({
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.put(url, data = json.dumps({
+            "name": "name",
+            "subject": "subject",
+            "manager": self.user2.pk
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.put(url2, data = json.dumps({
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.delete(url3)
 
     def test_m_member(self):
         client = Client()
-        url = self.url+'member/1/m/'
+        url = self.url+f'detail/{self.project1.pk}/member/{self.user2.pk}/'
+        url2 = self.url+f'detail/0/member/{self.user2.pk}/'
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.put(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
+
+        client = self.login(client)
+        response = client.put(url2)
+        self.assertEqual(response.status_code, 401)
+
+        response = client.put(url)
+        self.assertEqual(response.status_code, 204)
+
+        response = client.delete(url)
+        self.assertEqual(response.status_code, 204)
