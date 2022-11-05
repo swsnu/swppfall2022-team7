@@ -43,17 +43,7 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          projectBaseDir: /github/workspace/frontend
-          args: >
-            -Dsonar.organization=swsnu
-            -Dsonar.projectKey=swsnu_swppfall2022-team7
-            -Dsonar.projectName=swppfall2022-team7
-            -Dsonar.projectVersion=1.0
-            -Dsonar.javascript.lcov.reportPaths=sprint/coverage/lcov.info
-            -Dsonar.sources=frontend/sprint/src
-            -Dsonar.tests=frontend/sprint/src
-            -Dsonar.exclusions=frontend/sprint/src/index.tsx,frontend/sprint/src/serviceWorker.js
-            -Dsonar.test.inclusions=frontend/sprint/src/**/*.test.tsx,frontend/sprint/src/**/*.test.ts
+          projectBaseDir: frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
