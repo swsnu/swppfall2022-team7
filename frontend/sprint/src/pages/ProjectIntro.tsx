@@ -1,5 +1,5 @@
-import MemberCard from '../components/MemberCard';
-import TaskCard from '../components/TaskCard';
+import MemberCard from '@components/MemberCard';
+import TaskCard from '@components/TaskCard';
 
 const ProjectIntro: React.FC = () => {
   return (
