@@ -45,8 +45,8 @@ jobs:
         with:
           projectBaseDir: /github/workspace/frontend
           args: >
-            -Dsonar.organization=swsnu_swppfall2022-team7
-            -Dsonar.projectKey=swsnu
+            -Dsonar.organization=swsnu
+            -Dsonar.projectKey=swsnu_swppfall2022-team7
             -Dsonar.projectName=swppfall2022-team7
             -Dsonar.projectVersion=1.0
             -Dsonar.javascript.lcov.reportPaths=sprint/coverage/lcov.info
