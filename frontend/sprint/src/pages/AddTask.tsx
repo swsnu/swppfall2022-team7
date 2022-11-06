@@ -26,13 +26,15 @@ const AddTask: React.FC = () => {
     const newTask: TaskType = {
       name: taskName,
       description,
-      id: 4,
+      id: 3 + Math.floor(100 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
       documentSpaces: []
     };
-    if (projectId !== undefined) dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
-    navigate('/projects/1/tasks/4');
+    if (projectId !== undefined) {
+      dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
+      navigate(`/projects/${projectId}/tasks/${newTask.id}`);
+    }
   };
   return (
     <div className="new-task">
