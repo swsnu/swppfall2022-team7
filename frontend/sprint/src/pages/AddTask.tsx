@@ -1,17 +1,18 @@
 import AutoOption from '@components/AutoOption';
 import { AppDispatch } from '@store/index';
 import { projectActions } from '@store/slices/project';
-import { dummyProject, MemberType, ProjectType } from '@utils/dummy';
+import { dummyProject, MemberType, TaskType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const NewProject: React.FC = () => {
+const AddTask: React.FC = () => {
+  const { projectId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [projectName, setProjectName] = useState('');
-  const [subjectName, setSubjectName] = useState('');
+  const [taskName, setTaskName] = useState('');
+  const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
   const [inviteList, setInviteList] = useState<MemberType[]>([]);
   const onInviteClick: () => void = () => {
@@ -20,44 +21,41 @@ const NewProject: React.FC = () => {
     setInviteList(inviteList => [...inviteList, invite]);
     setEmail('');
   };
-  const createProject: () => void = () => {
-    if (projectName === '' || subjectName === '') return;
-    const newProject: ProjectType = {
-      id: 3,
-      name: projectName,
-      subject: subjectName,
-      description: '',
-      members: inviteList,
+  const createTask: () => void = () => {
+    if (taskName === '' || description === '') return;
+    const newTask: TaskType = {
+      name: taskName,
+      description,
+      id: 4,
       updatedAt: '1 min ago',
-      documents: 0,
-      documentSpaces: [],
-      tasks: []
+      members: inviteList,
+      documentSpaces: []
     };
-    dispatch(projectActions.addProject(newProject));
-    navigate('/projects');
+    if (projectId !== undefined) dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
+    navigate('/projects/1/tasks/4');
   };
   return (
-    <div className="new-project">
+    <div className="new-task">
       <div className="title-tab">
-        Create a New Project
+        Create a New Task
       </div>
       <div className="form-tab">
         <div className="form-description">
-          <div className="form-title">Project and Subject Name</div>
-          <div className="form-text">Enter your project and subject name</div>
+          <div className="form-title">Task Information</div>
+          <div className="form-text">Enter your task information</div>
         </div>
         <div className="input-form">
-          <label htmlFor="project-name">Project Name</label>
-          <Input id="project-name" placeholder="Project Name" value={projectName} onChange={e => setProjectName(e.target.value)} />
-          <label htmlFor="subject-name">Subject Name</label>
-          <Input id="subject-name" placeholder="Subject Name" value={subjectName} onChange={e => setSubjectName(e.target.value)} />
+          <label htmlFor="project-name">Task Name</label>
+          <Input id="project-name" placeholder="Task Name" value={taskName} onChange={e => setTaskName(e.target.value)} />
+          <label htmlFor="subject-name">Description</label>
+          <Input id="subject-name" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
         </div>
       </div>
       <Divider />
       <div className="form-tab">
         <div className="form-description">
-          <div className="form-title">Project Participants</div>
-          <div className="form-text">Add your project participants</div>
+          <div className="form-title">Task Participants</div>
+          <div className="form-text">Add your task participants</div>
         </div>
         <div className="input-form">
           <label htmlFor="invite-email">Send Invitiation to..</label>
@@ -104,10 +102,10 @@ const NewProject: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={createProject}>Create Project</Button>
+        <Button type="primary" onClick={createTask}>Create Task</Button>
       </div>
     </div>
   );
 };
 
-export default NewProject;
+export default AddTask;

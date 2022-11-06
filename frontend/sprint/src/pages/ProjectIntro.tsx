@@ -1,20 +1,23 @@
 import SpaceCard from '@components/SpaceCard';
+import { selectProject } from '@store/slices/project';
+import { DocumentSpaceType, MemberType } from '@utils/dummy';
 import { Avatar, List, Table, Tag } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const taskColumns = [
   {
     title: 'Task',
-    key: 'task',
-    dataIndex: 'task'
+    key: 'name',
+    dataIndex: 'name'
   },
   {
-    title: 'Team',
-    key: 'team',
-    dataIndex: 'team',
-    render: (members: string[]) => (
+    title: 'Members',
+    key: 'members',
+    dataIndex: 'members',
+    render: (members: MemberType[]) => (
       <Avatar.Group>
-        {members.map(member => <Avatar key={member}>{member}</Avatar>)}
+        {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
       </Avatar.Group>
     )
   },
@@ -22,8 +25,8 @@ const taskColumns = [
     title: 'Document Spaces',
     key: 'documentSpaces',
     dataIndex: 'documentSpaces',
-    render: (spaces: string[]) => (
-      spaces.map(space => <Tag key={space}>{space}</Tag>)
+    render: (spaces: DocumentSpaceType[]) => (
+      spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
     )
   },
   {
@@ -33,44 +36,17 @@ const taskColumns = [
   }
 ];
 
-const dummyTaskList = [
-  {
-    key: 1,
-    task: 'Play League of Legends',
-    team: ['S', 'H'],
-    documentSpaces: ['Space 1', 'Space 2'],
-    updatedAt: '2 days ago'
-  },
-  {
-    key: 2,
-    task: 'Play Overwatch 2',
-    team: ['K', 'J'],
-    documentSpaces: ['Duck', 'In'],
-    updatedAt: '2 days ago'
-  }
-];
-
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
+  const projectState = useSelector(selectProject);
+  const { projectId } = useParams();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   return (
     <div className="project-intro">
-      <div className="project-info">Summary of Thousands Brains: Scientific Tech and Writing</div>
+      <div className="project-info">{project?.name}: {project?.subject}</div>
       <div className="project-header">Description</div>
       <div className="project-description">
-        Lorem Ipsum is simply dummy text of t
-        he printing and typesetting industry. Lorem Ipsu
-        m has been the industry&#39;s standard dum
-        my text ever since the 1500s, when an unkno
-        wn printer took a galley of type and scram
-        bled it to make a type specimen book. It h
-        as survived not only five centuries, but a
-        lso the leap into electronic typesetting, rem
-        aining essentially unchanged. It was popular
-        ised in the 1960s with the release of Letras
-        et sheets containing Lorem Ipsum passages, an
-        d more recently with desktop publishing soft
-        ware like Aldus PageMaker including vers
-        ions of Lorem Ipsum.
+        {project?.description}
       </div>
       <div className="project-flex">
         <div className="team-members">
@@ -81,13 +57,13 @@ const ProjectIntro: React.FC = () => {
             <List
               className="invite-list"
               itemLayout="horizontal"
-              dataSource={[1, 2, 3]}
+              dataSource={project?.members}
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar>K</Avatar>}
-                    title="Seokwoo Choi"
-                    description="poding84@snu.ac.kr"
+                    avatar={<Avatar>{item.avatar}</Avatar>}
+                    title={item.name}
+                    description={item.email}
                   />
                 </List.Item>
               )}
@@ -99,9 +75,9 @@ const ProjectIntro: React.FC = () => {
             <div className="link" onClick={() => navigate('docs')}>Edit space</div>
           </div>
           <div className="member-container">
-            <SpaceCard name="Space 1" email="yohoho" />
-            <SpaceCard name="Space 2" email="yohoho" />
-            <SpaceCard name="Space 3" email="yohoho" />
+            {project?.documentSpaces.map(space => (
+              <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
+            ))}
           </div>
         </div>
       </div>
@@ -110,7 +86,7 @@ const ProjectIntro: React.FC = () => {
         <div className="link" onClick={() => navigate('add_task')}>Add new task</div>
       </div>
       <Table
-        dataSource={dummyTaskList}
+        dataSource={project?.tasks.map(task => ({ ...task, key: task.id }))}
         columns={taskColumns}
         pagination={false}
       />

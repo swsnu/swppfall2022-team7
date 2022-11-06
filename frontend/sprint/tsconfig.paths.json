@@ -9,7 +9,8 @@
             "@scss/*": ["src/scss/*"],
             "@services/*": ["src/services/*"],
             "@utils/*": ["src/utils/*"],
-            "@api": ["src/services/api"]
+            "@api": ["src/services/api"],
+            "@store/*": ["src/store/*"]
         }
     }
 }
