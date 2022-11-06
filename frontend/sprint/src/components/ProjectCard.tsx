@@ -19,7 +19,7 @@ const ProjectCard: React.FC<{ project: ProjectType }> = ({ project }: { project:
             {project.members.slice(0, 3).map(member => (
               <Avatar key={member.id} size="small" className="avatar">{member.avatar}</Avatar>
             ))}
-            <Avatar size="small" className="avatar">+{project.members.length - 3}</Avatar>
+            {project.members.length > 3 && <Avatar size="small" className="avatar">+{project.members.length - 3}</Avatar>}
           </Avatar.Group>
           <div className="task-badge">
             <CopyOutlined />

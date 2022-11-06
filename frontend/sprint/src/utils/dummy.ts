@@ -22,6 +22,7 @@ export interface TaskType {
 export interface ProjectType {
   id: number
   name: string
+  subject: string
   updatedAt: string
   members: MemberType[]
   documents: number

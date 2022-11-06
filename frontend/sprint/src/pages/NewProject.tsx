@@ -1,11 +1,15 @@
 import AutoOption from '@components/AutoOption';
-import { dummyProject, MemberType } from '@utils/dummy';
+import { AppDispatch } from '@store/index';
+import { projectActions } from '@store/slices/project';
+import { dummyProject, MemberType, ProjectType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const NewProject: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [projectName, setProjectName] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,6 +22,17 @@ const NewProject: React.FC = () => {
   };
   const createProject: () => void = () => {
     if (projectName === '' || subjectName === '') return;
+    const newProject: ProjectType = {
+      id: 3,
+      name: projectName,
+      subject: subjectName,
+      members: inviteList,
+      updatedAt: '1 min ago',
+      documents: 0,
+      documentSpaces: [],
+      tasks: []
+    };
+    dispatch(projectActions.addProject(newProject));
     navigate('/projects');
   };
   return (
