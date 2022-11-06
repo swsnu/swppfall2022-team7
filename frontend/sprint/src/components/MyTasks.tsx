@@ -1,28 +1,19 @@
 import { selectProject } from '@store/slices/project';
 import { Badge, List, Tabs } from 'antd';
 import { useSelector } from 'react-redux';
-
-// const dummyTaskList = [
-//   {
-//     task: 'Play League of Legends',
-//     project: 'Project 1',
-//     status: 'current'
-//   },
-//   {
-//     task: 'Play Overwatch 2',
-//     project: 'Project 2',
-//     status: 'current'
-//   }
-// ];
+import { useNavigate } from 'react-router-dom';
 
 interface MyTaskType {
   task: string
   project: string
   status: 'current' | 'new' | 'ongoing'
+  taskId: number
+  projectId: number
 }
 
 const MyTasks: React.FC = () => {
   const projectState = useSelector(selectProject);
+  const navigate = useNavigate();
   const myTasks: MyTaskType[] = [];
   projectState.forEach(project => {
     project.tasks.forEach(task => {
@@ -31,7 +22,9 @@ const MyTasks: React.FC = () => {
           myTasks.push({
             task: task.name,
             project: project.name,
-            status: 'ongoing'
+            status: 'ongoing',
+            taskId: task.id,
+            projectId: project.id
           });
         }
       });
@@ -51,7 +44,7 @@ const MyTasks: React.FC = () => {
             <List
               dataSource={myTasks}
               renderItem={(item, i) => (
-                <List.Item key={i}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
                   <List.Item.Meta
                     title={item.task}
                     description={item.project}
@@ -63,14 +56,9 @@ const MyTasks: React.FC = () => {
           )
         },
         {
-          label: <span>New&nbsp;<Badge count={5}/></span>,
-          key: 'badge',
-          children: 'New'
-        },
-        {
           label: 'Done',
           key: 'done',
-          children: 'done'
+          children: null
         }
       ]}
     />

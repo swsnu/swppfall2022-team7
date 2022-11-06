@@ -18,4 +18,11 @@
     font-weight: bold;
     padding: 20px 0 10px 0;
   }
+
+  .my-task-list{
+    cursor: pointer;
+  }
+  .my-task-list:hover{
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.04);
+  }
 }
