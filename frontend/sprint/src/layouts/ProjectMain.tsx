@@ -30,8 +30,8 @@ const ProjectMain: React.FC = () => {
         <Menu
           title='Header'
           onSelect={onSelect}
-          style={{ width: 256, height: 'calc(100% - 100px)' }}
-          defaultSelectedKeys={['1']}
+          style={{ width: 256, height: 'calc(100vh - 164px)' }}
+          defaultSelectedKeys={[projectId ?? '']}
           mode="inline"
           items={items}
           className="project-main-menu"
