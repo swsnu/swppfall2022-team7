@@ -26,6 +26,7 @@ const NewProject: React.FC = () => {
       id: 3,
       name: projectName,
       subject: subjectName,
+      description: '',
       members: inviteList,
       updatedAt: '1 min ago',
       documents: 0,

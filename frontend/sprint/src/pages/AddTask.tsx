@@ -1,11 +1,16 @@
 import AutoOption from '@components/AutoOption';
-import { dummyProject, MemberType } from '@utils/dummy';
+import { AppDispatch } from '@store/index';
+import { projectActions } from '@store/slices/project';
+import { dummyProject, MemberType, TaskType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AddTask: React.FC = () => {
+  const { projectId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
@@ -18,7 +23,16 @@ const AddTask: React.FC = () => {
   };
   const createTask: () => void = () => {
     if (taskName === '' || description === '') return;
-    navigate('/projects');
+    const newTask: TaskType = {
+      name: taskName,
+      description,
+      id: 4,
+      updatedAt: '1 min ago',
+      members: inviteList,
+      documentSpaces: []
+    };
+    if (projectId !== undefined) dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
+    navigate('/projects/1/tasks/4');
   };
   return (
     <div className="new-task">

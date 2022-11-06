@@ -14,6 +14,7 @@ export interface DocumentSpaceType {
 export interface TaskType {
   name: string
   id: number
+  description: string
   updatedAt: string
   members: MemberType[]
   documentSpaces: DocumentSpaceType[]
@@ -21,6 +22,7 @@ export interface TaskType {
 
 export interface ProjectType {
   id: number
+  description: string
   name: string
   subject: string
   updatedAt: string
@@ -84,6 +86,7 @@ export const dummyProject = {
       id: 1,
       updatedAt: '2 days ago',
       members: [choi, yi],
+      description: 'Description 1',
       documentSpaces: [
         {
           name: 'Space 1',
@@ -102,6 +105,7 @@ export const dummyProject = {
       id: 2,
       updatedAt: '1 hour ago',
       members: [yi, joo],
+      description: 'Description 2',
       documentSpaces: [
         {
           name: 'Space 2',

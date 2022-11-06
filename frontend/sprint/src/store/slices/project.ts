@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { dummyProjects, ProjectType } from '@utils/dummy';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { dummyProjects, ProjectType, TaskType } from '@utils/dummy';
 import { RootState } from '..';
 
 type ProjectState = ProjectType[];
@@ -12,6 +12,10 @@ export const projectSlice = createSlice({
   reducers: {
     addProject: (state, action) => {
       state.push(action.payload);
+    },
+    addTask: (state, action: PayloadAction<{ projectId: number, newTask: TaskType }>) => {
+      const project = state.find(project => project.id === action.payload.projectId);
+      if (project !== undefined) project.tasks.push(action.payload.newTask);
     }
   }
 });

@@ -1,7 +1,9 @@
 import SpaceCard from '@components/SpaceCard';
-import { DocumentSpaceType, dummyProject, MemberType } from '@utils/dummy';
+import { selectProject } from '@store/slices/project';
+import { DocumentSpaceType, MemberType } from '@utils/dummy';
 import { Avatar, List, Table, Tag } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const taskColumns = [
   {
@@ -36,12 +38,15 @@ const taskColumns = [
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
+  const projectState = useSelector(selectProject);
+  const { projectId } = useParams();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   return (
     <div className="project-intro">
-      <div className="project-info">{dummyProject.name}: {dummyProject.subject}</div>
+      <div className="project-info">{project?.name}: {project?.subject}</div>
       <div className="project-header">Description</div>
       <div className="project-description">
-        {dummyProject.description}
+        {project?.description}
       </div>
       <div className="project-flex">
         <div className="team-members">
@@ -52,7 +57,7 @@ const ProjectIntro: React.FC = () => {
             <List
               className="invite-list"
               itemLayout="horizontal"
-              dataSource={dummyProject.members}
+              dataSource={project?.members}
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
@@ -70,7 +75,7 @@ const ProjectIntro: React.FC = () => {
             <div className="link" onClick={() => navigate('docs')}>Edit space</div>
           </div>
           <div className="member-container">
-            {dummyProject.documentSpaces.map(space => (
+            {project?.documentSpaces.map(space => (
               <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
             ))}
           </div>
@@ -81,7 +86,7 @@ const ProjectIntro: React.FC = () => {
         <div className="link" onClick={() => navigate('add_task')}>Add new task</div>
       </div>
       <Table
-        dataSource={dummyProject.tasks.map(task => ({ ...task, key: task.id }))}
+        dataSource={project?.tasks.map(task => ({ ...task, key: task.id }))}
         columns={taskColumns}
         pagination={false}
       />
