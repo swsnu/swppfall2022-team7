@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 import ProjectIntro from './ProjectIntro';
 
-describe('project intro test',() => {
+describe('project intro test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
     AD = <ProjectIntro />;
-    global.matchMedia = global.matchMedia ?? function() {
+    global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
         removeListener: jest.fn()
@@ -14,5 +14,5 @@ describe('project intro test',() => {
   });
   it('should render wihtout error', () => {
     render(AD);
-  })
+  });
 });

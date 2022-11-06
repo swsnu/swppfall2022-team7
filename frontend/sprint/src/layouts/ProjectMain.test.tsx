@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { MemoryRouter, Route, Routes } from "react-router";
+import { MemoryRouter, Route, Routes } from 'react-router';
 import ProjectMain from './ProjectMain';
 
 const mockNavigate = jest.fn();
@@ -10,7 +10,7 @@ describe('project main test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
     AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path="/:projectId" element={<ProjectMain />} /> </Routes></MemoryRouter>;
-    global.matchMedia = global.matchMedia ?? function() {
+    global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
         removeListener: jest.fn()
@@ -36,5 +36,5 @@ describe('project main test', () => {
       fireEvent.click(buttons[4]);
       fireEvent.click(buttons[5]);
     });
-  })
+  });
 });
