@@ -74,6 +74,8 @@ jobs:
         with:
           github-token: ${{ secrets.HUBHUB_TOKEN }}
           path-to-lcov: frontend/coverage.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.HUBHUB_TOKEN }}
       
       - name: Upload the result to Slack
         uses: 8398a7/action-slack@v3
