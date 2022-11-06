@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { choi } from '@utils/dummy';
 import AutoOption from './AutoOption';
 
 describe('<AutoOption />', () => {
@@ -11,6 +12,6 @@ describe('<AutoOption />', () => {
     };
   });
   it('should render', () => {
-    render(<AutoOption />);
+    render(<AutoOption member={choi} />);
   });
 });

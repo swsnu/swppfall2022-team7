@@ -1,11 +1,15 @@
 import { items, menuIdList } from '@routes/menuconfig';
+import { selectProject } from '@store/slices/project';
 import { Menu, MenuProps } from 'antd';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 const ProjectMain: React.FC = () => {
   const navigate = useNavigate();
+  const projectState = useSelector(selectProject);
   const { projectId, menuId, taskId } = useParams();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
 
   const onSelect: MenuProps['onSelect'] = ({ key }: { key: string }) => {
     if (projectId === undefined) return;
@@ -24,8 +28,8 @@ const ProjectMain: React.FC = () => {
     <div className="project-main">
       <div className="project-main-left">
         <div className="project-intro">
-          <div className="project-name">Summary of <br></br>Thousands Brains</div>
-          <div className="project-subject">Scientific Tech and Writing</div>
+          <div className="project-name">{project?.name}</div>
+          <div className="project-subject">{project?.subject}</div>
         </div>
         <Menu
           title='Header'
@@ -33,7 +37,7 @@ const ProjectMain: React.FC = () => {
           style={{ width: 256, height: 'calc(100vh - 164px)' }}
           defaultSelectedKeys={[projectId ?? '']}
           mode="inline"
-          items={items}
+          items={items(project?.tasks ?? [])}
           className="project-main-menu"
           selectedKeys={[selectedKey()]}
         />

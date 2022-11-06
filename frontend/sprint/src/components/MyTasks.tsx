@@ -1,19 +1,35 @@
+import { selectProject } from '@store/slices/project';
 import { Badge, List, Tabs } from 'antd';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const dummyTaskList = [
-  {
-    task: 'Play League of Legends',
-    project: 'Project 1',
-    status: 'current'
-  },
-  {
-    task: 'Play Overwatch 2',
-    project: 'Project 2',
-    status: 'current'
-  }
-];
+interface MyTaskType {
+  task: string
+  project: string
+  status: 'current' | 'new' | 'ongoing'
+  taskId: number
+  projectId: number
+}
 
 const MyTasks: React.FC = () => {
+  const projectState = useSelector(selectProject);
+  const navigate = useNavigate();
+  const myTasks: MyTaskType[] = [];
+  projectState.forEach(project => {
+    project.tasks.forEach(task => {
+      task.members.forEach(member => {
+        if (member.email === 'poding84@snu.ac.kr') {
+          myTasks.push({
+            task: task.name,
+            project: project.name,
+            status: 'ongoing',
+            taskId: task.id,
+            projectId: project.id
+          });
+        }
+      });
+    });
+  });
   return (
     <Tabs
       style={{
@@ -26,9 +42,9 @@ const MyTasks: React.FC = () => {
           key: 'ongoing',
           children: (
             <List
-              dataSource={dummyTaskList}
+              dataSource={myTasks}
               renderItem={(item, i) => (
-                <List.Item key={i}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
                   <List.Item.Meta
                     title={item.task}
                     description={item.project}
@@ -40,14 +56,9 @@ const MyTasks: React.FC = () => {
           )
         },
         {
-          label: <span>New&nbsp;<Badge count={5}/></span>,
-          key: 'badge',
-          children: 'New'
-        },
-        {
           label: 'Done',
           key: 'done',
-          children: 'done'
+          children: null
         }
       ]}
     />
