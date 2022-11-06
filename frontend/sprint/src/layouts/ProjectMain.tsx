@@ -24,7 +24,7 @@ const ProjectMain: React.FC = () => {
     <div className="project-main">
       <div className="project-main-left">
         <div className="project-intro">
-          <div className="project-name">Summary of <br></br>Thousands Brains</div>
+          <div className="project-name">Summary of <br></br>Thousand Brains</div>
           <div className="project-subject">Scientific Tech and Writing</div>
         </div>
         <Menu

@@ -2,14 +2,16 @@ import { Layout, Avatar, Badge } from 'antd';
 import { BellFilled, UserOutlined, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
   const [showNotification, setShowNotification] = useState(false);
+  const navigate = useNavigate();
   return (
     <AntdHeader className="header">
-      <div className="header-logo">
+      <div className="header-logo" onClick={() => navigate('/projects')}>
         <FireFilled className="logo-icon" />
         Sprint
       </div>

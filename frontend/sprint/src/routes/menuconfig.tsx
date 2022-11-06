@@ -1,4 +1,5 @@
 import { AppstoreOutlined, AuditOutlined, CalendarOutlined, HomeOutlined, PieChartOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { dummyProject } from '@utils/dummy';
 import { MenuProps } from 'antd';
 
 export type MenuItem = Required<MenuProps>['items'][number];
@@ -21,9 +22,7 @@ export const getItem = (label: React.ReactNode,
 export const items: MenuProps['items'] = [
   getItem('Scientific Tech and Writing', 'intro', <HomeOutlined />),
   getItem('Task List', 'tasks', <AppstoreOutlined />, [
-    getItem('Write First Draft', 'tasks/1'),
-    getItem('Write Second Draft', 'tasks/2'),
-    getItem('Write Final Draft', 'tasks/3'),
+    ...dummyProject.tasks.map(task => getItem(task.name, `tasks/${task.id}`)),
     getItem('Add New Task', 'add_task', <PlusOutlined />)
   ]),
   getItem('Contribution', 'contrib', <PieChartOutlined />),
