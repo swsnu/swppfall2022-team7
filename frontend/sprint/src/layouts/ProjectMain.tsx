@@ -1,70 +1,45 @@
-import { AppstoreOutlined, AuditOutlined, CalendarOutlined, HomeOutlined, PieChartOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { items, menuIdList } from '@routes/menuconfig';
+import { selectProject } from '@store/slices/project';
 import { Menu, MenuProps } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-const getItem = (label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group'): MenuItem => {
-  const ret: MenuItem = {
-    key,
-    icon,
-    children,
-    label,
-    type
-  };
-  return ret;
-};
-
-const items: MenuProps['items'] = [
-  getItem('Scientific Tech and Writing', '1', <HomeOutlined />),
-  getItem('Task List', '2', <AppstoreOutlined />, [
-    getItem('Write First Draft', '3'),
-    getItem('Write Second Draft', '4'),
-    getItem('Write Final Draft', '5'),
-    getItem('Add New Task', '6', <PlusOutlined />)
-  ]),
-  getItem('Contribution', '7', <PieChartOutlined />),
-  getItem('Project Documents', '8', <AuditOutlined />),
-  getItem('Project Calendar', '9', <CalendarOutlined />),
-  getItem('Manage Project', '10', <SettingOutlined />)
-];
-
 const ProjectMain: React.FC = () => {
-  const [menuSelected, setMenuSelected] = useState('1');
   const navigate = useNavigate();
-  const { projectId } = useParams();
+  const projectState = useSelector(selectProject);
+  const { projectId, menuId, taskId } = useParams();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
 
-  const onClick: MenuProps['onClick'] = e => {
-    setMenuSelected(e.key);
+  const onSelect: MenuProps['onSelect'] = ({ key }: { key: string }) => {
     if (projectId === undefined) return;
-    if (e.key === '1') navigate(`/projects/${projectId}`);
-    else if (e.key === '3') navigate(`/projects/${projectId}/tasks/1`);
-    else if (e.key === '4') navigate(`/projects/${projectId}/tasks/2`);
-    else if (e.key === '5') navigate(`/projects/${projectId}/tasks/3`);
-    else navigate(`/projects/${projectId}`);
+    if (menuIdList.find(id => id === key) !== undefined) navigate(`/projects/${projectId}/${key}`);
+    else if (key === 'intro') navigate(`/projects/${projectId}`);
+    else navigate(`/projects/${projectId}/${key}`);
+  };
+
+  const selectedKey: () => string = () => {
+    if (taskId !== undefined) return 'tasks/' + taskId;
+    if (menuId !== undefined) return menuId;
+    return 'intro';
   };
 
   return (
     <div className="project-main">
       <div className="project-main-left">
         <div className="project-intro">
-          <div className="project-name">Summary of <br></br>Thousands Brains</div>
-          <div className="project-subject">Scientific Tech and Writing</div>
+          <div className="project-name">{project?.name}</div>
+          <div className="project-subject">{project?.subject}</div>
         </div>
         <Menu
           title='Header'
-          onClick={onClick}
-          style={{ width: 256, height: 'calc(100% - 100px)' }}
-          defaultSelectedKeys={['1']}
+          onSelect={onSelect}
+          style={{ width: 256, height: 'calc(100vh - 164px)' }}
+          defaultSelectedKeys={[projectId ?? '']}
           mode="inline"
-          items={items}
+          items={items(project?.tasks ?? [])}
           className="project-main-menu"
-          selectedKeys={[menuSelected]}
+          selectedKeys={[selectedKey()]}
         />
       </div>
       <Outlet />

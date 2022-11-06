@@ -1,8 +1,9 @@
 .project-intro{
   display: flex;
   flex-direction: column;
-  padding: 10px 0px 0px 0px;
-  width: 100%;
+  padding: 10px 50px 20px 0px;
+  overflow-y: auto;
+  flex: 1;
   .project-info{
     display: flex;
     color: #BBBBBB;
@@ -10,7 +11,7 @@
     font-weight: bold;
   }
   .project-header{
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     margin-top: 20px;
   }
@@ -22,6 +23,56 @@
   }
   .member-container{
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
+  }
+  .task-list{
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 8px;
+  }
+  .project-flex{
+    display: flex;
+    padding-top: 20px;
+    .team-members{
+      padding-right: 16px;
+      flex: 2;
+      display: flex;
+      flex-flow: column;
+      .team-members-title{
+        font-weight: bold;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 8px;
+      }
+    }
+    .document-spaces{
+      padding-left: 16px;
+      flex: 3;
+      display: flex;
+      flex-flow: column;
+      .document-space-title{
+        font-weight: bold;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 8px;
+      }
+      .space-list{
+        display: flex;
+      }
+    }
+  }
+  .link{
+    font-size: 14px;
+    font-weight: normal;
+    color: #108ee9;
+    cursor: pointer;
   }
 }

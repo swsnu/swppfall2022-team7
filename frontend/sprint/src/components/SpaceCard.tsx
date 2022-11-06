@@ -1,9 +1,9 @@
-interface MemberCardProps {
+interface SpaceCardProps {
   name: string
   email: string
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({ name, email }: MemberCardProps) => {
+const SpaceCard: React.FC<SpaceCardProps> = ({ name, email }: SpaceCardProps) => {
   return (
     <div className="member-card-container">
       <a href="https://google.com" target="_blank" rel="noreferrer">
@@ -21,4 +21,4 @@ const MemberCard: React.FC<MemberCardProps> = ({ name, email }: MemberCardProps)
   );
 };
 
-export default MemberCard;
+export default SpaceCard;

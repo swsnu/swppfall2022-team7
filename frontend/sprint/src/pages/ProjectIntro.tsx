@@ -1,38 +1,95 @@
-import MemberCard from '../components/MemberCard';
-import TaskCard from '../components/TaskCard';
+import SpaceCard from '@components/SpaceCard';
+import { selectProject } from '@store/slices/project';
+import { DocumentSpaceType, MemberType } from '@utils/dummy';
+import { Avatar, List, Table, Tag } from 'antd';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+
+const taskColumns = [
+  {
+    title: 'Task',
+    key: 'name',
+    dataIndex: 'name'
+  },
+  {
+    title: 'Members',
+    key: 'members',
+    dataIndex: 'members',
+    render: (members: MemberType[]) => (
+      <Avatar.Group>
+        {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
+      </Avatar.Group>
+    )
+  },
+  {
+    title: 'Document Spaces',
+    key: 'documentSpaces',
+    dataIndex: 'documentSpaces',
+    render: (spaces: DocumentSpaceType[]) => (
+      spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
+    )
+  },
+  {
+    title: 'Last Updated',
+    key: 'updatedAt',
+    dataIndex: 'updatedAt'
+  }
+];
 
 const ProjectIntro: React.FC = () => {
+  const navigate = useNavigate();
+  const projectState = useSelector(selectProject);
+  const { projectId } = useParams();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   return (
     <div className="project-intro">
-      <div className="project-info">Summary of Thousands Brains: Scientific Tech and Writing</div>
+      <div className="project-info">{project?.name}: {project?.subject}</div>
       <div className="project-header">Description</div>
-      <div className="project-description">Lorem Ipsum is simply dummy text of t
-      he printing and typesetting industry. Lorem Ipsu
-      m has been the industry&#39;s standard dum
-      my text ever since the 1500s, when an unkno
-      wn printer took a galley of type and scram
-      bled it to make a type specimen book. It h
-      as survived not only five centuries, but a
-      lso the leap into electronic typesetting, rem
-      aining essentially unchanged. It was popular
-      ised in the 1960s with the release of Letras
-      et sheets containing Lorem Ipsum passages, an
-      d more recently with desktop publishing soft
-      ware like Aldus PageMaker including vers
-      ions of Lorem Ipsum.</div>
-      <div className="project-header">Team Member</div>
-      <div className="member-container">
-        <MemberCard name="SangHun Kim" email="lpxp@gmail.com" />
-        <MemberCard name="SangHyun Yi" email="brighthonor@gmail.com" />
-        <MemberCard name="HyungJin Joo" email="hjjoo389@gmail.com" />
-        <MemberCard name="SeokWo Choi" email="a42034523@gmail.com" />
+      <div className="project-description">
+        {project?.description}
       </div>
-      <div className="project-header">Task List</div>
-      <div className="member-container">
-        <TaskCard name="Write First draft" assignee="SangHun Kim" />
-        <TaskCard name="Write Second draft" assignee="SangHun Kim" />
-        <TaskCard name="Write Final draft" assignee="SangHun Kim" />
+      <div className="project-flex">
+        <div className="team-members">
+          <div className="team-members-title">
+            Team Members
+            <div className="link">Edit team</div>
+          </div>
+            <List
+              className="invite-list"
+              itemLayout="horizontal"
+              dataSource={project?.members}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<Avatar>{item.avatar}</Avatar>}
+                    title={item.name}
+                    description={item.email}
+                  />
+                </List.Item>
+              )}
+            />
+        </div>
+        <div className="document-spaces">
+          <div className="document-space-title">
+            Document Spaces
+            <div className="link" onClick={() => navigate('docs')}>Edit space</div>
+          </div>
+          <div className="member-container">
+            {project?.documentSpaces.map(space => (
+              <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
+            ))}
+          </div>
+        </div>
       </div>
+      <div className="task-list">
+        Task List
+        <div className="link" onClick={() => navigate('add_task')}>Add new task</div>
+      </div>
+      <Table
+        dataSource={project?.tasks.map(task => ({ ...task, key: task.id }))}
+        columns={taskColumns}
+        pagination={false}
+      />
     </div>
   );
 };
