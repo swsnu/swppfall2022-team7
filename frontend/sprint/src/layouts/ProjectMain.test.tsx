@@ -27,7 +27,7 @@ describe('project main test', () => {
     const menubuttons = screen.getAllByRole('menuitem');
     fireEvent.click(menubuttons[0]);
   });
-  it('should handle with menu item clicked', async () => {
+  it('should handle with menu item clicked', () => {
     renderWithProviders(AD, mockStore);
     const menubuttons = screen.getAllByRole('menuitem');
     fireEvent.click(menubuttons[0]);
