@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
 import { MemoryRouter } from 'react-router-dom';
 import ProjectIntro from './ProjectIntro';
 
@@ -14,6 +14,6 @@ describe('project intro test', () => {
     };
   });
   it('should render wihtout error', () => {
-    render(AD);
+    renderWithProviders(AD);
   });
 });

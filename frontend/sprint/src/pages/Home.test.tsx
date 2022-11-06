@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
 import Home from './Home';
 
 const mockNavigate = jest.fn();
@@ -22,18 +22,10 @@ describe('<Home />', () => {
     };
   });
   it('should render', () => {
-    render(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>
-    );
+    renderWithProviders(<Home />);
   });
   it('should navigate', () => {
-    render(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>
-    );
+    renderWithProviders(<Home />);
     const toNewProject = screen.getByText('New Project');
     fireEvent.click(toNewProject);
     expect(mockNavigate).toHaveBeenCalledTimes(1);
