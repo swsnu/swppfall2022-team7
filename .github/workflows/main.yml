@@ -61,7 +61,7 @@ jobs:
           pylint **/*.py --load-plugins pylint_django
           coverage run --source='.' manage.py test --keepdb
           coverage xml
-          coveralls --merge=../../frontend/coverage.json
+          coveralls --service=github --merge=../../frontend/coverage.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
