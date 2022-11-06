@@ -18,6 +18,7 @@ env:
   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+  GITHUB_TOKEN: ${{ secrets.HUBHUB_TOKEN }}
 
 jobs:
   build:
