@@ -25,6 +25,19 @@ export const projectSlice = createSlice({
         task.name = action.payload.newTaskName;
         task.description = action.payload.newTaskDescription;
       }
+    },
+    randomAssign: (state, action: PayloadAction<{ projectId: number, taskList: number[], memberList: number[] }>) => {
+      const project = state.find(project => project.id === action.payload.projectId);
+      if (project === undefined) return;
+      let index = 0;
+      for (const task of project.tasks) {
+        if (task.id === action.payload.taskList[index]) {
+          const member = project.members.find(member => member.id === action.payload.memberList[index]);
+          if (member !== undefined) task.members = [member];
+          index += 1;
+        }
+        if (index === action.payload.taskList.length) break;
+      }
     }
   }
 });

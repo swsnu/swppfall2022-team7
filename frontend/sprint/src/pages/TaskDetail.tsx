@@ -44,6 +44,9 @@ const TaskDetail: React.FC = () => {
 
   useEffect(() => {
     setTaskInfo({ name: task?.name, content: task?.description });
+    setEdit(false);
+    setEditedName(task?.name);
+    setEditedContent(task?.description);
   }, [task]);
 
   useEffect(() => {
