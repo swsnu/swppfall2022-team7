@@ -157,6 +157,11 @@
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 10px;
+            .file-name-container{
+              display: flex;
+              width: 100%;
+              justify-content: space-between;
+            }
             .file-info{
               display: flex;
               width: 100%;
