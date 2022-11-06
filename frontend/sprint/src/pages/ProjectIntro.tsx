@@ -1,4 +1,4 @@
-import MemberCard from '@components/MemberCard';
+import SpaceCard from '@components/SpaceCard';
 import { Avatar, List, Table, Tag } from 'antd';
 
 const taskColumns = [
@@ -97,9 +97,9 @@ const ProjectIntro: React.FC = () => {
             <div className="link">Edit space</div>
           </div>
           <div className="member-container">
-            <MemberCard name="SangHyun Yi" email="sdf" />
-            <MemberCard name="SangHyun Yi" email="sdf" />
-            <MemberCard name="SangHyun Yi" email="sdf" />
+            <SpaceCard name="Space 1" email="yohoho" />
+            <SpaceCard name="Space 2" email="yohoho" />
+            <SpaceCard name="Space 3" email="yohoho" />
           </div>
         </div>
       </div>
