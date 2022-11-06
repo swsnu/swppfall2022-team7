@@ -1,19 +1,42 @@
+import { selectProject } from '@store/slices/project';
 import { Badge, List, Tabs } from 'antd';
+import { useSelector } from 'react-redux';
 
-const dummyTaskList = [
-  {
-    task: 'Play League of Legends',
-    project: 'Project 1',
-    status: 'current'
-  },
-  {
-    task: 'Play Overwatch 2',
-    project: 'Project 2',
-    status: 'current'
-  }
-];
+// const dummyTaskList = [
+//   {
+//     task: 'Play League of Legends',
+//     project: 'Project 1',
+//     status: 'current'
+//   },
+//   {
+//     task: 'Play Overwatch 2',
+//     project: 'Project 2',
+//     status: 'current'
+//   }
+// ];
+
+interface MyTaskType {
+  task: string
+  project: string
+  status: 'current' | 'new' | 'ongoing'
+}
 
 const MyTasks: React.FC = () => {
+  const projectState = useSelector(selectProject);
+  const myTasks: MyTaskType[] = [];
+  projectState.forEach(project => {
+    project.tasks.forEach(task => {
+      task.members.forEach(member => {
+        if (member.email === 'poding84@snu.ac.kr') {
+          myTasks.push({
+            task: task.name,
+            project: project.name,
+            status: 'ongoing'
+          });
+        }
+      });
+    });
+  });
   return (
     <Tabs
       style={{
@@ -26,7 +49,7 @@ const MyTasks: React.FC = () => {
           key: 'ongoing',
           children: (
             <List
-              dataSource={dummyTaskList}
+              dataSource={myTasks}
               renderItem={(item, i) => (
                 <List.Item key={i}>
                   <List.Item.Meta
