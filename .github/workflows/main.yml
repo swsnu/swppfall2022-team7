@@ -56,7 +56,7 @@ jobs:
           cd frontend/sprint
           ./node_modules/.bin/eslint src
           yarn test --coverage --watchAll=false
-          coveralls-lcov --service=github -v -n coverage/lcov.info > ../coverage.json
+          coveralls-lcov -v -n coverage/lcov.info > ../coverage.json
           cd ../..
           cd backend/sprint
           pylint **/*.py --load-plugins pylint_django
