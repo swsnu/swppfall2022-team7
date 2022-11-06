@@ -20,6 +20,7 @@ env:
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
   GITHUB_TOKEN: ${{ secrets.HUBHUB_TOKEN }}
   COVERALLS_SERVICE_NAME: 'github'
+  COVERALLS_REPO_TOKEN: ${{ secrets.HUBHUB_TOKEN }}
 
 jobs:
   build:
