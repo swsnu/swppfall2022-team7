@@ -1,8 +1,12 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
+import { MemoryRouter } from 'react-router-dom';
 import NewProject from './NewProject';
 
 describe('<NewProject />', () => {
+  let AD: JSX.Element;
   beforeAll(() => {
+    AD = <MemoryRouter><NewProject /></MemoryRouter>;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -11,10 +15,10 @@ describe('<NewProject />', () => {
     };
   });
   it('should render', () => {
-    render(<NewProject />);
+    renderWithProviders(AD);
   });
   it('should handle input', () => {
-    const { container } = render(<NewProject />);
+    const { container } = renderWithProviders(AD);
     const projectNameInput = screen.getByPlaceholderText('Project Name');
     const subjectNameInput = screen.getByPlaceholderText('Subject Name');
     const emailInput = container.querySelector('#invite-email');
