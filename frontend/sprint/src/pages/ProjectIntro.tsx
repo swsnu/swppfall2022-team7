@@ -1,5 +1,6 @@
 import SpaceCard from '@components/SpaceCard';
 import { Avatar, List, Table, Tag } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const taskColumns = [
   {
@@ -50,6 +51,7 @@ const dummyTaskList = [
 ];
 
 const ProjectIntro: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="project-intro">
       <div className="project-info">Summary of Thousands Brains: Scientific Tech and Writing</div>
@@ -94,7 +96,7 @@ const ProjectIntro: React.FC = () => {
         <div className="document-spaces">
           <div className="document-space-title">
             Document Spaces
-            <div className="link">Edit space</div>
+            <div className="link" onClick={() => navigate('docs')}>Edit space</div>
           </div>
           <div className="member-container">
             <SpaceCard name="Space 1" email="yohoho" />
@@ -105,7 +107,7 @@ const ProjectIntro: React.FC = () => {
       </div>
       <div className="task-list">
         Task List
-        <div className="link">Add new task</div>
+        <div className="link" onClick={() => navigate('add_task')}>Add new task</div>
       </div>
       <Table
         dataSource={dummyTaskList}

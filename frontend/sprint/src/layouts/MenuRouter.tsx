@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 
 const MenuRouter: React.FC = () => {
   const { menuId, taskId } = useParams();
-  console.log(menuId, taskId);
   if (taskId === undefined) {
     return (
       <div>{menuId}</div>
