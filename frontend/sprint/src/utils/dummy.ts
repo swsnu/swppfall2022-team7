@@ -29,7 +29,7 @@ export interface ProjectType {
   tasks: TaskType[]
 };
 
-const choi = {
+export const choi = {
   name: 'Seokwoo Choi',
   email: 'poding84@snu.ac.kr',
   avatar: 'C',

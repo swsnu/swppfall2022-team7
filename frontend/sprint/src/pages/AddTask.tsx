@@ -1,12 +1,25 @@
 import AutoOption from '@components/AutoOption';
+import { dummyProject, MemberType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddTask: React.FC = () => {
+  const navigate = useNavigate();
   const [taskName, setTaskName] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
+  const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
-  const [inviteList, setInviteList] = useState<string[]>([]);
+  const [inviteList, setInviteList] = useState<MemberType[]>([]);
+  const onInviteClick: () => void = () => {
+    const invite = dummyProject.members.find(member => member.email === email);
+    if (invite === undefined) return;
+    setInviteList(inviteList => [...inviteList, invite]);
+    setEmail('');
+  };
+  const createTask: () => void = () => {
+    if (taskName === '' || description === '') return;
+    navigate('/projects');
+  };
   return (
     <div className="new-task">
       <div className="title-tab">
@@ -20,8 +33,8 @@ const AddTask: React.FC = () => {
         <div className="input-form">
           <label htmlFor="project-name">Task Name</label>
           <Input id="project-name" placeholder="Task Name" value={taskName} onChange={e => setTaskName(e.target.value)} />
-          <label htmlFor="subject-name">Task Description</label>
-          <Input id="subject-name" placeholder="Task Description" value={taskDescription} onChange={e => setTaskDescription(e.target.value)} />
+          <label htmlFor="subject-name">Description</label>
+          <Input id="subject-name" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
         </div>
       </div>
       <Divider />
@@ -37,23 +50,23 @@ const AddTask: React.FC = () => {
               id="invite-email"
               style={{ width: '100%' }}
               placeholder="example@snu.ac.kr"
-              options={[
-                {
-                  value: 'kshunn@snu.ac.kr',
-                  label: <AutoOption />
-                },
-                {
-                  value: 'poding84@snu.ac.kr',
-                  label: <AutoOption />
-                }
-              ]}
+              options={email.length > 0
+                ? dummyProject.members.map(member => ({
+                  value: member.email,
+                  label: <AutoOption member={member} />
+                }))
+                : []}
               value={email}
               onChange={e => setEmail(e)}
+              filterOption={(inputValue, option) => {
+                if (option === undefined) return false;
+                return option.value.toUpperCase().includes(inputValue.toUpperCase());
+              }}
             />
             <Button
               type="primary"
               disabled={email.length === 0}
-              onClick={() => setInviteList(inviteList => [...inviteList, email])}
+              onClick={onInviteClick}
             >
               Invite
             </Button>
@@ -65,9 +78,9 @@ const AddTask: React.FC = () => {
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<Avatar>K</Avatar>}
-                  title="Seokwoo Choi"
-                  description="poding84@snu.ac.kr"
+                  avatar={<Avatar>{item.avatar}</Avatar>}
+                  title={item.name}
+                  description={item.email}
                 />
               </List.Item>
             )}
@@ -75,7 +88,7 @@ const AddTask: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary">Create Task</Button>
+        <Button type="primary" onClick={createTask}>Create Task</Button>
       </div>
     </div>
   );
