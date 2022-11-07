@@ -37,7 +37,7 @@ const ProjectMain: React.FC = () => {
           style={{ width: 256, height: 'calc(100vh - 164px)' }}
           defaultSelectedKeys={[projectId ?? '']}
           mode="inline"
-          items={items(project?.tasks ?? [])}
+          items={items(project?.name ?? '', project?.tasks ?? [])}
           className="project-main-menu"
           selectedKeys={[selectedKey()]}
         />

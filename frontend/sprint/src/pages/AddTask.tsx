@@ -2,7 +2,7 @@ import AutoOption from '@components/AutoOption';
 import { AppDispatch } from '@store/index';
 import { projectActions } from '@store/slices/project';
 import { dummyProject, MemberType, TaskType } from '@utils/dummy';
-import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
+import { AutoComplete, Avatar, Button, DatePicker, Divider, Input, List } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -15,6 +15,7 @@ const AddTask: React.FC = () => {
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
   const [inviteList, setInviteList] = useState<MemberType[]>([]);
+  const [dueDate, setDueDate] = useState('');
   const onInviteClick: () => void = () => {
     const invite = dummyProject.members.find(member => member.email === email);
     if (invite === undefined) return;
@@ -22,14 +23,17 @@ const AddTask: React.FC = () => {
     setEmail('');
   };
   const createTask: () => void = () => {
-    if (taskName === '' || description === '') return;
+    if (taskName === '' || description === '' || dueDate === '') return;
     const newTask: TaskType = {
       name: taskName,
       description,
       id: 3 + Math.floor(100 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
-      documentSpaces: []
+      documentSpaces: [],
+      comments: [],
+      dueDate,
+      status: 'ongoing'
     };
     if (projectId !== undefined) {
       dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
@@ -51,6 +55,8 @@ const AddTask: React.FC = () => {
           <Input id="project-name" placeholder="Task Name" value={taskName} onChange={e => setTaskName(e.target.value)} />
           <label htmlFor="subject-name">Description</label>
           <Input id="subject-name" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
+          <label htmlFor="due-date">Due Date</label>
+          <DatePicker id="due-date" placeholder="Due Date" onChange={(_, dateString) => setDueDate(dateString)} />
         </div>
       </div>
       <Divider />

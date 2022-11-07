@@ -19,8 +19,8 @@ export const getItem = (label: React.ReactNode,
   return ret;
 };
 
-export const items: (tasks: TaskType[]) => MenuProps['items'] = tasks => [
-  getItem('Scientific Tech and Writing', 'intro', <HomeOutlined />),
+export const items: (name: string, tasks: TaskType[]) => MenuProps['items'] = (name, tasks) => [
+  getItem(name, 'intro', <HomeOutlined />),
   getItem('Task List', 'tasks', <AppstoreOutlined />, [
     ...tasks.map(task => getItem(task.name, `tasks/${task.id}`)),
     getItem('Add New Task', 'add_task', <PlusOutlined />)
