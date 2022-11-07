@@ -1,0 +1,38 @@
+.project-calendar{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 50px 20px 0px;
+  overflow-y: auto;
+  flex: 1;
+  .project-info{
+    display: flex;
+    color: #BBBBBB;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .calendar-header{
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+  .events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .notes-month {
+    font-size: 28px;
+    text-align: center;
+  }
+  .notes-month section {
+    font-size: 28px;
+  }
+}
