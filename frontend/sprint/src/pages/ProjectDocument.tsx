@@ -3,7 +3,7 @@ import { selectProject } from '@store/slices/project';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
-import { message, Table, Tag } from 'antd';
+import { message, Table, Tag, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 interface TableDataType {
@@ -104,12 +104,18 @@ const ProjectDocument: React.FC = () => {
     });
   }, []);
 
+  const rowSelection = {
+    getCheckboxProps: (record: TableDataType) => ({
+      disabled: record.head.length === 1
+    })
+  };
+
   return (
     <div className="project-document">
       <div className="project-info">{project?.name}: {project?.subject}: documents</div>
       <div className="project-header">Document Spaces</div>
-      <div className="space-header">Thousands of Brains Summary</div>
-      <Table dataSource={tableData} columns={columns} pagination={false}/>
+      <div className="space-header">Thousands of Brains Summary<Button>Change Head to Selected</Button></div>
+      <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
     </div>
   );
 };
