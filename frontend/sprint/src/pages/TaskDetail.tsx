@@ -21,6 +21,7 @@ const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
   const projectState = useSelector(selectProject);
   const dispatch = useDispatch<AppDispatch>();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   const task = useMemo(() =>
     projectState.find(project => project.id === parseInt(projectId ?? '0'))?.tasks.find(task => task.id === parseInt(taskId ?? '0'))
   , [projectId, taskId]);
@@ -172,7 +173,7 @@ const TaskDetail: React.FC = () => {
 
   return (
     <div className="task-detail">
-      <div className="task-info">Summary of Thousands Brains: Scientific Tech and Writing: {taskInfo.name}</div>
+      <div className="task-info">{project?.name}: {project?.subject}: {taskInfo.name}</div>
       {
         edit
           ? <div className="edit-container">
@@ -193,62 +194,21 @@ const TaskDetail: React.FC = () => {
       <div className="bottom-container">
         <div className="comment-container">
           <div className="comment-header">Comments</div>
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
+          {task?.comments.map(comment => (
+            <Comment
+              key={comment.id}
+              actions={actions}
+              author={<a>{comment.author}</a>}
+              avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="alt" />}
+              content={<p>{comment.content}</p>}
+              datetime={'2 weeks ago'}
+            />
+          ))}
         </div>
         <div className="documents-container">
           <div className="document-header">Projects Documents<Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button></div>
           <Collapse accordion>
-            <Panel header='Summary' key='1'>
+            <Panel header='Document Space' key='1'>
               <div className="document-container">
                 <div className="document-left">
                   {fileList.map((file, i) => {

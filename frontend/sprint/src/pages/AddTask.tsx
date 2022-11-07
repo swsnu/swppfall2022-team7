@@ -29,7 +29,8 @@ const AddTask: React.FC = () => {
       id: 3 + Math.floor(100 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
-      documentSpaces: []
+      documentSpaces: [],
+      comments: []
     };
     if (projectId !== undefined) {
       dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
