@@ -1,5 +1,5 @@
 import { selectProject } from '@store/slices/project';
-import { Badge, List, Tabs } from 'antd';
+import { Badge, List, Tabs, Tag } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ interface MyTaskType {
   status: string
   taskId: number
   projectId: number
+  dueDate: string
 }
 
 const MyTasks: React.FC = () => {
@@ -26,7 +27,8 @@ const MyTasks: React.FC = () => {
               project: project.name,
               status: task.status,
               taskId: task.id,
-              projectId: project.id
+              projectId: project.id,
+              dueDate: task.dueDate
             });
           } else {
             onGoingTasks.push({
@@ -34,7 +36,8 @@ const MyTasks: React.FC = () => {
               project: project.name,
               status: task.status,
               taskId: task.id,
-              projectId: project.id
+              projectId: project.id,
+              dueDate: task.dueDate
             });
           }
         }
@@ -60,7 +63,10 @@ const MyTasks: React.FC = () => {
                     title={item.task}
                     description={item.project}
                   />
-                  <div>{item.status}</div>
+                  <>
+                    <Tag color='volcano'>On Going</Tag>
+                    {item.dueDate}
+                  </>
                 </List.Item>
               )}
             />
@@ -78,7 +84,10 @@ const MyTasks: React.FC = () => {
                     title={item.task}
                     description={item.project}
                   />
-                  <div>{item.status}</div>
+                  <>
+                    <Tag color='geekblue'>Done</Tag>
+                    {item.dueDate}
+                  </>
                 </List.Item>
               )}
             />
