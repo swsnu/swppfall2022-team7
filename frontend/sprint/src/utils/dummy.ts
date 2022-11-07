@@ -69,6 +69,36 @@ const kim = {
   id: 4
 };
 
+const jeong = {
+  name: 'Deokin Jeong',
+  email: 'applist@snu.ac.kr',
+  avatar: 'J',
+  id: 5
+};
+
+const lim = {
+  name: 'Jigyu Lim',
+  email: 'jigu@snu.ac.kr',
+  avatar: 'L',
+  id: 6
+};
+
+const lee = {
+  name: 'Dongsun Lee',
+  email: 'dslee@kaist.ac.kr',
+  avatar: 'L',
+  id: 7
+};
+
+const kim2 = {
+  name: 'Dohyun Kim',
+  email: 'dhkim@snu.ac.kr',
+  avatar: 'K',
+  id: 8
+};
+
+export const dummyMembers = [choi, yi, joo, kim, jeong, lim, lee, kim2];
+
 export const dummyDescription = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
 
 export const dummyProject = {
@@ -156,4 +186,107 @@ export const dummyProject = {
   ]
 };
 
-export const dummyProjects = [dummyProject];
+export const dummyProject2 = {
+  id: 2,
+  updatedAt: '1 day ago',
+  description: 'Science Writing Team Project',
+  documents: 2,
+  name: 'Science Writing Team Project',
+  subject: 'Science Writing',
+  members: [choi, yi, joo, kim],
+  documentSpaces: [
+    {
+      name: 'Summary Writing',
+      updatedAt: '4 hour ago',
+      id: 1
+    },
+    {
+      name: 'Report Editing',
+      updatedAt: '2022.10.29',
+      id: 2
+    }
+  ],
+  tasks: [
+    {
+      name: 'Write First draft of Summary Writing',
+      status: 'done',
+      id: 1,
+      dueDate: '2022-10-03',
+      updatedAt: '8 days ago',
+      members: [yi],
+      description: 'Write the first draft of summary of "Thousand Brain"',
+      documentSpaces: [
+        {
+          name: 'Summary Writing',
+          updatedAt: '1 days ago',
+          id: 1
+        }
+      ],
+      comments: [
+        {
+          id: 1,
+          author: 'SangHun Kim',
+          content: 'Looks good!'
+        }
+      ]
+    },
+    {
+      name: 'Write Second draft of Summary Writing',
+      id: 2,
+      status: 'done',
+      dueDate: '2022-10-15',
+      updatedAt: '1 hour ago',
+      members: [choi],
+      description: 'Read first draft and edit it',
+      documentSpaces: [
+        {
+          name: 'Summary Writing',
+          updatedAt: '1 days ago',
+          id: 1
+        }
+      ],
+      comments: [
+        {
+          id: 3,
+          author: 'Sanghyun Yi',
+          content: 'Oh, you catched some point well! I missed those parts!'
+        }
+      ]
+    },
+    {
+      name: 'Prepare powerpoint for editing science report',
+      id: 3,
+      status: 'ongoing',
+      dueDate: '2022-11-01',
+      updatedAt: '10 hour ago',
+      members: [choi],
+      description: 'We just dicussed about which parts are needed to be edited. Please make a PPT for presentation',
+      documentSpaces: [
+        {
+          name: 'Report Editing',
+          updatedAt: '30 minutes ago',
+          id: 1
+        }
+      ],
+      comments: [
+        {
+          id: 1,
+          author: 'Sanghyun Yi',
+          content: 'PPT looks awesome!'
+        },
+        {
+          id: 2,
+          author: 'Sanghun Kim',
+          content: 'This PPT looks good'
+        },
+        {
+          id: 3,
+          author: 'Hyungjin Joo',
+          content: '👍'
+        }
+      ]
+    }
+  ]
+};
+
+export const dummyProjects = [dummyProject, dummyProject2];

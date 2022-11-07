@@ -1,7 +1,7 @@
 import AutoOption from '@components/AutoOption';
 import { AppDispatch } from '@store/index';
 import { projectActions } from '@store/slices/project';
-import { dummyProject, MemberType, TaskType } from '@utils/dummy';
+import { dummyMembers, MemberType, TaskType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, DatePicker, Divider, Input, List } from 'antd';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,7 @@ const AddTask: React.FC = () => {
   const [inviteList, setInviteList] = useState<MemberType[]>([]);
   const [dueDate, setDueDate] = useState('');
   const onInviteClick: () => void = () => {
-    const invite = dummyProject.members.find(member => member.email === email);
+    const invite = dummyMembers.find(member => member.email === email);
     if (invite === undefined) return;
     setInviteList(inviteList => [...inviteList, invite]);
     setEmail('');
@@ -73,8 +73,9 @@ const AddTask: React.FC = () => {
               style={{ width: '100%' }}
               placeholder="example@snu.ac.kr"
               options={email.length > 0
-                ? dummyProject.members.map(member => ({
+                ? dummyMembers.map(member => ({
                   value: member.email,
+                  name: member.name,
                   label: <AutoOption member={member} />
                 }))
                 : []}
@@ -82,7 +83,7 @@ const AddTask: React.FC = () => {
               onChange={e => setEmail(e)}
               filterOption={(inputValue, option) => {
                 if (option === undefined) return false;
-                return option.value.toUpperCase().includes(inputValue.toUpperCase());
+                return option.value.toUpperCase().includes(inputValue.toUpperCase()) || option.name.toUpperCase().includes(inputValue.toUpperCase());
               }}
             />
             <Button
