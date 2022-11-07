@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react';
-import { testDummyProject } from '@utils/dummy';
+import { testDummyProject } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ProjectCard from './ProjectCard';
