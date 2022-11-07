@@ -9,11 +9,11 @@ const Notification: React.FC = () => {
       <List
         itemLayout="horizontal"
         dataSource={[1, 2, 3, 4]}
-        renderItem={item => (
+        renderItem={(item, i) => (
           <List.Item>
             <List.Item.Meta
               avatar={<Avatar>K</Avatar>}
-              title="Seokwoo Choi zz.zz"
+              title={`Notification ${i}`}
               description="1 hour ago"
             />
           </List.Item>

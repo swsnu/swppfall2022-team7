@@ -6,7 +6,7 @@ jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
 describe('task detail test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
-    AD = <TaskDetail taskContent='content' taskName='name'/>;
+    AD = <TaskDetail />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
