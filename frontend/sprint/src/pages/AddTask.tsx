@@ -27,7 +27,7 @@ const AddTask: React.FC = () => {
     const newTask: TaskType = {
       name: taskName,
       description,
-      id: 3 + Math.floor(100 * Math.random()),
+      id: 3 + Math.floor(10000 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
       documentSpaces: [],
