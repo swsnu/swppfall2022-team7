@@ -17,13 +17,14 @@ export const projectSlice = createSlice({
       const project = state.find(project => project.id === action.payload.projectId);
       if (project !== undefined) project.tasks.push(action.payload.newTask);
     },
-    editTask: (state, action: PayloadAction<{ projectId: number, taskId: number, newTaskName: string, newTaskDescription: string }>) => {
+    editTask: (state, action: PayloadAction<{ projectId: number, taskId: number, newTaskName: string, newTaskDescription: string, newTaskDate: string }>) => {
       const project = state.find(project => project.id === action.payload.projectId);
       if (project !== undefined) {
         const task = project.tasks.find(task => task.id === action.payload.taskId);
         if (task === undefined) return;
         task.name = action.payload.newTaskName;
         task.description = action.payload.newTaskDescription;
+        task.dueDate = action.payload.newTaskDate;
       }
     },
     randomAssign: (state, action: PayloadAction<{ projectId: number, taskList: number[], memberList: number[] }>) => {

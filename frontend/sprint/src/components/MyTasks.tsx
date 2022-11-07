@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 interface MyTaskType {
   task: string
   project: string
-  status: 'current' | 'new' | 'ongoing'
+  status: string
   taskId: number
   projectId: number
 }
@@ -14,18 +14,29 @@ interface MyTaskType {
 const MyTasks: React.FC = () => {
   const projectState = useSelector(selectProject);
   const navigate = useNavigate();
-  const myTasks: MyTaskType[] = [];
+  const onGoingTasks: MyTaskType[] = [];
+  const doneTasks: MyTaskType[] = [];
   projectState.forEach(project => {
     project.tasks.forEach(task => {
       task.members.forEach(member => {
         if (member.email === 'poding84@snu.ac.kr') {
-          myTasks.push({
-            task: task.name,
-            project: project.name,
-            status: 'ongoing',
-            taskId: task.id,
-            projectId: project.id
-          });
+          if (task.status === 'done') {
+            doneTasks.push({
+              task: task.name,
+              project: project.name,
+              status: task.status,
+              taskId: task.id,
+              projectId: project.id
+            });
+          } else {
+            onGoingTasks.push({
+              task: task.name,
+              project: project.name,
+              status: task.status,
+              taskId: task.id,
+              projectId: project.id
+            });
+          }
         }
       });
     });
@@ -38,11 +49,11 @@ const MyTasks: React.FC = () => {
       defaultActiveKey="ongoing"
       items={[
         {
-          label: <span>Ongoing&nbsp;<Badge count={myTasks.length}/></span>,
+          label: <span>Ongoing&nbsp;<Badge count={onGoingTasks.length}/></span>,
           key: 'ongoing',
           children: (
             <List
-              dataSource={myTasks}
+              dataSource={onGoingTasks}
               renderItem={(item, i) => (
                 <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
                   <List.Item.Meta
@@ -56,9 +67,22 @@ const MyTasks: React.FC = () => {
           )
         },
         {
-          label: 'Done',
+          label: <span>Done&nbsp;<Badge count={doneTasks.length}/></span>,
           key: 'done',
-          children: null
+          children: (
+            <List
+              dataSource={doneTasks}
+              renderItem={(item, i) => (
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
+                  <List.Item.Meta
+                    title={item.task}
+                    description={item.project}
+                  />
+                  <div>{item.status}</div>
+                </List.Item>
+              )}
+            />
+          )
         }
       ]}
     />
