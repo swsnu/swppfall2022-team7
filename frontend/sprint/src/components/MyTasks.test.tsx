@@ -1,0 +1,37 @@
+import { dummyProjects, ProjectType } from '@utils/dummy';
+import { renderWithProviders } from '@utils/mocks';
+import MyTask from './MyTasks';
+
+const mockNavigate = jest.fn();
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  Navigate: (props: any) => {
+    mockNavigate(props.to);
+    return null;
+  },
+  useNavigate: () => mockNavigate
+}));
+
+const stubInitialState: ProjectType[] = dummyProjects;
+
+const mockState = {
+  preloadedState: {
+    project: stubInitialState
+  }
+};
+
+describe('<MyTask />', () => {
+  let AD: JSX.Element;
+  beforeAll(() => {
+    AD = <MyTask />;
+    global.matchMedia = global.matchMedia ?? function () {
+      return {
+        addListener: jest.fn(),
+        removeListener: jest.fn()
+      };
+    };
+  });
+  it('should render my task', () => {
+    renderWithProviders(AD, mockState);
+  });
+});

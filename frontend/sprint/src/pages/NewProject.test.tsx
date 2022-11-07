@@ -22,8 +22,15 @@ describe('<NewProject />', () => {
     const projectNameInput = screen.getByPlaceholderText('Project Name');
     const subjectNameInput = screen.getByPlaceholderText('Subject Name');
     const emailInput = container.querySelector('#invite-email');
+    const inviteButton = container.querySelectorAll('button[type=\'button\']')[0];
+    const createButton = container.querySelectorAll('button[type=\'button\']')[1];
+    fireEvent.click(createButton);
     fireEvent.change(projectNameInput, { target: { value: 'Project Name' } });
     fireEvent.change(subjectNameInput, { target: { value: 'Subject Name' } });
-    if (emailInput !== null) fireEvent.change(emailInput, 'Email');
+    fireEvent.change(emailInput, { target: { value: 'test' } });
+    fireEvent.click(inviteButton);
+    fireEvent.change(emailInput, { target: { value: 'brighthonor@snu.ac.kr' } });
+    fireEvent.click(inviteButton);
+    fireEvent.click(createButton);
   });
 });

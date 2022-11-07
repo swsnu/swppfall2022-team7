@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
 import TaskDetail from './TaskDetail';
 
 jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
@@ -15,10 +16,10 @@ describe('task detail test', () => {
     };
   });
   it('should render without error', () => {
-    render(AD);
+    renderWithProviders(AD);
   });
   it('should handle save after edit', () => {
-    render(AD);
+    renderWithProviders(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
@@ -28,7 +29,7 @@ describe('task detail test', () => {
     fireEvent.click(saveButton);
   });
   it('should handld cancel after edit', () => {
-    render(AD);
+    renderWithProviders(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
@@ -38,7 +39,7 @@ describe('task detail test', () => {
     fireEvent.click(cancelButton);
   });
   it('should handle like and dislike', () => {
-    const { container } = render(AD);
+    const { container } = renderWithProviders(AD);
     const likes = container.getElementsByClassName('likeButton');
     fireEvent.click(likes[0]);
     const dislikes = container.getElementsByClassName('dislikeButton');
