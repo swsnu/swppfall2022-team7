@@ -1,10 +1,10 @@
 .member-card-container{
-  width: 180px;
-  height: 200px;
+  width: 193px;
+  height: 260px;
   margin: 10px 20px 10px 0px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   border-radius: 2px;
   border: 1px #d0d0d0 solid;
@@ -17,7 +17,7 @@
   }
   .member-description-container{
     display: flex;
-    padding: 10px 0 0 0;
+    padding: 30px 0 0 0;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;

@@ -16,7 +16,7 @@ const Header: React.FC = () => {
         Sprint
       </div>
       <div className="header-user-menu">
-        <Badge count={2} size="small">
+        <Badge count={3} size="small">
           <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
         </Badge>
         <Avatar className="avatar" icon={<UserOutlined />} />

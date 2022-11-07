@@ -1,5 +1,23 @@
 import { Avatar, List } from 'antd';
 
+const dummyNotifications = [
+  {
+    title: <div>✏️ <b>SangHun Kim</b> commented on <b>Requirements and Specs</b></div>,
+    description: '4 hours ago',
+    avatar: 'K'
+  },
+  {
+    title: <div>📎 <b>HyungJin Joo</b> uploaded a file to <b>Abstract</b></div>,
+    description: '1 week ago',
+    avatar: 'J'
+  },
+  {
+    title: <div>📩 <b>Sanghyun Yi</b> invited you to <b>SPRINT</b></div>,
+    description: '2 months ago',
+    avatar: 'Y'
+  }
+];
+
 const Notification: React.FC = () => {
   return (
     <div className="notification">
@@ -8,13 +26,13 @@ const Notification: React.FC = () => {
       </div>
       <List
         itemLayout="horizontal"
-        dataSource={[1, 2, 3, 4]}
+        dataSource={dummyNotifications}
         renderItem={(item, i) => (
           <List.Item>
             <List.Item.Meta
-              avatar={<Avatar>K</Avatar>}
-              title={`Notification ${i}`}
-              description="1 hour ago"
+              avatar={<Avatar>{item.avatar}</Avatar>}
+              title={item.title}
+              description={item.description}
             />
           </List.Item>
         )}

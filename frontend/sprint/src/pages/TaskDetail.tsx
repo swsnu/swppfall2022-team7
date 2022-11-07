@@ -1,4 +1,4 @@
-import { Input, Avatar, Comment, Tooltip, Button, Collapse, Upload, message } from 'antd';
+import { Input, Avatar, Comment, Tooltip, Button, Collapse, Upload, message, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, createElement, useMemo } from 'react';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { projectActions, selectProject } from '@store/slices/project';
 import { AppDispatch } from '@store/index';
+import moment from 'moment';
 
 interface DocumentType {
   key: string | undefined
@@ -21,12 +22,14 @@ const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
   const projectState = useSelector(selectProject);
   const dispatch = useDispatch<AppDispatch>();
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   const task = useMemo(() =>
     projectState.find(project => project.id === parseInt(projectId ?? '0'))?.tasks.find(task => task.id === parseInt(taskId ?? '0'))
   , [projectId, taskId]);
   const [edit, setEdit] = useState(false);
   const [editedName, setEditedName] = useState(task?.name);
-  const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.description });
+  const [editedDate, setEditedDate] = useState(task?.dueDate);
+  const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.description, dueDate: task?.dueDate });
   const [editedContent, setEditedContent] = useState(task?.description);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
@@ -43,10 +46,11 @@ const TaskDetail: React.FC = () => {
   const s3 = new AWS.S3();
 
   useEffect(() => {
-    setTaskInfo({ name: task?.name, content: task?.description });
+    setTaskInfo({ name: task?.name, content: task?.description, dueDate: task?.dueDate });
     setEdit(false);
     setEditedName(task?.name);
     setEditedContent(task?.description);
+    setEditedDate(task?.dueDate);
   }, [task]);
 
   useEffect(() => {
@@ -159,8 +163,8 @@ const TaskDetail: React.FC = () => {
   ];
 
   const onSaveClicked = (): void => {
-    setTaskInfo({ name: editedName, content: editedContent });
-    dispatch(projectActions.editTask({ projectId: parseInt(projectId ?? '0'), taskId: parseInt(taskId ?? '0'), newTaskName: editedName ?? '', newTaskDescription: editedContent ?? '' }));
+    setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
+    dispatch(projectActions.editTask({ projectId: parseInt(projectId ?? '0'), taskId: parseInt(taskId ?? '0'), newTaskName: editedName ?? '', newTaskDescription: editedContent ?? '', newTaskDate: editedDate ?? '' }));
     setEdit(false);
   };
 
@@ -172,7 +176,7 @@ const TaskDetail: React.FC = () => {
 
   return (
     <div className="task-detail">
-      <div className="task-info">Summary of Thousands Brains: Scientific Tech and Writing: {taskInfo.name}</div>
+      <div className="task-info">{project?.name}: {project?.subject}: {taskInfo.name}</div>
       {
         edit
           ? <div className="edit-container">
@@ -183,72 +187,41 @@ const TaskDetail: React.FC = () => {
                   <Button type='text' onClick={onCancelClicked}>Cancel</Button>
                 </div>
               </div>
+              <DatePicker defaultValue={moment(editedDate, 'YYYY-MM-DD')} onChange={(_, dateString) => setEditedDate(dateString)} />
               <TextArea className="task-content" rows={10} defaultValue={taskInfo.content} onChange={(e) => { setEditedContent(e.target.value); }}/>
             </div>
           : <div>
-              <div className="task-name">Task: {taskInfo.name}<Button onClick={() => setEdit(true)}>Edit</Button></div>
+              <div className="task-name">
+                <div className="task-avatar">
+                  Task: {taskInfo.name}
+                  <Avatar.Group className="avatar">
+                    {task?.members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
+                  </Avatar.Group>
+                </div>
+                <Button onClick={() => setEdit(true)}>Edit</Button>
+              </div>
+              <div className="task-due">Due: {taskInfo.dueDate}</div>
               <div className="task-content">{taskInfo.content}</div>
             </div>
       }
       <div className="bottom-container">
         <div className="comment-container">
           <div className="comment-header">Comments</div>
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
-          <Comment
-            actions={actions}
-            author={<a>Han Solo</a>}
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-            content={
-              <p>
-                We supply a series of design principles, practical patterns and high quality design
-                resources (Sketch and Axure), to help people create their product prototypes beautifully
-                and efficiently.
-              </p>
-            }
-            datetime={
-              <Tooltip title="2016-11-22 11:22:33">
-                <span>8 hours ago</span>
-              </Tooltip>
-            }
-          />
+          {task?.comments.map(comment => (
+            <Comment
+              key={comment.id}
+              actions={actions}
+              author={<a>{comment.author}</a>}
+              avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="alt" />}
+              content={<p>{comment.content}</p>}
+              datetime={'2 weeks ago'}
+            />
+          ))}
         </div>
         <div className="documents-container">
           <div className="document-header">Projects Documents<Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button></div>
           <Collapse accordion>
-            <Panel header='Summary' key='1'>
+            <Panel header='Document Space' key='1'>
               <div className="document-container">
                 <div className="document-left">
                   {fileList.map((file, i) => {
