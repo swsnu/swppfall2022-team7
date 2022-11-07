@@ -114,8 +114,11 @@ const ProjectDocument: React.FC = () => {
     <div className="project-document">
       <div className="project-info">{project?.name}: {project?.subject}: Documents</div>
       <div className="project-header">Document Spaces</div>
+      <div className="space-header">Abstract</div>
       <div className="space-header">User Stories<Button>Change Head to Selected</Button></div>
       <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
+      <br/>
+      <div className="space-header">Testing Plan</div>
     </div>
   );
 };

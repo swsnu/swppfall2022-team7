@@ -1,4 +1,5 @@
 import AddTask from '@pages/AddTask';
+import ProjectCalendar from '@pages/ProjectCalendar';
 import ProjectContribution from '@pages/ProjectContribution';
 import ProjectDocument from '@pages/ProjectDocument';
 import TaskDetail from '@pages/TaskDetail';
@@ -14,6 +15,9 @@ const MenuRouter: React.FC = () => {
   }
   if (menuId === 'contrib') {
     return <ProjectContribution />;
+  }
+  if (menuId === 'cal') {
+    return <ProjectCalendar />;
   }
   if (taskId === undefined) {
     return (
