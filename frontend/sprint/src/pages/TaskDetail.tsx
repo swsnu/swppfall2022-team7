@@ -79,13 +79,6 @@ const TaskDetail: React.FC = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   setTaskInfo({ name: taskName, content: taskContent });
-  //   setEditedName(taskName);
-  //   setEditedContent(taskContent);
-  //   setEdit(false);
-  // }, [taskName]);
-
   const props: UploadProps = {
     onRemove: file => {
       const index = uploadFile.indexOf(file);
@@ -220,8 +213,28 @@ const TaskDetail: React.FC = () => {
         </div>
         <div className="documents-container">
           <div className="document-header">Projects Documents<Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button></div>
-          <Collapse accordion>
-            <Panel header='Document Space' key='1'>
+          {project?.id === 1 && task?.id === 1 && <Collapse accordion>
+            <Panel header='Abstract' key='1'>
+            <div className="document-container">
+                <div className="document-left">
+                </div>
+                <div className="document-right">
+                  <Dragger {...props}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                      band files
+                    </p>
+                  </Dragger>
+                </div>
+              </div>
+            </Panel>
+          </Collapse>}
+          {project?.id === 1 && task?.id === 1 && <Collapse accordion>
+            <Panel header='User Stories' key='2'>
               <div className="document-container">
                 <div className="document-left">
                   {fileList.map((file, i) => {
@@ -253,7 +266,27 @@ const TaskDetail: React.FC = () => {
                 </div>
               </div>
             </Panel>
-          </Collapse>
+          </Collapse>}
+          {project?.id === 1 && task?.id === 2 && <Collapse accordion>
+            <Panel header='Testing Plan' key='3'>
+            <div className="document-container">
+                <div className="document-left">
+                </div>
+                <div className="document-right">
+                  <Dragger {...props}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                      band files
+                    </p>
+                  </Dragger>
+                </div>
+              </div>
+            </Panel>
+          </Collapse>}
         </div>
       </div>
     </div>

@@ -1,42 +1,11 @@
 import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
 import { selectProject } from '@store/slices/project';
-import { DocumentSpaceType, MemberType } from '@utils/dummy';
+import { DocumentSpaceType, MemberType, TaskType } from '@utils/dummy';
 import { Avatar, Button, List, Table, Tag } from 'antd';
 import { Key, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-
-const taskColumns = [
-  {
-    title: 'Task',
-    key: 'name',
-    dataIndex: 'name'
-  },
-  {
-    title: 'Members',
-    key: 'members',
-    dataIndex: 'members',
-    render: (members: MemberType[]) => (
-      <Avatar.Group>
-        {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
-      </Avatar.Group>
-    )
-  },
-  {
-    title: 'Document Spaces',
-    key: 'documentSpaces',
-    dataIndex: 'documentSpaces',
-    render: (spaces: DocumentSpaceType[]) => (
-      spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
-    )
-  },
-  {
-    title: 'Last Updated',
-    key: 'updatedAt',
-    dataIndex: 'updatedAt'
-  }
-];
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
@@ -45,6 +14,39 @@ const ProjectIntro: React.FC = () => {
   const [randomIdList, setRandomIdList] = useState<Key[]>([]);
   const [showModal, setShowModal] = useState(false);
   const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
+  const taskColumns = [
+    {
+      title: 'Task',
+      key: 'name',
+      dataIndex: 'name',
+      render: (text: any, record: TaskType) => {
+        return <div className="task-link" onClick={() => navigate(`tasks/${record.id}`)}>{text}</div>;
+      }
+    },
+    {
+      title: 'Members',
+      key: 'members',
+      dataIndex: 'members',
+      render: (members: MemberType[]) => (
+        <Avatar.Group>
+          {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
+        </Avatar.Group>
+      )
+    },
+    {
+      title: 'Document Spaces',
+      key: 'documentSpaces',
+      dataIndex: 'documentSpaces',
+      render: (spaces: DocumentSpaceType[]) => (
+        spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
+      )
+    },
+    {
+      title: 'Last Updated',
+      key: 'updatedAt',
+      dataIndex: 'updatedAt'
+    }
+  ];
   return (
     <>
       <div className="project-intro">
