@@ -17,7 +17,7 @@ const MenuRouter: React.FC = () => {
     );
   }
   return (
-    <TaskDetail taskName="Task 1" taskContent="Yohoho" />
+    <TaskDetail />
   );
 };
 

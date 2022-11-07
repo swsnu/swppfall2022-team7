@@ -1,14 +1,13 @@
 import { Input, Avatar, Comment, Tooltip, Button, Collapse, Upload, message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import React, { useState, useEffect, createElement } from 'react';
+import React, { useState, useEffect, createElement, useMemo } from 'react';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, InboxOutlined, StarOutlined } from '@ant-design/icons';
 import AWS from 'aws-sdk';
-
-interface TaskDetailProps {
-  taskName: string
-  taskContent: string
-}
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { projectActions, selectProject } from '@store/slices/project';
+import { AppDispatch } from '@store/index';
 
 interface DocumentType {
   key: string | undefined
@@ -18,11 +17,17 @@ interface DocumentType {
 
 const { Dragger } = Upload;
 
-const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDetailProps) => {
+const TaskDetail: React.FC = () => {
+  const { projectId, taskId } = useParams();
+  const projectState = useSelector(selectProject);
+  const dispatch = useDispatch<AppDispatch>();
+  const task = useMemo(() =>
+    projectState.find(project => project.id === parseInt(projectId ?? '0'))?.tasks.find(task => task.id === parseInt(taskId ?? '0'))
+  , [projectId, taskId]);
   const [edit, setEdit] = useState(false);
-  const [editedName, setEditedName] = useState(taskName);
-  const [taskInfo, setTaskInfo] = useState({ name: taskName, content: taskContent });
-  const [editedContent, setEditedContent] = useState(taskContent);
+  const [editedName, setEditedName] = useState(task?.name);
+  const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.description });
+  const [editedContent, setEditedContent] = useState(task?.description);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState<string | null>(null);
@@ -36,6 +41,13 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
     IdentityPoolId: 'ap-northeast-2:89dcba84-b66a-49ce-b1f1-c0a3e77dd9da'
   });
   const s3 = new AWS.S3();
+
+  useEffect(() => {
+    setTaskInfo({ name: task?.name, content: task?.description });
+    setEdit(false);
+    setEditedName(task?.name);
+    setEditedContent(task?.description);
+  }, [task]);
 
   useEffect(() => {
     s3.getSignedUrl('getObject', {
@@ -57,18 +69,18 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
           Expires: 604799,
           ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
         });
-        newList.unshift({ key: file.Key, time: file.LastModified, url: url });
+        newList.unshift({ key: file.Key, time: file.LastModified, url });
         setFileList([...newList]);
       });
     });
   }, []);
 
-  useEffect(() => {
-    setTaskInfo({ name: taskName, content: taskContent });
-    setEditedName(taskName);
-    setEditedContent(taskContent);
-    setEdit(false);
-  }, [taskName]);
+  // useEffect(() => {
+  //   setTaskInfo({ name: taskName, content: taskContent });
+  //   setEditedName(taskName);
+  //   setEditedContent(taskContent);
+  //   setEdit(false);
+  // }, [taskName]);
 
   const props: UploadProps = {
     onRemove: file => {
@@ -101,7 +113,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
             Expires: 604799,
             ResponseContentDisposition: `attachment; filename ="${file.name ?? 'asdf.txt'}"`
           });
-          setFileList([{ key: file.name, time: file.lastModifiedDate, url: url }, ...fileList]);
+          setFileList([{ key: file.name, time: file.lastModifiedDate, url }, ...fileList]);
         });
     };
   };
@@ -148,13 +160,14 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ taskName, taskContent }: TaskDe
 
   const onSaveClicked = (): void => {
     setTaskInfo({ name: editedName, content: editedContent });
+    dispatch(projectActions.editTask({ projectId: parseInt(projectId ?? '0'), taskId: parseInt(taskId ?? '0'), newTaskName: editedName ?? '', newTaskDescription: editedContent ?? '' }));
     setEdit(false);
   };
 
   const onCancelClicked = (): void => {
     setEdit(false);
-    setEditedName(taskName);
-    setEditedContent(taskContent);
+    setEditedName(task?.name);
+    setEditedContent(task?.description);
   };
 
   return (
