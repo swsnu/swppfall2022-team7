@@ -42,8 +42,8 @@ const RandomRole: React.FC<RandomRoleProps> = ({ randomIdList, setRandomIdList, 
     setShowModal(false);
   };
   return (
-    <Modal title="Random Role Assignment" open={showModal} onCancel={onCancel} onOk={onOk} okText="Assign" okButtonProps={{ disabled: selectedList?.length !== randomIdList.length }}>
-      Select {randomIdList.length} members to assign tasks randomly.
+    <Modal title="Random Role Assignment" open={showModal} onCancel={onCancel} onOk={onOk} okText="Assign" okButtonProps={{ disabled: (selectedList?.length ?? 0) < randomIdList.length }}>
+      Select at least {randomIdList.length} members to assign tasks randomly.
       <Table
         dataSource={memberList?.map(member => ({ ...member, key: member.id }))}
         columns={memberColumns}
