@@ -1,0 +1,60 @@
+.project-contrib{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 50px 20px 0px;
+  overflow-y: auto;
+  flex: 1;
+  .project-info{
+    display: flex;
+    color: #BBBBBB;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .contrib-header{
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 7px;
+  }
+  .quest-header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dddddd;
+  }
+  .timeline-header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dddddd;
+  }
+  .contrib-description{
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111111;
+  }
+  .timeline-container{
+    display: flex;
+    width: 400px;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .timeline-time{
+    font-size: 16px;
+    font-weight: 600;
+    color: #444444;
+  }
+  .timeline-content{
+    font-size: 14px;
+    color: #111111;
+    padding-left: 7px;
+  }
+}
