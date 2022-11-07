@@ -1,5 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
-import { dummyProjects, ProjectType } from '@utils/dummy';
+import { dummyProjects, ProjectType } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import AddTask from './AddTask';

@@ -94,7 +94,7 @@ const ProjectDocument: React.FC = () => {
           key: file.Key ?? 'undefined',
           filename: file.Key ?? 'undefined',
           description: `write ${file.Key ?? 'undefined'}`,
-          url: url,
+          url,
           head: (i === (d.Contents?.length ?? 1) - 1) ? ['head'] : [],
           lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
           uploader: 'SangHyun Yi'

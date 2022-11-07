@@ -2,7 +2,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import ProjectMain from './ProjectMain';
 import { renderWithProviders } from '@utils/mocks';
-import { dummyProjects, ProjectType } from '@utils/dummy';
+import { dummyProjects, ProjectType } from '@utils/testDummy';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));

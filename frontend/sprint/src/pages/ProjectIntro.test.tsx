@@ -1,5 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react';
-import { choi, dummyProjects, ProjectType } from '@utils/dummy';
+import { choi, dummyProjects, ProjectType } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ProjectIntro from './ProjectIntro';
@@ -97,7 +97,6 @@ describe('project intro test', () => {
   it('should handle checkbox click', () => {
     AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /></Routes></MemoryRouter>;
     renderWithProviders(AD, mockState2);
-    screen.debug();
     const checkbox = screen.getAllByRole('checkbox')[2];
     fireEvent.click(checkbox);
     const button = screen.getAllByRole('button')[0];

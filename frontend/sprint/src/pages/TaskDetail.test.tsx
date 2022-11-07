@@ -1,12 +1,21 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '@utils/mocks';
 import TaskDetail from './TaskDetail';
+import * as AWSMock from 'aws-sdk-mock';
+import AWS from 'aws-sdk';
 
 jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
 
 describe('task detail test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    AWSMock.setSDKInstance(AWS);
+    AWSMock.mock('S3', 'getSignedUrl', (func: string, obj: any) => {
+      return null;
+    });
+    AWSMock.mock('S3', 'listObjects', (params: any, callback: Function) => {
+      callback(null, { Contents: [{ Key: 'file1.csv' }] });
+    });
     AD = <TaskDetail />;
     global.matchMedia = global.matchMedia ?? function () {
       return {

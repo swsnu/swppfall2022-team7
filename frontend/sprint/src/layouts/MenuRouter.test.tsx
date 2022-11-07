@@ -24,4 +24,8 @@ describe('<TaskCard />', () => {
     AD = <MemoryRouter initialEntries={['/1/add_task/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /></Routes></MemoryRouter>;
     renderWithProviders(AD);
   });
+  it('should show menu router when menuId is docs', () => {
+    AD = <MemoryRouter initialEntries={['/1/docs/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD);
+  });
 });

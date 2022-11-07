@@ -1,6 +1,7 @@
-import { dummyProjects, ProjectType } from '@utils/dummy';
+import { dummyProjects, ProjectType } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import MyTask from './MyTasks';
+import { fireEvent, screen } from '@testing-library/react';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
@@ -33,5 +34,10 @@ describe('<MyTask />', () => {
   });
   it('should render my task', () => {
     renderWithProviders(AD, mockState);
+  });
+  it('should handle task click', () => {
+    renderWithProviders(AD, mockState);
+    const task = screen.getByRole('listitem');
+    fireEvent.click(task);
   });
 });
