@@ -33,7 +33,10 @@ const stubInitialState2: ProjectType[] = [{
           updatedAt: '2022.10.25',
           id: 2
         }
-      ]
+      ],
+      comments: [],
+      dueDate: '',
+      status: ''
     },
     {
       name: 'Task 2',
@@ -52,7 +55,10 @@ const stubInitialState2: ProjectType[] = [{
           updatedAt: '2022.10.23',
           id: 3
         }
-      ]
+      ],
+      comments: [],
+      dueDate: '',
+      status: ''
     }
   ]
 }];
@@ -72,7 +78,7 @@ const mockState2 = {
 describe('project intro test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
-    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /></Routes></MemoryRouter>;
+    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -91,11 +97,11 @@ describe('project intro test', () => {
     fireEvent.click(task);
   });
   it('should render w/o projectId', () => {
-    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:project' element={<ProjectIntro />} /></Routes></MemoryRouter>;
+    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:project' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
     renderWithProviders(AD, mockState);
   });
   it('should handle checkbox click', () => {
-    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /></Routes></MemoryRouter>;
+    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
     renderWithProviders(AD, mockState2);
     const checkbox = screen.getAllByRole('checkbox')[2];
     fireEvent.click(checkbox);

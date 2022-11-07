@@ -16,6 +16,7 @@ const mockState = {
 describe('<ProjectDocument />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    jest.useFakeTimers();
     AWSMock.setSDKInstance(AWS);
     AWSMock.mock('S3', 'getSignedUrl', (func: string, obj: any) => {
       return null;

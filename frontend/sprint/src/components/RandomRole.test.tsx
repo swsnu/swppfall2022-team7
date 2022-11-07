@@ -19,7 +19,10 @@ const stubInitialState: ProjectType[] = [{
     updatedAt: '2 days ago',
     members: [],
     description: 'Description 1',
-    documentSpaces: []
+    documentSpaces: [],
+    comments: [],
+    dueDate: '',
+    status: ''
   }]
 }];
 

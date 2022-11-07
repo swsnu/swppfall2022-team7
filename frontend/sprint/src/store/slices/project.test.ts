@@ -25,7 +25,10 @@ describe('project reducer', () => {
     updatedAt: '2 days ago',
     members: [],
     description: 'Description 1',
-    documentSpaces: []
+    documentSpaces: [],
+    comments: [],
+    dueDate: '',
+    status: ''
   };
 
   beforeAll(() => {
@@ -41,10 +44,10 @@ describe('project reducer', () => {
     store.dispatch(projectActions.addTask({ projectId: 0, newTask: mockTask }));
   });
   it('should handle edit task', () => {
-    store.dispatch(projectActions.editTask({ projectId: 1, taskId: 1, newTaskName: 'test', newTaskDescription: 'test desc' }));
+    store.dispatch(projectActions.editTask({ projectId: 1, taskId: 1, newTaskName: 'test', newTaskDescription: 'test desc', newTaskDate: '' }));
   });
   it('should handle edit task w/o valid task', () => {
-    store.dispatch(projectActions.editTask({ projectId: 1, taskId: 0, newTaskName: 'test', newTaskDescription: 'test desc' }));
+    store.dispatch(projectActions.editTask({ projectId: 1, taskId: 0, newTaskName: 'test', newTaskDescription: 'test desc', newTaskDate: '' }));
   });
   it('should handle random assign', () => {
     store.dispatch(projectActions.randomAssign({ projectId: 1, taskList: [2], memberList: [2] }));

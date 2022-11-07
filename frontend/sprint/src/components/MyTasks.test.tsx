@@ -37,6 +37,8 @@ describe('<MyTask />', () => {
   });
   it('should handle task click', () => {
     renderWithProviders(AD, mockState);
+    const tab = screen.getAllByRole('tab')[1];
+    fireEvent.click(tab);
     const task = screen.getByRole('listitem');
     fireEvent.click(task);
   });

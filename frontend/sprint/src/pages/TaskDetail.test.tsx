@@ -9,6 +9,7 @@ jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
 describe('task detail test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    jest.useFakeTimers();
     AWSMock.setSDKInstance(AWS);
     AWSMock.mock('S3', 'getSignedUrl', (func: string, obj: any) => {
       return null;
@@ -46,12 +47,5 @@ describe('task detail test', () => {
     fireEvent.change(inputs[1], { target: { value: 'asdf' } });
     const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
-  });
-  it('should handle like and dislike', () => {
-    const { container } = renderWithProviders(AD);
-    const likes = container.getElementsByClassName('likeButton');
-    fireEvent.click(likes[0]);
-    const dislikes = container.getElementsByClassName('dislikeButton');
-    fireEvent.click(dislikes[0]);
   });
 });
