@@ -28,7 +28,7 @@ const ProjectCalendar: React.FC = () => {
       if (moment(task.dueDate).month() === value.month()) {
         if (parseInt(task.dueDate.substring(8, 10)) === value.date()) {
           const t = task.status === 'ongoing' ? 'warning' : 'success';
-          const c = task.description;
+          const c = task.name;
           listData.push({ type: t, content: c });
         }
       }
