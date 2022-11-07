@@ -1,0 +1,28 @@
+.project-document{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 50px 20px 0px;
+  overflow-y: auto;
+  flex: 1;
+  .project-info{
+    display: flex;
+    color: #BBBBBB;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .project-header{
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .space-header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dddddd;
+  }
+}
