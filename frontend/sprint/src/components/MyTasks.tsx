@@ -38,7 +38,7 @@ const MyTasks: React.FC = () => {
       defaultActiveKey="ongoing"
       items={[
         {
-          label: <span>Ongoing&nbsp;<Badge count={1}/></span>,
+          label: <span>Ongoing&nbsp;<Badge count={myTasks.length}/></span>,
           key: 'ongoing',
           children: (
             <List
