@@ -1,11 +1,22 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
 import TaskDetail from './TaskDetail';
+import * as AWSMock from 'aws-sdk-mock';
+import AWS from 'aws-sdk';
 
 jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
 
 describe('task detail test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    jest.useFakeTimers();
+    AWSMock.setSDKInstance(AWS);
+    AWSMock.mock('S3', 'getSignedUrl', (func: string, obj: any) => {
+      return null;
+    });
+    AWSMock.mock('S3', 'listObjects', (params: any, callback: Function) => {
+      callback(null, { Contents: [{ Key: 'file1.csv' }] });
+    });
     AD = <TaskDetail />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
@@ -15,10 +26,10 @@ describe('task detail test', () => {
     };
   });
   it('should render without error', () => {
-    render(AD);
+    renderWithProviders(AD);
   });
   it('should handle save after edit', () => {
-    render(AD);
+    renderWithProviders(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
@@ -28,7 +39,7 @@ describe('task detail test', () => {
     fireEvent.click(saveButton);
   });
   it('should handld cancel after edit', () => {
-    render(AD);
+    renderWithProviders(AD);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');
@@ -36,12 +47,5 @@ describe('task detail test', () => {
     fireEvent.change(inputs[1], { target: { value: 'asdf' } });
     const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
-  });
-  it('should handle like and dislike', () => {
-    const { container } = render(AD);
-    const likes = container.getElementsByClassName('likeButton');
-    fireEvent.click(likes[0]);
-    const dislikes = container.getElementsByClassName('dislikeButton');
-    fireEvent.click(dislikes[0]);
   });
 });

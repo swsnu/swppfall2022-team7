@@ -1,10 +1,22 @@
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@utils/mocks';
+import { dummyProjects, ProjectType } from '@utils/testDummy';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import MenuRouter from './MenuRouter';
 
-describe('<TaskCard />', () => {
+const stubInitialState: ProjectType[] = dummyProjects;
+
+const mockState = { preloadedState: { project: stubInitialState } };
+
+const TaskDetail = (): JSX.Element => <div />;
+jest.mock('../pages/TaskDetail', () => TaskDetail);
+
+const ProjectDocument = (): JSX.Element => <div />;
+jest.mock('../pages/ProjectDocument', () => ProjectDocument);
+
+describe('<MenuRouter />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    jest.useFakeTimers();
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -13,11 +25,19 @@ describe('<TaskCard />', () => {
     };
   });
   it('should show menu router without taskId', () => {
-    AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path="/:projectId/:menuId" element={<MenuRouter />} /></Routes></MemoryRouter>;
-    render(AD);
+    AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path="/:projectId/:menuId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
   });
   it('should show menu router with taskId', () => {
-    AD = <MemoryRouter initialEntries={['/1/1/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /></Routes></MemoryRouter>;
-    render(AD);
+    AD = <MemoryRouter initialEntries={['/1/1/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
+  });
+  it('should show menu router when menuId is add_task', () => {
+    AD = <MemoryRouter initialEntries={['/1/add_task/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
+  });
+  it('should show menu router when menuId is docs', () => {
+    AD = <MemoryRouter initialEntries={['/1/docs/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
   });
 });
