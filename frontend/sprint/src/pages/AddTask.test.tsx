@@ -14,6 +14,15 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
+// const mockRandomValues = jest.fn();
+// jest.mock('crypto', () => ({
+//   ...jest.requireActual('crypto'),
+//   getRandomValues: (props: any) => {
+//     mockRandomValues(props);
+//     return 1003;
+//   }
+// }));
+
 const stubInitialState: ProjectType[] = dummyProjects;
 
 const mockState = {
@@ -54,10 +63,12 @@ describe('<AddTask />', () => {
     const { container } = renderWithProviders(AD, mockState);
     const name = screen.getByPlaceholderText('Task Name');
     const sub = screen.getByPlaceholderText('Description');
+    const due = screen.getByPlaceholderText('Due Date');
     const createButton = container.querySelectorAll('button[type=\'button\']')[1];
     fireEvent.click(createButton);
     fireEvent.change(name, { target: { value: 'test' } });
     fireEvent.change(sub, { target: { value: 'test' } });
+    fireEvent.change(due, { target: { value: 'test', title: 'test' } });
     fireEvent.click(createButton);
   });
 });

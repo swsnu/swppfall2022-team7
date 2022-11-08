@@ -55,11 +55,23 @@ describe('project main test', () => {
     renderWithProviders(AD, mockStore);
     const buttons = screen.getAllByRole('menuitem');
     await act(async () => { fireEvent.click(buttons[0]); });
+    await act(async () => { fireEvent.click(buttons[1]); });
+    const taskButtons = screen.getAllByRole('menuitem');
+    await act(async () => { fireEvent.click(taskButtons[2]); });
+    await act(async () => { fireEvent.click(taskButtons[3]); });
+    await act(async () => { fireEvent.click(taskButtons[4]); });
+    await act(async () => { fireEvent.click(taskButtons[5]); });
   });
   it('should handle when there is no task', async () => {
     AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path="/:projectId/:menuId" element={<ProjectMain />} /> </Routes></MemoryRouter>;
     renderWithProviders(AD, mockStore);
     const buttons = screen.getAllByRole('menuitem');
-    await act(async () => { fireEvent.click(buttons[0]); });
+    await act(async () => { fireEvent.click(buttons[2]); });
+  });
+  it('should handle when there is wrong menu', async () => {
+    AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path="/:projectId/:taskId" element={<ProjectMain />} /> </Routes></MemoryRouter>;
+    renderWithProviders(AD, mockStore);
+    const buttons = screen.getAllByRole('menuitem');
+    await act(async () => { fireEvent.click(buttons[2]); });
   });
 });

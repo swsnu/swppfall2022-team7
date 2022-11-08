@@ -40,4 +40,12 @@ describe('<MenuRouter />', () => {
     AD = <MemoryRouter initialEntries={['/1/docs/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
     renderWithProviders(AD, mockState);
   });
+  it('should show menu router when menuId is cal', () => {
+    AD = <MemoryRouter initialEntries={['/1/cal/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
+  });
+  it('should show menu router when menuId is contrib', () => {
+    AD = <MemoryRouter initialEntries={['/1/contrib/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    renderWithProviders(AD, mockState);
+  });
 });

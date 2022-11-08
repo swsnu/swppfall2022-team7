@@ -1,10 +1,10 @@
 import AutoOption from '@components/AutoOption';
 import { AppDispatch } from '@store/index';
-import { projectActions } from '@store/slices/project';
+import { projectActions, selectProject } from '@store/slices/project';
 import { dummyMembers, MemberType, TaskType } from '@utils/dummy';
 import { AutoComplete, Avatar, Button, DatePicker, Divider, Input, List } from 'antd';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const AddTask: React.FC = () => {
@@ -16,6 +16,9 @@ const AddTask: React.FC = () => {
   const [email, setEmail] = useState('');
   const [inviteList, setInviteList] = useState<MemberType[]>([]);
   const [dueDate, setDueDate] = useState('');
+  const projectState = useSelector(selectProject);
+  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
+  const nextId = (project === undefined ? 1 : project.tasks.length + 1);
   const onInviteClick: () => void = () => {
     const invite = dummyMembers.find(member => member.email === email);
     if (invite === undefined) return;
@@ -27,7 +30,7 @@ const AddTask: React.FC = () => {
     const newTask: TaskType = {
       name: taskName,
       description,
-      id: 3 + Math.floor(10000 * Math.random()),
+      id: nextId, // Math.floor(10000 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
       documentSpaces: [],
