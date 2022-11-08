@@ -3,8 +3,43 @@ import { renderWithProviders } from '@utils/mocks';
 import TaskDetail from './TaskDetail';
 import * as AWSMock from 'aws-sdk-mock';
 import AWS from 'aws-sdk';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 jest.mock('antd', () => ({ ...jest.requireActual('antd') }));
+
+const stubInitialState = [{
+  id: 1,
+  updatedAt: '1 hour ago',
+  description: 'Project SPRINT for SWPP Fall 2022 (Special Platform for Robust Integration in Novice Team)',
+  documents: 0,
+  name: 'SPRINT',
+  subject: 'Principles and Practices of Software Development',
+  members: [],
+  documentSpaces: [],
+  tasks: [
+    {
+      name: 'Requirements and Specs',
+      status: 'done',
+      id: 1,
+      dueDate: '2022-02-02',
+      updatedAt: '1 week ago',
+      members: [],
+      description: 'This section will include the specification for your project in the form of user stories. For each user story, you should have at least a Feature and one or more Scenarios, each of which can have one or more Acceptance Tests. Acceptance Tests list one or more acceptance tests with concrete values for the parameters, and concrete assertions that you will make to verify the postconditions. You have to at least write user stories in detail (including Acceptance Tests) for the features to be implemented by this sprint. You can include user stories for the future sprints, and extend or modify the user stories in the following sprints.',
+      documentSpaces: [],
+      comments: [{
+        id: 1,
+        author: 'Sanghyun Yi',
+        content: 'Should we include the ER diagram in our Github Wiki?'
+      }]
+    }
+  ]
+}];
+
+const mockState = {
+  preloadedState: {
+    project: stubInitialState
+  }
+};
 
 describe('task detail test', () => {
   let AD: JSX.Element;
@@ -17,7 +52,7 @@ describe('task detail test', () => {
     AWSMock.mock('S3', 'listObjects', (params: any, callback: Function) => {
       callback(null, { Contents: [{ Key: 'file1.csv' }] });
     });
-    AD = <TaskDetail />;
+    AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path='/:projectId/:taskId' element={<TaskDetail />} /></Routes></MemoryRouter>;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -39,7 +74,7 @@ describe('task detail test', () => {
     fireEvent.click(saveButton);
   });
   it('should handld cancel after edit', () => {
-    renderWithProviders(AD);
+    renderWithProviders(AD, mockState);
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
     const inputs = screen.getAllByRole('textbox');

@@ -54,10 +54,12 @@ describe('<AddTask />', () => {
     const { container } = renderWithProviders(AD, mockState);
     const name = screen.getByPlaceholderText('Task Name');
     const sub = screen.getByPlaceholderText('Description');
+    const due = screen.getByPlaceholderText('Due Date');
     const createButton = container.querySelectorAll('button[type=\'button\']')[1];
     fireEvent.click(createButton);
     fireEvent.change(name, { target: { value: 'test' } });
     fireEvent.change(sub, { target: { value: 'test' } });
+    fireEvent.change(due, { target: { value: 'test', title: 'test' } });
     fireEvent.click(createButton);
   });
 });
