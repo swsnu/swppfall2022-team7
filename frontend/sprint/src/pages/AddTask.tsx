@@ -22,12 +22,15 @@ const AddTask: React.FC = () => {
     setInviteList(inviteList => [...inviteList, invite]);
     setEmail('');
   };
+  const crypto = window.crypto;
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
   const createTask: () => void = () => {
     if (taskName === '' || description === '' || dueDate === '') return;
     const newTask: TaskType = {
       name: taskName,
       description,
-      id: 3 + Math.floor(10000 * Math.random()),
+      id: 3 + Number(array.at(0)), // Math.floor(10000 * Math.random()),
       updatedAt: '1 min ago',
       members: inviteList,
       documentSpaces: [],
