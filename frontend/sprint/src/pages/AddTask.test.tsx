@@ -14,6 +14,15 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
+// const mockRandomValues = jest.fn();
+// jest.mock('crypto', () => ({
+//   ...jest.requireActual('crypto'),
+//   getRandomValues: (props: any) => {
+//     mockRandomValues(props);
+//     return 1003;
+//   }
+// }));
+
 const stubInitialState: ProjectType[] = dummyProjects;
 
 const mockState = {
