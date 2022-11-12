@@ -53,7 +53,7 @@ const ProjectCalendar: React.FC = () => {
     <div className="project-calendar">
       <div className="project-info">{projectInfo?.name}: {projectInfo?.subject}: Calendar</div>
       <div className="calendar-header">Project Calendar</div>
-      <Calendar dateCellRender={dateCellRender} />
+      <Calendar dateCellRender={dateCellRender} style={{ zIndex: 0 }} />
     </div>
   );
 };
