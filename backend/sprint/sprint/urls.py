@@ -17,13 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('user/', include('api_user.urls')),
-    path('project/', include('api_project.urls')),
-    path('task/', include('api_task.urls')),
-    path('meeting/', include('api_meeting.urls')),
-    path('document/', include('api_document_space.urls')),
-    path('documents/', include('api_document.urls')),
-    path('comment/', include('api_comment.urls')),
-    path('reaction/', include('api_reaction.urls')),
+    path('api/admin/', admin.site.urls),
+    path('api/user/', include('api_user.urls')),
+    path('api/project/', include('api_project.urls')),
+    path('api/task/', include('api_task.urls')),
+    path('api/meeting/', include('api_meeting.urls')),
+    path('api/document/', include('api_document_space.urls')),
+    path('api/documents/', include('api_document.urls')),
+    path('api/comment/', include('api_comment.urls')),
+    path('api/reaction/', include('api_reaction.urls')),
 ]
