@@ -4,16 +4,17 @@ import Home from '@pages/Home';
 import { RouteObject } from 'react-router-dom';
 import ProjectMain from '@layouts/ProjectMain';
 import NewProject from '@pages/NewProject';
-// import TaskDetail from '@pages/TaskDetail';
 import MenuRouter from '@layouts/MenuRouter';
-
-// const taskContent: string = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
+import Login from '@pages/Login';
+import SignUp from '@pages/SignUp';
 
 export const routes: RouteObject[] = [
   {
     path: '/',
     element: <Layout />,
     children: [
+      { path: '/login', element: <Login /> },
+      { path: '/signup', element: <SignUp /> },
       { path: '/projects', element: <Home /> },
       {
         path: '/projects/:projectId',
@@ -22,9 +23,6 @@ export const routes: RouteObject[] = [
           { path: '/projects/:projectId', element: <ProjectIntro /> },
           { path: '/projects/:projectId/:menuId/:taskId', element: <MenuRouter /> },
           { path: '/projects/:projectId/:menuId', element: <MenuRouter /> }
-          // { path: '/projects/:projectId/tasks/1', element: <TaskDetail taskName={'Write First Draft'} taskContent={taskContent}/> },
-          // { path: '/projects/:projectId/tasks/2', element: <TaskDetail taskName={'Write Second Draft'} taskContent={taskContent}/> },
-          // { path: '/projects/:projectId/tasks/3', element: <TaskDetail taskName={'Write Final Draft'} taskContent={taskContent}/> }
         ]
       },
       { path: '/projects/new-project', element: <NewProject /> }

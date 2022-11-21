@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   return (
     <AntdHeader className="header">
-      <div className="header-logo" onClick={() => navigate('/projects')}>
+      <div className="header-logo" onClick={() => navigate('/')}>
         <FireFilled className="logo-icon" />
         Sprint
       </div>
