@@ -3,10 +3,12 @@ import { BellFilled, UserOutlined, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useBindStore from '@store/zustand';
 
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
+  const user = useBindStore(state => state.user);
   const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
   return (
@@ -15,13 +17,18 @@ const Header: React.FC = () => {
         <FireFilled className="logo-icon" />
         Sprint
       </div>
-      <div className="header-user-menu">
-        <Badge count={3} size="small">
-          <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
-        </Badge>
-        <Avatar className="avatar" icon={<UserOutlined />} />
-      </div>
-      {showNotification && <Notification />}
+      {
+      user !== null
+        ? <>
+        <div className="header-user-menu">
+          <Badge count={3} size="small">
+            <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
+          </Badge>
+          <Avatar className="avatar" icon={<UserOutlined />} />
+        </div>
+        {showNotification && <Notification />}
+      </>
+        : null}
     </AntdHeader>
   );
 };
