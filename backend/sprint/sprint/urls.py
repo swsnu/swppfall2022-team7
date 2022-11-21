@@ -16,10 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.permissions import AllowAny
-from drf_yasg.views import get_schema_view 
+from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-schema_url_patterns = [ 
+schema_url_patterns = [
     path('user/', include('api_user.urls')),
     path('project/', include('api_project.urls')),
     path('task/', include('api_task.urls')),
@@ -30,7 +30,7 @@ schema_url_patterns = [
     path('reaction/', include('api_reaction.urls')),
 ]
 
-schema_view_v1 = get_schema_view(
+SchemaView = get_schema_view(
     openapi.Info(
         title="SWPP SPRINT API",
         default_version='v1',
@@ -52,7 +52,19 @@ urlpatterns = [
     path('documents/', include('api_document.urls')),
     path('comment/', include('api_comment.urls')),
     path('reaction/', include('api_reaction.urls')),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(
+        r'^swagger(?P<format>\.json|\.yaml)$',
+        SchemaView.without_ui(cache_timeout=0),
+        name='schema-json'
+    ),
+    re_path(
+        r'^swagger/$',
+        SchemaView.with_ui('swagger', cache_timeout=0),
+        name='schema-swagger-ui'
+    ),
+    re_path(
+        r'^redoc/$',
+        SchemaView.with_ui('redoc', cache_timeout=0),
+        name='schema-redoc'
+    ),
 ]
