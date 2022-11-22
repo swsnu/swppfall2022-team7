@@ -50,7 +50,30 @@
     }
   }
 }
-
+.dissolve-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .dissolve-warning{
+    border-radius: 5px;
+    border: 1px solid red;
+    font-size: 15px;
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    color: red; 
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  .dissolve-desc{
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  Input{
+    width: 100%;
+  }
+}
 .form-tab{
   display: flex;
   .input-form{
