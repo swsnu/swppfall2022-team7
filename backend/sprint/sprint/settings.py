@@ -143,4 +143,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = '/static/'
 
-CSRF_TRUSTED_ORIGINS = ['https://api.swppsprint.site', 'https://swppsprint.site', 'https://www.swppsprint.site']
+CSRF_TRUSTED_ORIGINS = [
+    'https://api.swppsprint.site',
+    'https://swppsprint.site',
+    'https://www.swppsprint.site'
+]
