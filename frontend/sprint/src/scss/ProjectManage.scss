@@ -1,0 +1,101 @@
+.project-manage{
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  padding: 10px 50px 20px 0px;
+  overflow-y: auto;
+  flex: 1;
+  .project-info{
+    display: flex;
+    color: #BBBBBB;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .settings-header{
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .team-members{
+    padding-right: 16px;
+    display: flex;
+    flex-flow: column;
+    .team-members-title{
+      font-weight: bold;
+      font-size: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+    }
+  }
+  .dissolve-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dissolve-left{
+      display: flex;
+      flex-direction: column;
+      .dissolve-header{
+        display: flex;
+        font-weight: bold;
+        font-size: 22px;
+      }
+      .dissolve-desc{
+        display: flex;
+        font-size: 15px;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+.dissolve-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .dissolve-warning{
+    border-radius: 5px;
+    border: 1px solid red;
+    font-size: 15px;
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    color: red; 
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  .dissolve-desc{
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  Input{
+    width: 100%;
+  }
+}
+.form-tab{
+  display: flex;
+  .input-form{
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    label{
+      margin-bottom: 5px;
+    }
+    .invite-input{
+      display: flex;
+      button{
+        margin-left: 4px;
+      }
+    }
+    input{
+      margin-bottom: 15px;
+    }
+  }
+}
+.invite-list{
+  margin: 15px 0;
+  height: 240px;
+  overflow-y: auto;
+}
