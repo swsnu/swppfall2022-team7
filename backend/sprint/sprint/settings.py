@@ -32,6 +32,12 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'corsheaders',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'model_user',
     'model_project',
     'api_comment',
@@ -42,12 +48,8 @@ INSTALLED_APPS = [
     'api_reaction',
     'api_task',
     'api_user',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'drf_yasg',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -139,6 +141,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL = True
+STATIC_ROOT = '/static/'
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+CSRF_TRUSTED_ORIGINS = [
+    'https://api.swppsprint.site',
+    'https://swppsprint.site',
+    'https://www.swppsprint.site'
+]
