@@ -4,6 +4,9 @@ from django.contrib.auth import logout, login
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
@@ -11,21 +14,35 @@ from utility.custom_decorator import (
 )
 from .tools.account import create_user, get_user
 
-# Create your views here.
 
-#
+from .serializers import (
+    RequestSignupPOSTSerializer,
+    ResponseSignupPOSTSerializer200,
+    ResponseSignupPOSTSerializer401
+)
+
+# Create your views here.
+@swagger_auto_schema(
+    methods=['POST'],
+    request_body=RequestSignupPOSTSerializer,
+    responses={
+        "200": ResponseSignupPOSTSerializer200,
+        "401": ResponseSignupPOSTSerializer401
+    }
+)
+@api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
 def signup(request: HttpRequest):
     data=json.loads(request.body.decode())
     user=create_user(data)
     if user is not None :
-        return JsonResponse(status=200, data={
+        return Response(status=200, data={
             "id" : user.id,
             "username" : user.username,
             "email" : user.email
         })
-    return HttpResponse(status=401)
+    return Response(status=401)
 
 @require_http_methods(['POST'])
 @return_bad_request_if_exception

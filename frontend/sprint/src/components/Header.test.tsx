@@ -16,12 +16,12 @@ describe('<Header />', () => {
       };
     };
   });
-  it('should show noti', () => {
-    AD = <MemoryRouter><Routes><Route path="" element={<Header />} /></Routes></MemoryRouter>;
-    const { container } = renderWithProviders(AD);
-    const bellIcon = container.getElementsByClassName('bell-icon')[0];
-    fireEvent.click(bellIcon);
-  });
+  // it('should show noti', () => {
+  //   AD = <MemoryRouter><Routes><Route path="" element={<Header />} /></Routes></MemoryRouter>;
+  //   const { container } = renderWithProviders(AD);
+  //   const bellIcon = container.getElementsByClassName('bell-icon')[0];
+  //   fireEvent.click(bellIcon);
+  // });
   it('should navigate when clicking logo', () => {
     AD = <MemoryRouter><Routes><Route path="" element={<Header />} /></Routes></MemoryRouter>;
     const { container } = renderWithProviders(AD);

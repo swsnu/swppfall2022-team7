@@ -1,0 +1,22 @@
+.login-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  flex-flow: column;
+  .login-box{
+    .title{
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+    width: 360px;
+    input{
+      margin-bottom: 12px;
+    }
+    button{
+      width: 100%;
+    }
+    margin-bottom: 36px;
+  }
+}
