@@ -109,6 +109,7 @@ disable=
       W0611,
       W0511, 
       W0613, # Unused arguments
+      W0223, # Abstract-method
       R0801, # Duplicate lines 
       R1705, # if, elif struct
       R1710, # if, elif struct
