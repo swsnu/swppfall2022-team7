@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import logout, login
+from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -35,7 +36,7 @@ from .serializers import (
 @return_bad_request_if_exception
 def signup(request: HttpRequest):
     data=json.loads(request.body.decode())
-    user=create_user(data)
+    user: User=create_user(data)
     if user is not None :
         return Response(status=200, data={
             "id" : user.id,
@@ -48,10 +49,14 @@ def signup(request: HttpRequest):
 @return_bad_request_if_exception
 def signin(request):
     data=json.loads(request.body.decode())
-    user=get_user(data)
+    user: User=get_user(data)
     if user is not None:
         login(request, user)
-        return HttpResponse(status=204)
+        return Response(status=204, data={
+            "id" : user.id,
+            "username" : user.username,
+            "email" : user.email
+        })
     return HttpResponse(status=401)
 
 @require_http_methods(['GET'])
