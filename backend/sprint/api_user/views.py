@@ -52,7 +52,7 @@ def signin(request):
     user=get_user(data)
     if user is not None:
         login(request, user)
-        return Response(status=200, data={
+        return Response(status=204, data={
             "id" : user.id,
             "username" : user.username,
             "email" : user.email
