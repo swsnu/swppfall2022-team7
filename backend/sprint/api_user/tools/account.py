@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.db.models import Q
 
 def create_user(data: dict) :
     username=data['username']
@@ -39,3 +40,12 @@ def send_invite_email(user_email: str) :
     TODO: send invite email
     """
     return
+
+def listup_user_by_query(query: str) :
+    user_list = User.objects.filter(Q(email__contains=query) | Q(username__contains=query)).order_by('username').values()
+    
+    return [{
+        "email": user['email'],
+        "username": user['username'],
+        "id": user['id']
+    } for user in user_list]
