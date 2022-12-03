@@ -1,6 +1,4 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { message } from 'antd';
-import { act } from 'react-dom/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import SignUp from './SignUp';
 
@@ -24,6 +22,6 @@ describe('sign up page test', () => {
     fireEvent.change(pass2, { target: { value: 'password' } });
     const login = screen.getByText('Create Account');
     fireEvent.click(login);
-    await waitFor(() => {expect(screen.getByText('The email already exists!')).toBeInTheDocument()});
+    await waitFor(() => { expect(screen.getByText('The email already exists!')).toBeInTheDocument(); });
   });
 });

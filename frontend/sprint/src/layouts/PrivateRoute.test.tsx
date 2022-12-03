@@ -13,8 +13,8 @@ jest.mock('react-router', () => ({
 }));
 
 describe('project main test', () => {
-  function createMockLocalStorage(storage: any) {
-    let localStorageMock = (function () {
+  function createMockLocalStorage (storage: any): void {
+    const localStorageMock = (function () {
       let store: any = storage;
       return {
         getItem: function (key: string) {
@@ -25,11 +25,11 @@ describe('project main test', () => {
         },
         clear: function () {
           store = {};
-        },
+        }
       };
     })();
     Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
+      value: localStorageMock
     });
   }
   let AD: JSX.Element;
@@ -46,7 +46,7 @@ describe('project main test', () => {
     render(AD);
   });
   it('if exists token', () => {
-    createMockLocalStorage({ 'token': 'asdf' });
+    createMockLocalStorage({ token: 'asdf' });
     render(AD);
   });
 });
