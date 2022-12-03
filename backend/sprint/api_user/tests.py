@@ -60,7 +60,7 @@ class UserTestCase(TestCase):
             "email": "email1@gmail.com",
             "password": "pw1"
         }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         # Wrong password
         response = client.post(url, data = json.dumps({

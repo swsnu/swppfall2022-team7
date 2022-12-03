@@ -57,7 +57,7 @@ class ProjectTestCase(TestCase):
             "email": "email1@gmail.com",
             "password": "pw1"
         }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
@@ -101,7 +101,7 @@ class ProjectTestCase(TestCase):
             "email": "email1@gmail.com",
             "password": "pw1"
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
@@ -131,7 +131,7 @@ class ProjectTestCase(TestCase):
             "email": "email1@gmail.com",
             "password": "pw1"
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         response = client.put(url, data = json.dumps({
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
