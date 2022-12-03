@@ -5,10 +5,18 @@ class RequestSignupPOSTSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=20)
     email = serializers.CharField(max_length=20)
 
+class RequestSigninPOSTSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=20)
+    password = serializers.CharField(max_length=20)
+
 class ResponseSignupPOSTSerializer200(serializers.Serializer):
     id = serializers.IntegerField()
     username = serializers.CharField()
     email = serializers.CharField()
+    token = serializers.CharField()
 
 class ResponseSignupPOSTSerializer401(serializers.Serializer):
+    pass
+
+class BaseResponse(serializers.Serializer):
     pass
