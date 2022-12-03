@@ -45,7 +45,7 @@ def edit_task_detail(task: Task, get_data: dict):
     task.assignee = get_user_model().objects.get(id=assignee_id)
     task.name = name
     task.content = content
-    task.until_at = date_to_string(until_at)
+    task.until_at = string_to_date(until_at)
     ret = get_task_detail(task)
     return ret
 

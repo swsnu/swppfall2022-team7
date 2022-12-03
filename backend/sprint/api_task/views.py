@@ -2,10 +2,14 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view
+from drf_yasg.utils import swagger_auto_schema
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception,
     return_bad_request_if_does_not_exist
+)
+from utility.serializers import (
+    BaseResponse
 )
 from model_project.models import Task, Project, UserProject, DocumentSpace
 from model_user.models import get_user_model
@@ -115,7 +119,7 @@ def task_document(request, task_id:int):
     ret = get_document_space_list(task)
     return JsonResponse(ret, safe=False, status=200)
 
-@api_view(['PUT', 'DELETE'])
+@api_view(['POST', 'DELETE'])
 @require_http_methods(['POST', 'DELETE'])
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
