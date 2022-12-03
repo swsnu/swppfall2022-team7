@@ -2,6 +2,7 @@ import AddTask from '@pages/AddTask';
 import ProjectCalendar from '@pages/ProjectCalendar';
 import ProjectContribution from '@pages/ProjectContribution';
 import ProjectDocument from '@pages/ProjectDocument';
+import ProjectManage from '@pages/ProjectManage';
 import TaskDetail from '@pages/TaskDetail';
 import { useParams } from 'react-router-dom';
 
@@ -18,6 +19,9 @@ const MenuRouter: React.FC = () => {
   }
   if (menuId === 'cal') {
     return <ProjectCalendar />;
+  }
+  if (menuId === 'settings') {
+    return <ProjectManage />;
   }
   if (taskId === undefined) {
     return (
