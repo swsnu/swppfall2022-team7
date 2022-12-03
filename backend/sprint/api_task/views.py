@@ -18,6 +18,10 @@ from api_task.tools.task import (
     edit_task_detail, get_task_belong, get_document_space_list,
     edit_task_document, delete_task_document
 )
+from .serializers import (
+    RequestTaskPOSTSerializer,
+    RequestTaskDocuPOSTSerializer
+)
 
 # Create your views here.
 @api_view(['GET'])
@@ -35,6 +39,13 @@ def get_task(request, project_id:int):
     ret_data = get_task_list(project, user)
     return JsonResponse(ret_data, safe=False, status=200)
 
+@swagger_auto_schema(
+    methods=['POST'],
+    request_body=RequestTaskDocuPOSTSerializer,
+    responses={
+        '200': BaseResponse
+    }
+)
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
@@ -68,6 +79,13 @@ def task_detail(request, task_id:int):
     ret_data = get_task_detail(task)
     return JsonResponse(ret_data, status=200)
 
+@swagger_auto_schema(
+    methods=['PUT'],
+    request_body=RequestTaskPOSTSerializer,
+    responses={
+        '200': BaseResponse
+    }
+)
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_exception
@@ -119,6 +137,13 @@ def task_document(request, task_id:int):
     ret = get_document_space_list(task)
     return JsonResponse(ret, safe=False, status=200)
 
+@swagger_auto_schema(
+    methods=['POST', 'DELETE'],
+    request_body=RequestTaskDocuPOSTSerializer,
+    responses={
+        '200': BaseResponse
+    }
+)
 @api_view(['POST', 'DELETE'])
 @require_http_methods(['POST', 'DELETE'])
 @return_bad_request_if_exception
