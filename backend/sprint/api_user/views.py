@@ -1,6 +1,6 @@
 import json
 
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout
 from django.http import  HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -57,8 +57,8 @@ def signin(request: Request):
             token = Token.objects.get(user = user).key
         else :
             token  = Token.objects.create(user = user).key
-        
-        return Response (status=200, data ={
+
+        return Response (status=204, data ={
             "token" : token,
             "id" : user.id,
             "username": user.username,
@@ -161,5 +161,5 @@ def m_image(request, user_id:int):
 
 @ensure_csrf_cookie
 @require_http_methods(['GET'])
-def token(request):
+def csrf_token(request):
     return HttpResponse(status=204)
