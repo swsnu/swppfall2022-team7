@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-import uuid
 
 # Create your models here.
 class Project(models.Model):
@@ -44,7 +43,7 @@ class Reaction(models.Model):
 class DocumentSpace(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    head = models.BigIntegerField(default=-1)
+    head = models.IntegerField(default=-1)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TaskDocumentSpace(models.Model):
@@ -55,5 +54,5 @@ class TaskDocumentSpace(models.Model):
 class Document(models.Model):
     name = models.CharField(max_length=100)
     space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE)
-    document = models.UUIDField(unique=True, default=uuid.uuid4(), editable=False)
+    document = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
