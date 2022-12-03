@@ -2,6 +2,8 @@ import json
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from rest_framework.decorators import api_view
+
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
@@ -16,6 +18,7 @@ from .tools.project import (
 )
 
 # Create your views here.
+@api_view(['GET'])
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def user_project(request, user_id:int):
@@ -27,6 +30,7 @@ def user_project(request, user_id:int):
         "project_list": project_list
     })
 
+@api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
@@ -35,6 +39,7 @@ def m_project(request: HttpRequest):
     project = create_project(data, request.user)
     return JsonResponse(status=204, data=project)
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def project_detail(request, project_id:int):
@@ -44,6 +49,7 @@ def project_detail(request, project_id:int):
     data = get_project_detail(project)
     return JsonResponse(status=200, data=data)
 
+@api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
@@ -62,6 +68,7 @@ def m_project_detail(request: HttpRequest, project_id:int):
         project.delete()
         return HttpResponse(status=204)
 
+@api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_anonymous
 def m_member(request, project_id:int, member_id: int):

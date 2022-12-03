@@ -15,5 +15,5 @@ urlpatterns = [
     path('noti/detail/<int:noti_id>/m/', views.m_noti_detail),
     path('image/<int:user_id>/', views.image),
     path('image/<int:user_id>/m/', views.m_image),
-    path('token/', views.token, name='token'),
+    path('token/', views.csrf_token, name='token'),
 ]
