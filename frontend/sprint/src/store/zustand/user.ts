@@ -1,3 +1,4 @@
+import { SIGNIN_URL, SIGNOUT_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -24,7 +25,7 @@ UserSlice
   user: null,
   logIn: async (email: string, password: string) => {
     try {
-      const res = await axios.post('user/signin/', { email, password });
+      const res = await axios.post(SIGNIN_URL, { email, password });
       const user = {
         id: res.data.id,
         email: res.data.email,
@@ -37,7 +38,7 @@ UserSlice
     }
   },
   logOut: async () => {
-    await axios.get('user/signout');
+    await axios.get(SIGNOUT_URL);
   },
   signUp: async () => {
   }

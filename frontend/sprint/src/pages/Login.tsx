@@ -1,6 +1,6 @@
 import useBindStore from '@store/zustand';
 import { Button, Input } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
@@ -15,13 +15,22 @@ const Login: React.FC = () => {
       setPassword('');
     }
   };
+  const onKeyPress: (e: React.KeyboardEvent<HTMLElement>) => Promise<void> = async (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter') await handleLogin();
+  };
   return (
     user === null
       ? <div className="login-body">
       <div className="login-box">
         <div className="title">Login</div>
         <Input placeholder="Example@snu.ac.kr" value={email} onChange={e => setEmail(e.target.value)} />
-        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          onKeyPress={e => { void onKeyPress(e); }}
+        />
         <Button type="primary" onClick={() => { void handleLogin(); }}>Login</Button>
       </div>
       <div>
