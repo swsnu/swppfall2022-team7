@@ -43,7 +43,7 @@ def get_task(request, project_id:int):
     methods=['POST'],
     request_body=RequestTaskDocuPOSTSerializer,
     responses={
-        '200': BaseResponse
+        '201': BaseResponse
     }
 )
 @api_view(['POST'])
@@ -83,7 +83,7 @@ def task_detail(request, task_id:int):
     methods=['PUT'],
     request_body=RequestTaskPOSTSerializer,
     responses={
-        '200': BaseResponse
+        '200': BaseResponse,
     }
 )
 @api_view(['PUT', 'DELETE'])

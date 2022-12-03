@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view
@@ -10,11 +11,14 @@ from utility.custom_decorator import (
 from utility.serializers import (
     BaseResponse
 )
-from model_project.models import Task, Project, UserProject, DocumentSpace
-from model_user.models import get_user_model
+from model_project.models import Project, UserProject, DocumentSpace
 from .tools.docuspace import (
     get_docuspace, create_docuspace, get_docuspace_detail,
     edit_docuspace_detail
+)
+from .serializers import (
+    RequestDocuspaceDetailPOSTSerializer,
+    RequestDocuspacePOSTSerializer
 )
 
 # Create your views here.
@@ -22,7 +26,7 @@ from .tools.docuspace import (
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
-def docuspace(request, project_id:int):
+def list_docuspace(request, project_id:int):
     '''
     [GET] Get document space list of the project
     '''
@@ -31,8 +35,15 @@ def docuspace(request, project_id:int):
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
     ret = get_docuspace(project)
-    return JsonResponse(ret, status=200)
+    return JsonResponse(ret, safe=False, status=200)
 
+@swagger_auto_schema(
+    methods=['POST'],
+    request_body=RequestDocuspacePOSTSerializer,
+    responses={
+        '200': BaseResponse
+    }
+)
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
@@ -46,7 +57,8 @@ def m_docuspace(request, project_id:int):
     user = request.user
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
-    ret = create_docuspace(project)
+    get_data = json.loads(request.body.decode())
+    ret = create_docuspace(project, get_data)
     return JsonResponse(ret, status=201)
 
 @api_view(['GET'])
@@ -65,6 +77,13 @@ def docuspace_detail(request, docuspace_id:int):
     ret = get_docuspace_detail(docuspace)
     return JsonResponse(ret, status=200)
 
+@swagger_auto_schema(
+    methods=['PUT', 'DELETE'],
+    request_body=RequestDocuspaceDetailPOSTSerializer,
+    responses={
+        '200': BaseResponse
+    }
+)
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_exception
@@ -81,7 +100,8 @@ def m_docuspace_detail(request, docuspace_id:int):
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
     if request.method == 'PUT':
-        ret = edit_docuspace_detail(docuspace)
+        get_data = json.loads(request.body.decode())
+        ret = edit_docuspace_detail(docuspace, get_data)
         return JsonResponse(ret, status=200)
     elif request.method == 'DELETE':
         docuspace.delete()
