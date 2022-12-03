@@ -15,7 +15,6 @@ const Login: React.FC = () => {
       localStorage.clear();
       await message.error('Wrong email or password', 1);
     } else {
-      localStorage.clear();
       localStorage.setItem('token', token);
       navigate('/projects');
     }

@@ -1,22 +1,40 @@
 import { selectProject } from '@store/slices/project';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { List, Avatar, Button, Modal, AutoComplete, Input } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { dummyMembers, MemberType } from '@utils/dummy';
+import { UserType } from '@store/zustand/user';
+import useBindStore from '@store/zustand';
+import { BaseOptionType } from 'antd/lib/select';
 
 const ProjectManage: React.FC = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [openDissolve, setOpenDissolve] = useState(false);
   const [dissolve, setDissolve] = useState('');
-  const [email, setEmail] = useState('');
-  const [inviteList, setInviteList] = useState<MemberType[]>([]);
+  const [query, setQuery] = useState('');
+  const [queryList, setQueryList] = useState<UserType[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
+  const [emailList, setEmailList] = useState<string[]>([]);
+  const getAutoComplete = useBindStore(state => state.getAutoComplete);
+  useEffect(() => {
+    const asyncGetAutoComplete: () => Promise<void> = async () => {
+      if (query === '') return;
+      const autoComplete = await getAutoComplete(query);
+      setQueryList(autoComplete);
+    };
+    void asyncGetAutoComplete();
+  }, [query]);
+  const onSelect: (value: string, option: BaseOptionType) => void = (value, option) => {
+    setQuery(value);
+    setSelectedUser(option.name);
+  };
   const onInviteClick: () => void = () => {
-    const invite = dummyMembers.find(member => member.email === email);
-    if (invite === undefined) return;
-    setInviteList(inviteList => [...inviteList, invite]);
-    setEmail('');
+    setInviteList(inviteList => [...inviteList, { username: selectedUser, email: query }]);
+    setEmailList(emailList => [...emailList, query]);
+    setQuery('');
   };
   const { projectId } = useParams();
   const projectState = useSelector(selectProject);
@@ -25,6 +43,7 @@ const ProjectManage: React.FC = () => {
   ), [projectId]);
 
   const onAddConfirmClicked = (): void => {
+    console.log(emailList);
     setOpenAdd(false);
     setInviteList([]);
   };
@@ -101,23 +120,20 @@ const ProjectManage: React.FC = () => {
                 id="invite-email"
                 style={{ width: '100%' }}
                 placeholder="example@snu.ac.kr"
-                options={email.length > 0
-                  ? dummyMembers.map(member => ({
+                options={query.length > 0
+                  ? queryList.map(member => ({
                     value: member.email,
-                    name: member.name,
+                    name: member.username,
                     label: <AutoOption member={member} />
                   }))
                   : []}
-                value={email}
-                onChange={e => setEmail(e)}
-                filterOption={(inputValue, option) => {
-                  if (option === undefined) return false;
-                  return option.value.toUpperCase().includes(inputValue.toUpperCase()) || option.name.toUpperCase().includes(inputValue.toUpperCase());
-                }}
+                value={query}
+                onChange={e => setQuery(e)}
+                onSelect={onSelect}
               />
               <Button
                 type="primary"
-                disabled={email.length === 0}
+                disabled={query.length === 0}
                 onClick={onInviteClick}
               >
                 Invite
@@ -130,8 +146,8 @@ const ProjectManage: React.FC = () => {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar>{item.avatar}</Avatar>}
-                    title={item.name}
+                    avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
+                    title={item.username}
                     description={item.email}
                   />
                 </List.Item>

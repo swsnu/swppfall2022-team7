@@ -1,39 +1,42 @@
 import AutoOption from '@components/AutoOption';
-import { AppDispatch } from '@store/index';
-import { projectActions } from '@store/slices/project';
-import { dummyMembers, MemberType, ProjectType } from '@utils/dummy';
+import useBindStore from '@store/zustand';
+import { UserType } from '@store/zustand/user';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { BaseOptionType } from 'antd/lib/select';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const NewProject: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const [projectName, setProjectName] = useState('');
   const [subjectName, setSubjectName] = useState('');
-  const [email, setEmail] = useState('');
-  const [inviteList, setInviteList] = useState<MemberType[]>([]);
+  const [query, setQuery] = useState('');
+  const [queryList, setQueryList] = useState<UserType[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
+  const [emailList, setEmailList] = useState<string[]>([]);
+  const addProject = useBindStore(state => state.addProject);
+  const getAutoComplete = useBindStore(state => state.getAutoComplete);
+  useEffect(() => {
+    const asyncGetAutoComplete: () => Promise<void> = async () => {
+      if (query === '') return;
+      const autoComplete = await getAutoComplete(query);
+      setQueryList(autoComplete);
+    };
+    void asyncGetAutoComplete();
+  }, [query]);
+  const onSelect: (value: string, option: BaseOptionType) => void = (value, option) => {
+    setQuery(value);
+    setSelectedUser(option.name);
+  };
   const onInviteClick: () => void = () => {
-    const invite = dummyMembers.find(member => member.email === email);
-    if (invite === undefined) return;
-    setInviteList(inviteList => [...inviteList, invite]);
-    setEmail('');
+    setInviteList(inviteList => [...inviteList, { username: selectedUser, email: query }]);
+    setEmailList(emailList => [...emailList, query]);
+    setQuery('');
   };
   const createProject: () => void = () => {
     if (projectName === '' || subjectName === '') return;
-    const newProject: ProjectType = {
-      id: 3,
-      name: projectName,
-      subject: subjectName,
-      description: '',
-      members: inviteList,
-      updatedAt: '1 min ago',
-      documents: 0,
-      documentSpaces: [],
-      tasks: []
-    };
-    dispatch(projectActions.addProject(newProject));
+    void addProject(projectName, subjectName, emailList);
     navigate('/projects');
   };
   return (
@@ -66,23 +69,20 @@ const NewProject: React.FC = () => {
               id="invite-email"
               style={{ width: '100%' }}
               placeholder="example@snu.ac.kr"
-              options={email.length > 0
-                ? dummyMembers.map(member => ({
+              options={query.length > 0
+                ? queryList.map(member => ({
                   value: member.email,
-                  name: member.name,
+                  name: member.username,
                   label: <AutoOption member={member} />
                 }))
                 : []}
-              value={email}
-              onChange={e => setEmail(e)}
-              filterOption={(inputValue, option) => {
-                if (option === undefined) return false;
-                return option.value.toUpperCase().includes(inputValue.toUpperCase()) || option.name.toUpperCase().includes(inputValue.toUpperCase());
-              }}
+              value={query}
+              onChange={e => setQuery(e)}
+              onSelect={onSelect}
             />
             <Button
               type="primary"
-              disabled={email.length === 0}
+              disabled={query.length === 0}
               onClick={onInviteClick}
             >
               Invite
@@ -95,8 +95,8 @@ const NewProject: React.FC = () => {
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<Avatar>{item.avatar}</Avatar>}
-                  title={item.name}
+                  avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
+                  title={item.username}
                   description={item.email}
                 />
               </List.Item>
@@ -105,7 +105,9 @@ const NewProject: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={createProject}>Create Project</Button>
+        <Button type="primary" onClick={createProject} disabled={projectName === '' || subjectName === '' || emailList.length === 0}>
+          Create Project
+        </Button>
       </div>
     </div>
   );

@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User
 from model_project.models import UserProject, Project, Task
 
-from model_project.tools.project_manage import get_project_member_list, get_project_task_list
+from model_project.tools.project_manage import (
+    get_project_member_list,
+    get_project_task_list,
+    get_project_document_space_list,
+    get_last_modified_timestamp
+)
+
 from model_user.tools.user_manage import get_user_by_id
 from api_user.tools.account import send_invite_email
 
@@ -14,7 +20,10 @@ def get_project_list(user: User):
             "id": project.id,
             "name": project.name,
             "subject": project.subject,
-            "manager": project.manager.id
+            "manager": project.manager.id,
+            "member_list": get_project_member_list(project),
+            "last_modified": get_last_modified_timestamp(project),
+            "document_number": len(get_project_document_space_list(project)),
         })
     return project_list
 

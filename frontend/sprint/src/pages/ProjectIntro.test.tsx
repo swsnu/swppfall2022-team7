@@ -1,12 +1,12 @@
 import { fireEvent, screen } from '@testing-library/react';
-import { choi, dummyProjects, ProjectType } from '@utils/testDummy';
+import { choi, dummyProjects, DProjectType } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ProjectIntro from './ProjectIntro';
 
-const stubInitialState: ProjectType[] = dummyProjects;
+const stubInitialState: DProjectType[] = dummyProjects;
 
-const stubInitialState2: ProjectType[] = [{
+const stubInitialState2: DProjectType[] = [{
   id: 1,
   updatedAt: '1 hour ago',
   description: 'test',

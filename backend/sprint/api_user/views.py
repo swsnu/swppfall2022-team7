@@ -10,23 +10,30 @@ from rest_framework.request import Request
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
+from model_user.tools.user_manage import get_user_by_id
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
 )
-
 from utility.serializers import (
-    BaseResponseError,
     BaseResponse
 )
 
-from .tools.account import create_user, get_user
+from .tools.account import (
+    create_user,
+    get_user,
+    edit_user,
+    delete_user,
+    convert_user_to_dict,
+    listup_user_by_query,
+)
+
 from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
+    RequestEditUserPOSTSerializer,
     ResponseSignupPOSTSerializer200,
     ResponseSignupPOSTSerializer401,
-    BaseResponse
 )
 
 # Create your views here.
@@ -45,11 +52,7 @@ def signup(request: Request):
     data=json.loads(request.body.decode())
     user=create_user(data)
     if user is not None :
-        return Response(status=200, data={
-            "id" : user.id,
-            "username" : user.username,
-            "email" : user.email
-        })
+        return Response(status=200, data=convert_user_to_dict(user))
     return Response(status=401)
 
 @swagger_auto_schema(
@@ -87,22 +90,46 @@ def signout(request: Request):
     logout(request)
     return HttpResponse(status=204)
 
+
+@swagger_auto_schema(
+    methods=['PUT'],
+    request_body=RequestEditUserPOSTSerializer,
+    responses={
+        "200": BaseResponse
+    }
+)
+@api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-def change(request):
-    '''
-    [PUT] Change User setting
-    [DELETE] Delete User
-    '''
-    # TODO
+@return_bad_request_if_anonymous
+def change(request: Request):
+    user = request.user
+    if request.method == 'PUT' :
+        user = edit_user(request.data, user)
+        return Response(
+            status = 201,
+            data = convert_user_to_dict(user)
+        )
+    elif request.method == 'DELETE' :
+        delete_user(request.user)
+        return HttpResponse(status=204)
     return HttpResponse(status=200)
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
-def info(request, user_id:int):
-    '''
-    [GET] Get User info
-    '''
-    # TODO
-    return HttpResponse(status=200)
+@return_bad_request_if_anonymous
+def info(request: Request, user_id:int):
+    print(user_id)
+    user = get_user_by_id(user_id)
+    if user is None :
+        return HttpResponse(status=403)
+    return Response(status=200, data=convert_user_to_dict(user))
+
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def auto_compelete(request: Request, query: str) :
+    return Response(status=200, data=listup_user_by_query(query))
+
 
 @require_http_methods(['GET'])
 def timetable(request, user_id:int):
