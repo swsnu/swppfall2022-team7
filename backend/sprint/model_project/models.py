@@ -43,6 +43,7 @@ class Reaction(models.Model):
 class DocumentSpace(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    head = models.IntegerField(default=-1)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TaskDocumentSpace(models.Model):
@@ -52,6 +53,6 @@ class TaskDocumentSpace(models.Model):
 
 class Document(models.Model):
     name = models.CharField(max_length=100)
-    document = models.URLField()
-    head = models.BooleanField()
+    space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE)
+    document = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
