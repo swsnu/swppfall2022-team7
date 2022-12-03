@@ -1,12 +1,12 @@
-import { MemberType } from '@utils/dummy';
+import { UserType } from '@store/zustand/user';
 import { Avatar } from 'antd';
 
-const AutoOption: React.FC<{ member: MemberType }> = ({ member }: { member: MemberType }) => {
+const AutoOption: React.FC<{ member: UserType }> = ({ member }: { member: UserType }) => {
   return (
     <div className="auto-option">
       <div className="avatar">
-        <Avatar size="small" className="profile-image">{member.avatar}</Avatar>
-        {member.name}
+        <Avatar size="small" className="profile-image">{member.username.substring(0, 1)}</Avatar>
+        {member.username}
       </div>
       <div className="email">
         {member.email}

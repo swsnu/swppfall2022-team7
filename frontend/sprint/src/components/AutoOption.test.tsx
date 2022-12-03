@@ -11,7 +11,7 @@ describe('<AutoOption />', () => {
       };
     };
   });
-  it('should render', () => {
-    render(<AutoOption member={choi} />);
-  });
+  // it('should render', () => {
+  //   render(<AutoOption member={choi} />);
+  // });
 });

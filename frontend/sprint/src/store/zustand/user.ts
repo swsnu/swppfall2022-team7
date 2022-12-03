@@ -1,4 +1,4 @@
-import { GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
+import { AUTO_COMPLETE_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -15,6 +15,7 @@ export interface UserSlice {
   logOut: () => Promise<void>
   signUp: (name: string, email: string, password: string) => Promise<void>
   getUser: () => Promise<void>
+  getAutoComplete: (query: string) => Promise<UserType[]>
 };
 
 export const createUserSlice: StateCreator<
@@ -49,5 +50,9 @@ UserSlice
     const res = await axios.get(GET_USER_URL(userId));
     const user = res.data;
     set({ user });
+  },
+  getAutoComplete: async (query: string) => {
+    const res = await axios.get(AUTO_COMPLETE_URL(query));
+    return res.data;
   }
 });
