@@ -1,4 +1,4 @@
-import { dummyProjects, ProjectType } from '@utils/testDummy';
+import { DProjectType, dummyProjects } from '@utils/testDummy';
 import { renderWithProviders } from '@utils/mocks';
 import MyTask from './MyTasks';
 import { fireEvent, screen } from '@testing-library/react';
@@ -13,7 +13,7 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
-const stubInitialState: ProjectType[] = dummyProjects;
+const stubInitialState: DProjectType[] = dummyProjects;
 
 const mockState = {
   preloadedState: {

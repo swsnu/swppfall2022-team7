@@ -1,11 +1,11 @@
-import { SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
+import { GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 
 export interface UserType {
   id: number
-  name: string
+  username: string
   email: string
 };
 
@@ -14,6 +14,7 @@ export interface UserSlice {
   logIn: (email: string, password: string) => Promise<string | null>
   logOut: () => Promise<void>
   signUp: (name: string, email: string, password: string) => Promise<void>
+  getUser: () => Promise<void>
 };
 
 export const createUserSlice: StateCreator<
@@ -27,11 +28,8 @@ UserSlice
     try {
       const res = await axios.post(SIGNIN_URL, { email, password });
       const token = res.data.token;
-      const user = {
-        id: res.data.id,
-        email: res.data.email,
-        name: res.data.username
-      };
+      const user = res.data;
+      localStorage.setItem('userId', user.id);
       set({ user });
       return token;
     } catch (error) {
@@ -44,5 +42,12 @@ UserSlice
   },
   signUp: async (name: string, email: string, password: string) => {
     await axios.post(SIGNUP_URL, { username: name, email, password });
+  },
+  getUser: async () => {
+    const userId = localStorage.getItem('userId');
+    if (userId === null) return;
+    const res = await axios.get(GET_USER_URL(userId));
+    const user = res.data;
+    set({ user });
   }
 });
