@@ -15,7 +15,6 @@ const Login: React.FC = () => {
       setPassword('');
       localStorage.clear();
     } else {
-      localStorage.clear();
       localStorage.setItem('token', token);
       navigate('/projects');
     }

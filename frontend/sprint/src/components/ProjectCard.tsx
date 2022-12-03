@@ -1,5 +1,5 @@
 import { CopyOutlined } from '@ant-design/icons';
-import { ProjectType } from '@utils/dummy';
+import { ProjectType } from '@store/zustand/project';
 import { Avatar, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,18 +12,18 @@ const ProjectCard: React.FC<{ project: ProjectType }> = ({ project }: { project:
           {project.name}
         </div>
         <div className="last-edited">
-          Updated: {project.updatedAt}
+          Updated: {project.last_modified}
         </div>
         <div className="info-tab">
           <Avatar.Group>
-            {project.members.slice(0, 3).map(member => (
-              <Avatar key={member.id} size="small" className="avatar">{member.avatar}</Avatar>
+            {project.member_list.slice(0, 3).map(member => (
+              <Avatar key={member.id} size="small" className="avatar">{member.username.substring(0, 1)}</Avatar>
             ))}
-            {project.members.length > 3 && <Avatar size="small" className="avatar">+{project.members.length - 3}</Avatar>}
+            {project.member_list.length > 3 && <Avatar size="small" className="avatar">+{project.member_list.length - 3}</Avatar>}
           </Avatar.Group>
           <div className="task-badge">
             <CopyOutlined />
-            {project.documents}
+            {project.document_number}
           </div>
         </div>
       </div>

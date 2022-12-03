@@ -2,7 +2,7 @@ import { act, fireEvent, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import ProjectMain from './ProjectMain';
 import { renderWithProviders } from '@utils/mocks';
-import { dummyProjects, ProjectType } from '@utils/testDummy';
+import { dummyProjects, DProjectType } from '@utils/testDummy';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
@@ -14,7 +14,7 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
-const stubInitialState: ProjectType[] = dummyProjects;
+const stubInitialState: DProjectType[] = dummyProjects;
 
 const mockStore = { preloadedState: { project: stubInitialState } };
 

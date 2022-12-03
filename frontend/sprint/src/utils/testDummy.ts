@@ -29,7 +29,7 @@ export interface TaskType {
   status: string
 }
 
-export interface ProjectType {
+export interface DProjectType {
   id: number
   description: string
   name: string
@@ -158,7 +158,7 @@ export const dummyProject = {
 
 export const dummyProjects = [dummyProject];
 
-export const testDummyProject: ProjectType = {
+export const testDummyProject: DProjectType = {
   id: 1,
   updatedAt: '1 hour ago',
   description: 'test',
@@ -166,6 +166,6 @@ export const testDummyProject: ProjectType = {
   name: 'test',
   subject: 'test',
   members: [choi, yi, kim, joo],
-  documentSpaces: [],
-  tasks: []
+  tasks: [],
+  documentSpaces: []
 };
