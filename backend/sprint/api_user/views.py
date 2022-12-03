@@ -14,7 +14,7 @@ from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
 )
-from .tools.account import create_user, get_user
+from .tools.account import create_user, get_user, edit_user, delete_user
 
 
 from .serializers import (
@@ -58,7 +58,9 @@ def signin(request: Request):
         else :
             token  = Token.objects.create(user = user).key
 
-        return Response (status=204, data ={
+        return Response(
+            status=204, 
+            data = {
             "token" : token,
             "id" : user.id,
             "username": user.username,
@@ -74,13 +76,24 @@ def signout(request: Request):
     logout(request)
     return HttpResponse(status=204)
 
+@api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-def change(request):
-    '''
-    [PUT] Change User setting
-    [DELETE] Delete User
-    '''
-    # TODO
+@return_bad_request_if_anonymous
+def change(request: Request):
+    user = request.user
+    if request.method == 'PUT' :
+        user = edit_user(user)
+        return Response(
+            status = 201,
+            data = {
+                "id" : user.id,
+                "username": user.username,
+                "email": user.email
+            }
+        )
+    elif request.method == 'DELETE' :
+        user.delete()
+        return HttpResponse(status=204) 
     return HttpResponse(status=200)
 
 @require_http_methods(['GET'])

@@ -18,6 +18,14 @@ def get_user(data: dict) :
     user=authenticate(username=user.first().username, password=password)
     return user
 
+def edit_user(data: dict, user: User) -> User :
+    user.username = data['username']
+    user.save()
+    return user
+
+def delete_user(user: User) :
+    user.delete()
+
 def send_invite_email(user_email: str) :
     print(f"send user email with email `{user_email}`")
     """
