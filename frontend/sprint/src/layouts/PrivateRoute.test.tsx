@@ -13,6 +13,25 @@ jest.mock('react-router', () => ({
 }));
 
 describe('project main test', () => {
+  function createMockLocalStorage (storage: any): void {
+    const localStorageMock = (function () {
+      let store: any = storage;
+      return {
+        getItem: function (key: string) {
+          return store[key] ?? null;
+        },
+        setItem: function (key: string, value: string) {
+          store[key] = value.toString();
+        },
+        clear: function () {
+          store = {};
+        }
+      };
+    })();
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock
+    });
+  }
   let AD: JSX.Element;
   beforeAll(() => {
     AD = <MemoryRouter initialEntries={['/']}><Routes><Route path='/' element={<PrivateRoute />} /></Routes></MemoryRouter>;
@@ -24,6 +43,10 @@ describe('project main test', () => {
     };
   });
   it('should render without render', () => {
+    render(AD);
+  });
+  it('if exists token', () => {
+    createMockLocalStorage({ token: 'asdf' });
     render(AD);
   });
 });
