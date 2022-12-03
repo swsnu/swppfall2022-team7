@@ -2,12 +2,13 @@ import json
 
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
 
 # Create your tests here.
 class UserTestCase(TestCase):
     def setUp(self):
         self.url = '/user/'
-        get_user_model().objects.create_user(
+        user1 = get_user_model().objects.create_user(
             username = 'un1',
             password = 'pw1',
             email = 'email1@gmail.com'
@@ -17,6 +18,7 @@ class UserTestCase(TestCase):
             password = 'pw2',
             email = 'email2@gmail.com'
         )
+        self.token1 = Token.objects.create(user = user1).key
 
     def test_signup(self):
         client = Client()
@@ -83,7 +85,7 @@ class UserTestCase(TestCase):
             "password": "pw1"
         }), content_type='application/json')
 
-        response = client.get(url)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 204)
 
     def test_change(self):
