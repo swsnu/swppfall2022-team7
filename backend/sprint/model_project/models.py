@@ -55,3 +55,12 @@ class Document(models.Model):
     document = models.URLField()
     head = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class UserProjectActivity(models.Model) :
+    user_project = models.ForeignKey(UserProject, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
+    document_space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE, null=True)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE, null = True)
+    activity_type = models.IntegerField()
+    
