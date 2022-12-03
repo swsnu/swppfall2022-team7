@@ -1,4 +1,4 @@
-import { SIGNIN_URL, SIGNOUT_URL } from '@services/api';
+import { SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -13,7 +13,7 @@ export interface UserSlice {
   user: UserType | null
   logIn: (email: string, password: string) => Promise<string | null>
   logOut: () => Promise<void>
-  signUp: () => Promise<void>
+  signUp: (name: string, email: string, password: string) => Promise<void>
 };
 
 export const createUserSlice: StateCreator<
@@ -39,13 +39,10 @@ UserSlice
     }
   },
   logOut: async () => {
-    try {
-      await axios.get(SIGNOUT_URL);
-      localStorage.clear();
-    } catch (error) {
-      console.log(error);
-    }
+    await axios.get(SIGNOUT_URL);
+    localStorage.clear();
   },
-  signUp: async () => {
+  signUp: async (name: string, email: string, password: string) => {
+    await axios.post(SIGNUP_URL, { username: name, email, password });
   }
 });
