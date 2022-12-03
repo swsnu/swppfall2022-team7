@@ -8,6 +8,7 @@ import { selectProject } from '@store/slices/project';
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const projectState = useSelector(selectProject);
+
   return (
     <div className="home">
       <div className="project-title-tab">

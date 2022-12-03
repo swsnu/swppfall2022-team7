@@ -12,7 +12,7 @@ import PrivateRoute from '@layouts/PrivateRoute';
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to="/login" />
+    element: <Navigate to="/projects" />
   },
   {
     path: '/',

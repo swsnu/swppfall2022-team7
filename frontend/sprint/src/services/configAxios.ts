@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { BASE_URL } from './api';
 
-axios.defaults.baseURL = 'https://api.swppsprint.site/';
+axios.defaults.baseURL = BASE_URL;
 axios.interceptors.request.use(config => {
   config.headers = config.headers ?? {};
   const token = localStorage.getItem('token');

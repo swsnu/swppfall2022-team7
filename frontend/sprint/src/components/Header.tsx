@@ -8,9 +8,18 @@ import useBindStore from '@store/zustand';
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
-  const user = useBindStore(state => state.user);
-  const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const logOut = useBindStore(state => state.logOut);
+  const handleLogout: () => Promise<void> = async () => {
+    try {
+      await logOut();
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const [showNotification, setShowNotification] = useState(false);
   return (
     <AntdHeader className="header">
       <div className="header-logo" onClick={() => navigate('/projects')}>
@@ -18,13 +27,13 @@ const Header: React.FC = () => {
         Sprint
       </div>
       {
-      user !== null
+      token !== null
         ? <>
         <div className="header-user-menu">
           <Badge count={3} size="small">
             <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
           </Badge>
-          <Avatar className="avatar" icon={<UserOutlined />} />
+          <Avatar className="avatar" icon={<UserOutlined />} onClick={() => { void handleLogout(); }}/>
         </div>
         {showNotification && <Notification />}
       </>
