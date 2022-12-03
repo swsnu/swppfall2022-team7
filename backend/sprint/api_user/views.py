@@ -19,7 +19,14 @@ from utility.serializers import (
     BaseResponse
 )
 
-from .tools.account import create_user, get_user, edit_user, delete_user, convert_user_to_dict
+from .tools.account import (
+    create_user,
+    get_user,
+    edit_user,
+    delete_user,
+    convert_user_to_dict,
+    listup_user_by_query,
+)
 
 from .serializers import (
     RequestSignupPOSTSerializer,
@@ -116,6 +123,13 @@ def info(request: Request, user_id:int):
     if user is None :
         return HttpResponse(status=403)
     return Response(status=200, data=convert_user_to_dict(user))
+
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def auto_compelete(request: Request, query: str) :
+    return Response(status=200, data=listup_user_by_query(query))
+
 
 @require_http_methods(['GET'])
 def timetable(request, user_id:int):
