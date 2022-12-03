@@ -5,9 +5,15 @@ import { Link, Navigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const user = useBindStore(state => state.user);
+  const logIn = useBindStore(state => state.logIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleLogin: () => void = () => {
+  const handleLogin: () => Promise<void> = async () => {
+    const isLoggedIn = await logIn(email, password);
+    if (!isLoggedIn) {
+      alert('Email or password is incorrect');
+      setPassword('');
+    }
   };
   return (
     user === null
@@ -15,8 +21,8 @@ const Login: React.FC = () => {
       <div className="login-box">
         <div className="title">Login</div>
         <Input placeholder="Example@snu.ac.kr" value={email} onChange={e => setEmail(e.target.value)} />
-        <Input placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        <Button type="primary" onClick={handleLogin}>Login</Button>
+        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        <Button type="primary" onClick={() => { void handleLogin(); }}>Login</Button>
       </div>
       <div>
         {'Don\'t have an account yet?'}&nbsp;&nbsp;<Link to="/signup">Sign up!</Link>

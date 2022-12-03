@@ -9,6 +9,7 @@ const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
   const user = useBindStore(state => state.user);
+  const logOut = useBindStore(state => state.logOut);
   const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
   return (
@@ -24,7 +25,7 @@ const Header: React.FC = () => {
           <Badge count={3} size="small">
             <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
           </Badge>
-          <Avatar className="avatar" icon={<UserOutlined />} />
+          <Avatar className="avatar" icon={<UserOutlined />} onClick={() => { void logOut(); }}/>
         </div>
         {showNotification && <Notification />}
       </>
