@@ -5,7 +5,7 @@ import { UserType } from './user';
 export interface TaskType {
   id: number
   project: number
-  assignee: UserType[]
+  assignee: UserType
   name: string
   content: string
   createdAt: string

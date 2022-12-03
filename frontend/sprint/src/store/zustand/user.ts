@@ -11,7 +11,7 @@ export interface UserType {
 
 export interface UserSlice {
   user: UserType | null
-  logIn: (email: string, password: string) => Promise<boolean>
+  logIn: (email: string, password: string) => Promise<string | null>
   logOut: () => Promise<void>
   signUp: () => Promise<void>
 };
@@ -26,19 +26,25 @@ UserSlice
   logIn: async (email: string, password: string) => {
     try {
       const res = await axios.post(SIGNIN_URL, { email, password });
+      const token = res.data.token;
       const user = {
         id: res.data.id,
         email: res.data.email,
         name: res.data.username
       };
       set({ user });
-      return true;
+      return token;
     } catch (error) {
-      return false;
+      return null;
     }
   },
   logOut: async () => {
-    await axios.get(SIGNOUT_URL);
+    try {
+      await axios.get(SIGNOUT_URL);
+      localStorage.clear();
+    } catch (error) {
+      console.log(error);
+    }
   },
   signUp: async () => {
   }

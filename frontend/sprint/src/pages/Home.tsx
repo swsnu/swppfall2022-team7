@@ -4,16 +4,10 @@ import { Button, Row } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectProject } from '@store/slices/project';
-import { useEffect } from 'react';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const projectState = useSelector(selectProject);
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (token === null) navigate('/login');
-  }, [token]);
 
   return (
     <div className="home">

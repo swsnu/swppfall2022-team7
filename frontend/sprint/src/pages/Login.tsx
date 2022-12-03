@@ -1,26 +1,30 @@
 import useBindStore from '@store/zustand';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const user = useBindStore(state => state.user);
+  const navigate = useNavigate();
   const logIn = useBindStore(state => state.logIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const handleLogin: () => Promise<void> = async () => {
-    const isLoggedIn = await logIn(email, password);
-    if (!isLoggedIn) {
-      alert('Email or password is incorrect');
+    const token = await logIn(email, password);
+    if (token === null) {
+      await message.error('Wrong email or password', 1);
       setPassword('');
+      localStorage.clear();
+    } else {
+      localStorage.clear();
+      localStorage.setItem('token', token);
+      navigate('/projects');
     }
   };
   const onKeyPress: (e: React.KeyboardEvent<HTMLElement>) => Promise<void> = async (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter') await handleLogin();
   };
   return (
-    user === null
-      ? <div className="login-body">
+    <div className="login-body">
       <div className="login-box">
         <div className="title">Login</div>
         <Input placeholder="Example@snu.ac.kr" value={email} onChange={e => setEmail(e.target.value)} />
@@ -37,7 +41,6 @@ const Login: React.FC = () => {
         {'Don\'t have an account yet?'}&nbsp;&nbsp;<Link to="/signup">Sign up!</Link>
       </div>
     </div>
-      : <Navigate to="/projects" />
   );
 };
 
