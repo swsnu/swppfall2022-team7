@@ -21,7 +21,11 @@ from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
     ResponseSignupPOSTSerializer200,
-    ResponseSignupPOSTSerializer401,
+    ResponseSignupPOSTSerializer401
+)
+
+from utility.serializers import (
+    BaseResponseError,
     BaseResponse
 )
 
