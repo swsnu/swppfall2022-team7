@@ -57,6 +57,23 @@ class Document(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class UserProjectActivity(models.Model) :
+    class ActivityType:
+        CREATE_TASK = 1
+        CREATE_DOCUMENT_SPACE = 2
+        CREATE_COMMENT = 3
+        UPLOAD_DOCUMENT = 4
+        DOWNLOAD_DOCUMENT = 5 # will not be alerted
+        ASSIGNED_TASK = 6
+        EDIT_TASK = 7
+        EDIT_COMMENT = 8
+        REACT_COMMENT = 9
+        COMPLETE_TASK = 10
+
+        TASK_RELATED_ACTIVITY = [CREATE_TASK, EDIT_TASK, COMPLETE_TASK, ASSIGNED_TASK]
+        COMMENT_RELATED_ACTIVITY = [CREATE_COMMENT, REACT_COMMENT, EDIT_COMMENT]
+        DOCUMENT_RELATED_ACTIVITY = [UPLOAD_DOCUMENT, DOWNLOAD_DOCUMENT]
+        DOCUMENT_SPACE_RELATED_ACTIVITY = [CREATE_DOCUMENT_SPACE]
+
     user_project = models.ForeignKey(UserProject, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)

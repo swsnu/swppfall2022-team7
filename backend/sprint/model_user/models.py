@@ -10,6 +10,7 @@ class Timetable(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.TextField()
+    link = models.TextField()
     checked = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -5,7 +5,11 @@ from model_project.tools.project_manage import (
     get_project_member_list,
     get_project_task_list,
     get_project_document_space_list,
-    get_last_modified_timestamp
+    get_last_modified_timestamp,
+)
+
+from model_user.tools.noti_manage import (
+    send_project_invitation_notification
 )
 
 from model_user.tools.user_manage import get_user_by_id
@@ -47,18 +51,12 @@ def create_project(data: dict, user: User) :
         manager=user
     )
 
-    UserProject.objects.create(
-        user=user,
-        project=project
-    )
-    
+    add_project_member(project, user.id)
+
     for member_email in data["member_list"] :
         member = User.objects.filter(email=member_email)
         if member.exists() :
-            UserProject.objects.create(
-                user=member.first(),
-                project=project
-            )
+            add_project_member(project, member.first().id)
         else :
             send_invite_email(member_email)
 
@@ -95,10 +93,11 @@ def add_project_member(project: Project, member_id: int) :
         raise ValueError("User does not exist")
     
     if not UserProject.objects.filter(user = member, project = project).exists() :
-        UserProject.objects.create(
+        up =UserProject.objects.create(
             user = member,
             project = project
         )
+        send_project_invitation_notification(up)
     
     return get_project_detail(project)
 
