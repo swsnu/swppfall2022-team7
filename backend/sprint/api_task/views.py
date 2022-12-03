@@ -1,16 +1,16 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
-from datetime import datetime
 import json
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
 )
-from model_project.models import Task, Project, UserProject
+from model_project.models import Task, Project, UserProject, DocumentSpace
 from model_user.models import get_user_model
 from api_task.tools.task import (
     get_task_list, create_task, get_task_detail,
-    edit_task_detail, get_task_belong
+    edit_task_detail, get_task_belong, get_document_space_list,
+    edit_task_document, delete_task_document
 )
 
 # Create your views here.
@@ -98,8 +98,14 @@ def task_document(request, task_id:int):
     '''
     [GET] Get document space list of the task
     '''
-    # TODO
-    return HttpResponse(status=200)
+    try: task = Task.objects.get(id=task_id)
+    except: return HttpResponse(status=404)
+    project = task.project
+    user = request.user
+    if not UserProject.objects.filter(user=user, project=project).exists():
+        return HttpResponse(status=403)
+    ret = get_document_space_list(task)
+    return JsonResponse(ret, safe=False, status=200)
 
 @require_http_methods(['POST', 'DELETE'])
 @return_bad_request_if_exception
@@ -109,5 +115,19 @@ def m_task_document(request, task_id:int):
     [POST] Connect documnet space and the task
     [DELETE] Disconnect document space and the task
     '''
-    # TODO
-    return HttpResponse(status=200)
+    try: task = Task.objects.get(id=task_id)
+    except: return HttpResponse(status=404)
+    project = task.project
+    user = request.user
+    if not UserProject.objects.filter(user=user, project=project).exists():
+        return HttpResponse(status=403)
+    get_data = json.loads(request.body.decode())
+    document_id = get_data['documentId']
+    try: docuspace = DocumentSpace.objects.get(id=document_id)
+    except: return HttpResponse(status=404)
+    if request.method == 'POST':
+        edit_task_document(task, docuspace)
+        return HttpResponse(status=201)
+    elif request.method == 'DELETE':
+        delete_task_document(task, docuspace)
+        return HttpResponse(status=204)
