@@ -2,7 +2,9 @@ import json
 
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
 from model_project.models import UserProject, Project
+
 # Create your tests here.
 class ProjectTestCase(TestCase):
     def login(self, client) :
@@ -25,6 +27,9 @@ class ProjectTestCase(TestCase):
             password = 'pw2',
             email = 'email2@gmail.com'
         )
+
+        self.token1 = Token.objects.create(user = self.user1).key
+        self.token2 = Token.objects.create(user = self.user2).key
 
         self.project1 = Project.objects.create(
             name="pn",
@@ -52,12 +57,12 @@ class ProjectTestCase(TestCase):
             "email": "email1@gmail.com",
             "password": "pw1"
         }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
-
-        response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        response = client.get(url2)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get(url2, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 401)
 
     def test_m_project(self):
@@ -78,8 +83,8 @@ class ProjectTestCase(TestCase):
                 "email2@gmail.com",
                 "nonexist@email.com"
             ]
-        }, content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        }, content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 201)
 
     def test_project_detail(self):
         client = Client()
@@ -95,13 +100,13 @@ class ProjectTestCase(TestCase):
         response = client.post(self.login_url, data = json.dumps({
             "email": "email1@gmail.com",
             "password": "pw1"
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
-
-        response = client.get(url)
+        }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
 
-        response = client.get(url2)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get(url2, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 401)
 
     def test_m_project_detail(self):
@@ -116,31 +121,31 @@ class ProjectTestCase(TestCase):
         )
         url3 = self.url+f'detail/{proj.pk}/m/'
         # Wrong Method Test
-        response = client.get(url)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 405)
         # Right Test
-        response = client.put(url)
-        self.assertEqual(response.status_code, 401)
+        response = client.put(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 400)
 
         response = client.post(self.login_url, data = json.dumps({
             "email": "email1@gmail.com",
             "password": "pw1"
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 200)
 
         response = client.put(url, data = json.dumps({
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 201)
 
         response = client.put(url, data = json.dumps({
             "name": "name",
             "subject": "subject",
             "manager": self.user2.pk
-        }), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 201)
 
         response = client.put(url2, data = json.dumps({
-        }), content_type='application/json')
+        }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 401)
 
         response = client.delete(url3)
@@ -157,11 +162,11 @@ class ProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
         client = self.login(client)
-        response = client.put(url2)
+        response = client.put(url2, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 401)
 
-        response = client.put(url)
-        self.assertEqual(response.status_code, 204)
+        response = client.put(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
+        self.assertEqual(response.status_code, 201)
 
-        response = client.delete(url)
+        response = client.delete(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 204)
