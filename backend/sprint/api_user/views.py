@@ -19,8 +19,10 @@ from .tools.account import create_user, get_user
 
 from .serializers import (
     RequestSignupPOSTSerializer,
+    RequestSigninPOSTSerializer,
     ResponseSignupPOSTSerializer200,
-    ResponseSignupPOSTSerializer401
+    ResponseSignupPOSTSerializer401,
+    BaseResponse
 )
 
 # Create your views here.
@@ -46,6 +48,13 @@ def signup(request: Request):
         })
     return Response(status=401)
 
+@swagger_auto_schema(
+    methods=['POST'],
+    request_body=RequestSigninPOSTSerializer,
+    responses={
+        "200": BaseResponse
+    }
+)
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
@@ -58,7 +67,7 @@ def signin(request: Request):
         else :
             token  = Token.objects.create(user = user).key
 
-        return Response (status=204, data ={
+        return Response (status=200, data ={
             "token" : token,
             "id" : user.id,
             "username": user.username,
