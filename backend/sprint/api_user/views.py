@@ -1,11 +1,13 @@
 import json
 
 from django.contrib.auth import logout, login
-from django.http import HttpRequest, HttpResponse
+from django.http import  HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.request import Request
+from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
@@ -33,7 +35,7 @@ from .serializers import (
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
-def signup(request: HttpRequest):
+def signup(request: Request):
     data=json.loads(request.body.decode())
     user=create_user(data)
     if user is not None :
@@ -47,21 +49,28 @@ def signup(request: HttpRequest):
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_if_exception
-def signin(request):
-    data=json.loads(request.body.decode())
+def signin(request: Request):
+    data=request.data
     user=get_user(data)
     if user is not None:
-        login(request, user)
-        return Response(status=204, data={
+        if Token.objects.filter(user = user).exists() :
+            token = Token.objects.get(user = user).key
+        else :
+            token  = Token.objects.create(user = user).key
+        
+        return Response (status=200, data ={
+            "token" : token,
             "id" : user.id,
-            "username" : user.username,
-            "email" : user.email
+            "username": user.username,
+            "email": user.email
         })
     return Response(status=401)
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
-def signout(request):
+def signout(request: Request):
+    Token.objects.get(user = request.user).delete()
     logout(request)
     return HttpResponse(status=204)
 
