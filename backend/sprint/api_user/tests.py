@@ -95,8 +95,6 @@ class UserTestCase(TestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
-        response = client.put(url)
-        self.assertEqual(response.status_code, 200)
 
     def test_info(self):
         client = Client()
@@ -105,7 +103,7 @@ class UserTestCase(TestCase):
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
-        response = client.get(url)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
 
     def test_timetable(self):

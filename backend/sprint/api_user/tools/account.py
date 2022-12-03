@@ -9,7 +9,7 @@ def create_user(data: dict) :
         return None
     return User.objects.create_user(username=username, password=password, email=email)
 
-def get_user(data: dict) :
+def get_user(data: dict) -> User:
     email=data['email']
     password=data['password']
     user=User.objects.filter(email=email)
@@ -17,6 +17,13 @@ def get_user(data: dict) :
         return None
     user=authenticate(username=user.first().username, password=password)
     return user
+
+def convert_user_to_dict(user: User) :
+    return {
+        'email': user.email,
+        'username': user.username,
+        'id': user.id
+    }
 
 def edit_user(data: dict, user: User) -> User :
     user.username = data['username']
