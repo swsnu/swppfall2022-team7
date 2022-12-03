@@ -84,7 +84,7 @@ class ProjectTestCase(TestCase):
                 "nonexist@email.com"
             ]
         }, content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 201)
 
     def test_project_detail(self):
         client = Client()
@@ -135,14 +135,14 @@ class ProjectTestCase(TestCase):
 
         response = client.put(url, data = json.dumps({
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 201)
 
         response = client.put(url, data = json.dumps({
             "name": "name",
             "subject": "subject",
             "manager": self.user2.pk
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 201)
 
         response = client.put(url2, data = json.dumps({
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
@@ -166,7 +166,7 @@ class ProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
         response = client.put(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 201)
 
         response = client.delete(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 204)

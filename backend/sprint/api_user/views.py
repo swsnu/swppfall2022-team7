@@ -14,19 +14,18 @@ from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
 )
+
+from utility.serializers import (
+    BaseResponseError,
+    BaseResponse
+)
+
 from .tools.account import create_user, get_user
-
-
 from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
     ResponseSignupPOSTSerializer200,
     ResponseSignupPOSTSerializer401
-)
-
-from utility.serializers import (
-    BaseResponseError,
-    BaseResponse
 )
 
 # Create your views here.
