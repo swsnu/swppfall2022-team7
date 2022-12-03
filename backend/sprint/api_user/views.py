@@ -14,19 +14,9 @@ from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
 )
-<<<<<<< HEAD
 from .tools.account import create_user, get_user, edit_user, delete_user
 
 
-=======
-
-from utility.serializers import (
-    BaseResponseError,
-    BaseResponse
-)
-
-from .tools.account import create_user, get_user
->>>>>>> main
 from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
