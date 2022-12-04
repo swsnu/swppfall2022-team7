@@ -1,11 +1,13 @@
 from model_project.models import UserProject, Project, Task, Comment, UserProjectActivity
 from model_project.tools.activity_manage import push_activity
+from api_reaction.tools.reaction_manage import get_reaction_list_by_comment_id
 
 def convert_comment_to_dict(comment: Comment): 
     return {
         "id": comment.pk,
         "content": comment.content,
-        "created_at": comment.created_at
+        "created_at": comment.created_at,
+        "reaction_list": get_reaction_list_by_comment_id(comment.id)
     }
 
 def get_comment_list_by_task_id(task_id: int): 

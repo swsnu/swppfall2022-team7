@@ -17,6 +17,15 @@ from utility.custom_decorator import (
     return_bad_request_if_does_not_exist
 )
 
+from utility.serializers import (
+    BaseResponse
+)
+
+from .serializers import (
+    RequestCreateCommentPostSerializer,
+    RequestEditCommentPutSerializer
+)
+
 # Create your views here.
 @api_view(['GET'])
 @require_http_methods(['GET'])
@@ -27,6 +36,7 @@ def comment(request: Request, task_id:int):
     [GET] Get comment list of the task
     '''
     return Response(status=200, data=get_comment_list_by_task_id(task_id))
+
 
 @api_view(['POST'])
 @require_http_methods(['POST'])
