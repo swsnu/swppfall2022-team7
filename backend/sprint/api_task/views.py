@@ -41,7 +41,7 @@ def get_task(request, project_id:int):
 
 @swagger_auto_schema(
     methods=['POST'],
-    request_body=RequestTaskDocuPOSTSerializer,
+    request_body=RequestTaskPOSTSerializer,
     responses={
         '201': BaseResponse
     }
