@@ -23,7 +23,7 @@ const ProjectIntro: React.FC = () => {
       }
     },
     {
-      title: 'Members',
+      title: 'Assignee',
       key: 'members',
       dataIndex: 'members',
       render: (members: MemberType[]) => (
@@ -46,6 +46,7 @@ const ProjectIntro: React.FC = () => {
       dataIndex: 'updatedAt'
     }
   ];
+  console.log(project);
   return (
     <>
       <div className="project-intro">

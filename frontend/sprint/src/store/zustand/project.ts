@@ -44,8 +44,7 @@ ProjectSlice
   },
   addProject: async (name: string, subject: string, memberList: string[]) => {
     const newProject = { name, subject, member_list: memberList };
-    const res = await axios.post(ADD_PROJECT_URL, newProject);
-    console.log(res);
+    await axios.post(ADD_PROJECT_URL, newProject);
   },
   editProject: async () => {},
   deleteProject: async () => {}

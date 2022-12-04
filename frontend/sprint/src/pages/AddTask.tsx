@@ -30,7 +30,7 @@ const AddTask: React.FC = () => {
     const newTask: TaskType = {
       name: taskName,
       description,
-      id: nextId, // Math.floor(10000 * Math.random()),
+      id: nextId,
       updatedAt: '1 min ago',
       members: inviteList,
       documentSpaces: [],
@@ -53,7 +53,7 @@ const AddTask: React.FC = () => {
           <div className="form-title">Task Information</div>
           <div className="form-text">Enter your task information</div>
         </div>
-        <div className="input-form">
+        <div className="add-task-input-form">
           <label htmlFor="project-name">Task Name</label>
           <Input id="project-name" placeholder="Task Name" value={taskName} onChange={e => setTaskName(e.target.value)} />
           <label htmlFor="subject-name">Description</label>
