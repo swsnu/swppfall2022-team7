@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { List, Avatar, Button, Modal, AutoComplete, Input, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { List, Avatar, Button, Modal, AutoComplete, Input } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
@@ -19,8 +19,10 @@ const ProjectManage: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
   const [idList, setIdList] = useState<number[]>([]);
+  const project = useBindStore(state => state.selectedProject);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
   const addMember = useBindStore(state => state.addMember);
+  const deleteMember = useBindStore(state => state.deleteMember);
   const selectProject = useBindStore(state => state.selectProject);
   const deleteProject = useBindStore(state => state.deleteProject);
 
@@ -38,12 +40,17 @@ const ProjectManage: React.FC = () => {
     setSelectedUser(option.name);
     setSelectedUserId(option.id);
   };
+
   const onInviteClick: () => void = () => {
     setInviteList(inviteList => [...inviteList, { username: selectedUser, email: query }]);
     setIdList(idList => [...idList, selectedUserId]);
     setQuery('');
   };
-  const project = useBindStore(state => state.selectedProject);
+
+  const onDeleteClick = async (userId: number): Promise<void> => {
+    if (projectId === undefined) return;
+    await deleteMember(parseInt(projectId), userId);
+  };
 
   const onAddConfirmClicked = async (): Promise<void> => {
     if (projectId === undefined) return;
@@ -89,10 +96,10 @@ const ProjectManage: React.FC = () => {
             dataSource={project?.member_list}
             renderItem={item => (
               <List.Item
-                actions={[<a key="list-delete">delete</a>]}
+                actions={[<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>]}
               >
                 <List.Item.Meta
-                  avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
+                  avatar={<Avatar>{item.username.substring(0, 1).toUpperCase()}</Avatar>}
                   title={item.username}
                   description={item.email}
                 />
