@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux';
-import { selectProject } from '@store/slices/project';
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
@@ -60,10 +58,9 @@ const columns: ColumnsType<TableDataType> = [
 ];
 
 const ProjectDocument: React.FC = () => {
-  const projectState = useSelector(selectProject);
   const { projectId } = useParams();
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const project = useBindStore(state => state.selectedProject);
   const documentSpaces = useBindStore(state => state.documentSpaces);
   const getDocumentSpaces = useBindStore(state => state.getDocumentSpaces);
 

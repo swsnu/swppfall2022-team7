@@ -1,15 +1,15 @@
-import { Input, Avatar, Comment, Tooltip, Button, DatePicker, Tag, Modal } from 'antd';
+import { Input, Avatar, Comment, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import React, { useState, useEffect, createElement, useMemo } from 'react';
-import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
+import Reaction from '@components/Reaction';
+import { ReactionType } from '@store/zustand/task';
 
 const TaskDetail: React.FC = () => {
-  const { confirm } = Modal;
   const { projectId, taskId } = useParams();
   const project = useBindStore(state => state.selectedProject);
   const task = useBindStore(state => state.selectedTask);
@@ -23,9 +23,6 @@ const TaskDetail: React.FC = () => {
   const [editedDate, setEditedDate] = useState(task?.untilAt);
   const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
   const [editedContent, setEditedContent] = useState(task?.content);
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
-  const [action, setAction] = useState<string | null>(null);
 
   useEffect(() => {
     setTaskInfo({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
@@ -35,33 +32,9 @@ const TaskDetail: React.FC = () => {
     setEditedDate(task?.untilAt);
   }, [task]);
 
-  const like = (): void => {
-    setLikes(1);
-    setDislikes(0);
-    setAction('liked');
-  };
-
-  const dislike = (): void => {
-    setLikes(0);
-    setDislikes(1);
-    setAction('disliked');
-  };
-
-  const actions = [
-    <Tooltip key="comment-basic-like" title="Like">
-      <span className="likeButton" onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className="comment-action">{likes}</span>
-      </span>
-    </Tooltip>,
-    <Tooltip key="comment-basic-dislike" title="Dislike">
-      <span className="dislikeButton" onClick={dislike}>
-        {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-        <span className="comment-action">{dislikes}</span>
-      </span>
-    </Tooltip>,
-    <span key="comment-basic-reply-to">Reply to</span>
-  ];
+  const commentActions: (reactionList: ReactionType[]) => JSX.Element = (reactionList: ReactionType[]) => (
+    <Reaction reactionList={reactionList} />
+  );
 
   const onSaveClicked: () => Promise<void> = async () => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
@@ -127,9 +100,9 @@ const TaskDetail: React.FC = () => {
           {task?.comment_list?.map(comment => (
             <Comment
               key={comment.id}
-              actions={actions}
-              author={<a>{'Author'}</a>}
-              avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="alt" />}
+              actions={[commentActions(comment.reaction_list)]}
+              author={<a>{comment.writer.username}</a>}
+              avatar={<Avatar>{comment.writer.username.substring(0, 1).toUpperCase()}</Avatar>}
               content={<p>{comment.content}</p>}
               datetime={comment.created_at}
             />

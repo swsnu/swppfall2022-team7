@@ -18,4 +18,6 @@ export const GET_TASK_URL: (taskId: number) => string = (taskId: number) => `tas
 export const EDIT_TASK_URL: (taskId: number) => string = (taskId: number) => `task/detail/${taskId}/m/`;
 export const GET_USER_TASKS_URL: (userId: string) => string = (userId: string) => `task/belong/${userId}/`;
 
+export const ADD_REACTION_URL: (commentId: number) => string = (commentId: number) => `reaction/${commentId}/m/`;
+
 export const GET_DOC_SPACES_URL: (projectId: number) => string = (projectId: number) => `document/${projectId}/`;

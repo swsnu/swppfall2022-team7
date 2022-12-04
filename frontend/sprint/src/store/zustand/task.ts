@@ -1,13 +1,15 @@
-import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL } from '@services/api';
+import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL, ADD_REACTION_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 import { DocumentSpaceCardType } from './project';
 import { UserType } from './user';
 
-interface ReactionType {
+type EmojiType = 'good' | 'heart' | 'eyes';
+
+export interface ReactionType {
   created_at: string
-  emoji: string
+  emoji: EmojiType
   user: UserType
 }
 
@@ -16,6 +18,7 @@ interface CommentType {
   created_at: string
   id: number
   reaction_list: ReactionType[]
+  writer: Omit<UserType, 'email'>
 }
 
 export interface TaskType {
@@ -43,6 +46,7 @@ export interface TaskSlice {
   editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
   deleteTask: (taskId: number) => Promise<void>
   randomAssign: (taskList: number[], userList: number[]) => Promise<void>
+  toggleStatus: (taskId: number, isDone: boolean) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<
@@ -90,5 +94,13 @@ TaskSlice
     for (let i = 0; i < taskList.length; i++) {
       await axios.put(EDIT_TASK_URL(taskList[i]), { assignee: userList[i] });
     }
+  },
+  addReaction: async (commentId: number, emoji: EmojiType) => {
+    const reaction = { emoji };
+    await axios.post(ADD_REACTION_URL(commentId), reaction);
+  },
+  toggleStatus: async (taskId: number, isDone: boolean) => {
+    const editStatus = { status: isDone ? 'done' : 'on-going' };
+    await axios.put(EDIT_TASK_URL(taskId), editStatus);
   }
 });
