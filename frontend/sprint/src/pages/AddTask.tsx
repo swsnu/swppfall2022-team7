@@ -1,47 +1,49 @@
 import AutoOption from '@components/AutoOption';
-import { AppDispatch } from '@store/index';
-import { projectActions, selectProject } from '@store/slices/project';
-import { dummyMembers, MemberType, TaskType } from '@utils/dummy';
+import UserCard from '@components/UserCard';
+import useBindStore from '@store/zustand';
+import { UserType } from '@store/zustand/user';
 import { AutoComplete, Avatar, Button, DatePicker, Divider, Input, List } from 'antd';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { BaseOptionType } from 'antd/lib/select';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const AddTask: React.FC = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
-  const [email, setEmail] = useState('');
-  const [inviteList, setInviteList] = useState<MemberType[]>([]);
+  const [query, setQuery] = useState('');
+  const [queryList, setQueryList] = useState<UserType[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
+  const [emailList, setEmailList] = useState<string[]>([]);
   const [dueDate, setDueDate] = useState('');
-  const projectState = useSelector(selectProject);
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
-  const nextId = (project === undefined ? 1 : project.tasks.length + 1);
-  const onInviteClick: () => void = () => {
-    const invite = dummyMembers.find(member => member.email === email);
-    if (invite === undefined) return;
-    setInviteList(inviteList => [...inviteList, invite]);
-    setEmail('');
-  };
-  const createTask: () => void = () => {
-    if (taskName === '' || description === '' || dueDate === '') return;
-    const newTask: TaskType = {
-      name: taskName,
-      description,
-      id: nextId,
-      updatedAt: '1 min ago',
-      members: inviteList,
-      documentSpaces: [],
-      comments: [],
-      dueDate,
-      status: 'ongoing'
+  const addTask = useBindStore(state => state.addTask);
+  const selectProject = useBindStore(state => state.selectProject);
+  const getAutoComplete = useBindStore(state => state.getAutoComplete);
+  useEffect(() => {
+    const asyncGetAutoComplete: () => Promise<void> = async () => {
+      if (query === '') return;
+      const autoComplete = await getAutoComplete(query);
+      setQueryList(autoComplete);
     };
-    if (projectId !== undefined) {
-      dispatch(projectActions.addTask({ projectId: parseInt(projectId), newTask }));
-      navigate(`/projects/${projectId}/tasks/${newTask.id}`);
-    }
+    void asyncGetAutoComplete();
+  }, [query]);
+  const onSelect: (value: string, option: BaseOptionType) => void = (value, option) => {
+    setQuery(value);
+    setSelectedUser(option.name);
+  };
+  const onInviteClick: () => void = () => {
+    setInviteList(inviteList => [...inviteList, { username: selectedUser, email: query }]);
+    setEmailList(emailList => [...emailList, query]);
+    setQuery('');
+  };
+  const createTask: () => Promise<void> = async () => {
+    if (taskName === '' || description === '' || dueDate === '') return;
+    if (projectId === undefined) return;
+    const newTaskId = await addTask(parseInt(projectId), taskName, description, emailList.length === 0 ? '' : emailList[0], dueDate);
+    await selectProject(parseInt(projectId));
+    navigate(`/projects/${projectId}/tasks/${newTaskId}`);
   };
   return (
     <div className="new-task">
@@ -71,27 +73,24 @@ const AddTask: React.FC = () => {
         <div className="input-form">
           <label htmlFor="invite-email">Send Invitiation to..</label>
           <div className="invite-input">
-            {/* <AutoComplete
+            <AutoComplete
               id="invite-email"
               style={{ width: '100%' }}
               placeholder="example@snu.ac.kr"
-              options={email.length > 0
-                ? dummyMembers.map(member => ({
+              options={query.length > 0
+                ? queryList.map(member => ({
                   value: member.email,
-                  name: member.name,
+                  name: member.username,
                   label: <AutoOption member={member} />
                 }))
                 : []}
-              value={email}
-              onChange={e => setEmail(e)}
-              filterOption={(inputValue, option) => {
-                if (option === undefined) return false;
-                return option.value.toUpperCase().includes(inputValue.toUpperCase()) || option.name.toUpperCase().includes(inputValue.toUpperCase());
-              }}
-            /> */}
+              value={query}
+              onChange={e => setQuery(e)}
+              onSelect={onSelect}
+            />
             <Button
               type="primary"
-              disabled={email.length === 0}
+              disabled={query.length === 0}
               onClick={onInviteClick}
             >
               Invite
@@ -102,19 +101,13 @@ const AddTask: React.FC = () => {
             itemLayout="horizontal"
             dataSource={inviteList}
             renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar>{item.avatar}</Avatar>}
-                  title={item.name}
-                  description={item.email}
-                />
-              </List.Item>
+              <UserCard user={item} />
             )}
           />
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={createTask}>Create Task</Button>
+        <Button type="primary" onClick={() => { void createTask(); }}>Create Task</Button>
       </div>
     </div>
   );

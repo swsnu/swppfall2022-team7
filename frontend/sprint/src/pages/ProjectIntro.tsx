@@ -2,6 +2,7 @@ import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
 import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
+import { DocumentSpaceCardType } from '@store/zustand/project';
 import { TaskType } from '@store/zustand/task';
 import { Avatar, Button, List, Table, Tag } from 'antd';
 import { Key, useState } from 'react';
@@ -29,20 +30,21 @@ const ProjectIntro: React.FC = () => {
         assignee
       )
     },
-    // {
-    //   title: 'Document Spaces',
-    //   key: 'documentSpaces',
-    //   dataIndex: 'documentSpaces',
-    //   render: (spaces: DocumentSpaceType[]) => (
-    //     spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
-    //   )
-    // },
+    {
+      title: 'Document Spaces',
+      key: 'document_space_list',
+      dataIndex: 'document_space_list',
+      render: (spaces: DocumentSpaceCardType[]) => (
+        spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
+      )
+    },
     {
       title: 'Last Updated',
       key: 'updated_at',
       dataIndex: 'updated_at'
     }
   ];
+  console.log(project);
   return (
     <>
       <div className="project-intro">

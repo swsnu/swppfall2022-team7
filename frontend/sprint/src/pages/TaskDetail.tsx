@@ -20,12 +20,8 @@ const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
   const project = useBindStore(state => state.selectedProject);
   const task = useBindStore(state => state.selectedTask);
-  const selectTask = useBindStore(state => state.selectTask);
   const editTask = useBindStore(state => state.editTask);
-  useEffect(() => {
-    if (projectId === undefined || taskId === undefined) return;
-    void selectTask(parseInt(taskId));
-  }, []);
+  const selectProject = useBindStore(state => state.selectProject);
 
   const [edit, setEdit] = useState(false);
   const [editedName, setEditedName] = useState(task?.name);
@@ -156,9 +152,10 @@ const TaskDetail: React.FC = () => {
     <span key="comment-basic-reply-to">Reply to</span>
   ];
 
-  const onSaveClicked = (): void => {
+  const onSaveClicked: () => Promise<void> = async () => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
-    void editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
+    await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
+    await selectProject(parseInt(projectId ?? '0'));
     setEdit(false);
   };
 
@@ -177,7 +174,7 @@ const TaskDetail: React.FC = () => {
               <div className="edit-name-container">
                 <Input defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 <div className="edit-name-button-container">
-                  <Button onClick={onSaveClicked}>Save</Button>
+                  <Button onClick={() => { void onSaveClicked(); }}>Save</Button>
                   <Button type='text' onClick={onCancelClicked}>Cancel</Button>
                 </div>
               </div>
@@ -188,7 +185,7 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  {/* <Avatar className="avatar">{task?.assignee?.username.substring(0, 1)}</Avatar> */}
+                  <Avatar className="avatar">{task?.assignee?.username.substring(0, 1).toUpperCase()}</Avatar>
                 </div>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </div>

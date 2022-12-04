@@ -5,7 +5,8 @@ import { SliceType } from '.';
 import { TaskType } from './task';
 import { UserType } from './user';
 
-interface DocumentSpaceCardType {
+export interface DocumentSpaceCardType {
+  id: number
   name: string
   head: number
   created_at: string

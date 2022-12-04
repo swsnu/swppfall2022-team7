@@ -10,10 +10,11 @@ const ProjectMain: React.FC = () => {
 
   const project = useBindStore(state => state.selectedProject);
   const selectProject = useBindStore(state => state.selectProject);
+  const selectTask = useBindStore(state => state.selectTask);
   useEffect(() => {
-    if (projectId === undefined) return;
-    void selectProject(parseInt(projectId));
-  }, [projectId]);
+    if (projectId !== undefined) void selectProject(parseInt(projectId));
+    if (taskId !== undefined) void selectTask(parseInt(taskId));
+  }, [projectId, taskId]);
 
   const onSelect: MenuProps['onSelect'] = ({ key }: { key: string }) => {
     if (projectId === undefined) return;

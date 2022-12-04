@@ -21,7 +21,7 @@ export interface TaskSlice {
   selectedTask: TaskType | null
   selectTask: (taskId: number) => Promise<void>
   getTasks: (projectId: number) => Promise<void>
-  addTask: (projectId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
+  addTask: (projectId: number, name: string, content: string, assignee: string, untilAt: string) => Promise<number>
   editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
   deleteTask: () => Promise<void>
 };
@@ -42,10 +42,10 @@ TaskSlice
     const res = await axios.get(GET_TASKS_URL(projectId));
     set({ tasks: res.data });
   },
-  addTask: async (projectId: number, name: string, content: string, assignee: number, untilAt: string) => {
+  addTask: async (projectId: number, name: string, content: string, assignee: string, untilAt: string) => {
     const newTask = { name, content, assignee, untilAt };
     const res = await axios.post(ADD_TASK_URL(projectId), newTask);
-    console.log(res);
+    return res.data.id;
   },
   editTask: async (taskId: number, name: string, content: string, assignee: number, untilAt: string) => {
     const editTask = { name, content, assignee, untilAt };
