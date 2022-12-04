@@ -28,6 +28,10 @@ from .tools.account import (
     listup_user_by_query,
 )
 
+from .tools.notification import (
+    get_notification_list,
+)
+
 from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
@@ -148,38 +152,11 @@ def m_timetable(request, user_id:int):
     # TODO
     return HttpResponse(status=200)
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
-def noti(request, user_id:int):
-    '''
-    [GET] Get notification of the user
-    '''
-    # TODO
-    return HttpResponse(status=200)
-
-@require_http_methods(['POST'])
-def m_noti(request, user_id:int):
-    '''
-    [POST] Create notification for the user
-    '''
-    # TODO
-    return HttpResponse(status=200)
-
-@require_http_methods(['GET'])
-def noti_detail(request, noti_id:int):
-    '''
-    [GET] Get the detail of the noti
-    '''
-    # TODO
-    return HttpResponse(status=200)
-
-@require_http_methods(['PUT', 'DELETE'])
-def m_noti_detail(request, noti_id:int):
-    '''
-    [PUT] Change status of the noti
-    [DELETE] Delete the notification
-    '''
-    # TODO
-    return HttpResponse(status=200)
+@return_bad_request_if_anonymous
+def noti(request: Request):
+    return Response(status=200, data=get_notification_list(request.user))
 
 @require_http_methods(['GET'])
 def image(request, user_id:int):

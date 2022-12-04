@@ -128,43 +128,14 @@ class UserTestCase(TestCase):
 
     def test_noti(self):
         client = Client()
-        url = self.url+'noti/1/'
+        url = self.url+'noti/'
         # Wrong Method Test
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
-        response = client.get(url)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
 
-    def test_m_noti(self):
-        client = Client()
-        url = self.url+'noti/1/m/'
-        # Wrong Method Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.post(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_noti_detail(self):
-        client = Client()
-        url = self.url+'noti/detail/1/'
-        # Wrong Method Test
-        response = client.post(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_m_noti_detail(self):
-        client = Client()
-        url = self.url+'noti/detail/1/m/'
-        # Wrong Method Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.put(url)
-        self.assertEqual(response.status_code, 200)
 
     def test_image(self):
         client = Client()
