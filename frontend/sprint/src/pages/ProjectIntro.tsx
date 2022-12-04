@@ -4,7 +4,7 @@ import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { DocumentSpaceCardType } from '@store/zustand/project';
 import { TaskType } from '@store/zustand/task';
-import { Avatar, Button, List, Table, Tag } from 'antd';
+import { Button, List, Table, Tag } from 'antd';
 import { Key, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

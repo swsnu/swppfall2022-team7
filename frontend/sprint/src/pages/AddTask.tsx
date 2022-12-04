@@ -2,7 +2,7 @@ import AutoOption from '@components/AutoOption';
 import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { UserType } from '@store/zustand/user';
-import { AutoComplete, Avatar, Button, DatePicker, Divider, Input, List } from 'antd';
+import { AutoComplete, Button, DatePicker, Divider, Input, List } from 'antd';
 import { BaseOptionType } from 'antd/lib/select';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,7 +43,7 @@ const AddTask: React.FC = () => {
     if (projectId === undefined) return;
     const newTaskId = await addTask(parseInt(projectId), taskName, description, emailList.length === 0 ? '' : emailList[0], dueDate);
     await selectProject(parseInt(projectId));
-    navigate(`/projects/${projectId}/tasks/${newTaskId}`);
+    if (newTaskId !== undefined) navigate(`/projects/${projectId}/tasks/${newTaskId}`);
   };
   return (
     <div className="new-task">
