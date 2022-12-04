@@ -1,36 +1,66 @@
-from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.request import Request
 from django.views.decorators.http import require_http_methods
+from drf_yasg.utils import swagger_auto_schema
+
+from api_comment.tools.comment_manage import(
+    get_comment_list_by_task_id,
+    create_new_comment,
+    edit_comment,
+    delete_comment
+)
+from utility.custom_decorator import (
+    return_bad_request_if_anonymous,
+    return_bad_request_if_exception,
+    return_bad_request_if_does_not_exist
+)
+
+from utility.serializers import (
+    BaseResponse
+)
+
+from .serializers import (
+    RequestCreateCommentPostSerializer,
+    RequestEditCommentPutSerializer
+)
 
 # Create your views here.
+@api_view(['GET'])
 @require_http_methods(['GET'])
-def comment(request, task_id:int):
+@return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+def comment(request: Request, task_id:int):
     '''
     [GET] Get comment list of the task
     '''
-    # TODO
-    return HttpResponse(status=200)
+    return Response(status=200, data=get_comment_list_by_task_id(task_id))
 
+
+@api_view(['POST'])
 @require_http_methods(['POST'])
-def m_comment(request, task_id:int):
+@return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+@return_bad_request_if_exception
+def m_comment(request: Request, task_id:int):
     '''
     [POST] Create new comment for the task
     '''
-    # TODO
-    return HttpResponse(status=200)
+    return Response(status=200, data=create_new_comment(task_id, request.data, request.user))
 
-@require_http_methods(['GET'])
-def comment_detail(request, comment_id:int):
-    '''
-    [GET] Get comment detail
-    '''
-    # TODO
-    return HttpResponse(status=200)
 
+@api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-def m_comment_detail(request, comment_id:int):
+@return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+@return_bad_request_if_exception
+def m_comment_detail(request: Request, comment_id:int):
     '''
     [PUT] Change the comment
     [DELETE] Delete the comment
     '''
-    # TODO
-    return HttpResponse(status=200)
+    if request.method == 'PUT':
+        return Response(status=200, data=edit_comment(comment_id, request.data))
+    elif request.method == 'DELETE':
+        delete_comment(comment_id)
+        return Response(status=204)

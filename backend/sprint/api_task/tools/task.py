@@ -9,13 +9,15 @@ def get_task_list(project: Project, user: get_user_model()):
         ret.append(get_task_detail(task))
     return ret
 
-def create_task(project: Project, get_data: dict):
-    assignee_id = get_data['assignee']
+def create_task(project: Project, get_data: dict, requester):
+    assignee_email = get_data['assignee']
     name = get_data['name']
     content = get_data['content']
     until_at = get_data['untilAt']
-    user = get_user_model().objects.get(id=assignee_id)
-    user_project = UserProject.objects.get(project = project, user = user)
+    if assignee_email != '' :
+        user = get_user_model().objects.get(email=assignee_email)
+    else :
+        user = None
     task = Task.objects.create(
         name = name,
         project = project,
@@ -24,6 +26,8 @@ def create_task(project: Project, get_data: dict):
         until_at = string_to_date(until_at)
     )
     ret = get_task_detail(task)
+
+    user_project = UserProject.objects.get(project = project, user = requester)
     push_activity(user_project, task, UserProjectActivity.ActivityType.CREATE_TASK)
     return ret
 
@@ -31,7 +35,7 @@ def get_task_detail(task: Task):
     ret = {
         'id': task.id,
         'project': task.project.id,
-        'assignee': { 'id': task.assignee.id, 'name': task.assignee.username },
+        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),
@@ -40,18 +44,24 @@ def get_task_detail(task: Task):
     }
     return ret
 
-def edit_task_detail(task: Task, get_data: dict):
-    assignee_id = get_data['assignee']
+def edit_task_detail(task: Task, get_data: dict, requester):
+    assignee_email = get_data['assignee']
     name = get_data['name']
     content = get_data['content']
     until_at = get_data['untilAt']
-    task.assignee = get_user_model().objects.get(id=assignee_id)
+    if assignee_email != '' :
+        user = get_user_model().objects.get(email=assignee_email)
+    else :
+        user = None
+    task.assignee = user
     task.name = name
     task.content = content
     task.until_at = string_to_date(until_at)
-    user_project = UserProject.objects.get(user = task.assignee, project = task.project)
+    task.save()
     ret = get_task_detail(task)
-    push_activity(user_project, task, UserProjectActivity.ActivityType.CREATE_TASK)
+
+    user_project = UserProject.objects.get(user = requester, project = task.project)
+    push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
     return ret
 
 def get_task_belong(user: get_user_model()):

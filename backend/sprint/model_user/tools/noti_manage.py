@@ -11,23 +11,23 @@ def send_notification_upa(upa: UserProjectActivity) :
     message = ""
 
     if upa.activity_type == UserProjectActivity.ActivityType.CREATE_TASK :
-        message = f"💻 <b>{upa.user_project.user.username}</b> created a new task <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> created a new task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_DOCUMENT_SPACE :
-        message = f"💻 <b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_COMMENT :
-        message = f"✏️ <b>{upa.user_project.user.username}</b> commented on <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> commented on <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.UPLOAD_DOCUMENT :
-        message = f"✉️ <b>{upa.user_project.user.username}</b> uploaded a new document <b>{upa.document.name}</b> to <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> uploaded a new document <b>{upa.document.name}</b> to <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.ASSIGNED_TASK :
-        message = f"🚀 <b>{upa.user_project.user.username}</b> assigned to the task <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> assigned to the task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.EDIT_TASK :
-        message = f"✏️ <b>{upa.user_project.user.username}</b> edited the task <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> edited the task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.EDIT_COMMENT :
-        message = f"✏️ <b>{upa.user_project.user.username}</b> edited the comment in <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> edited the comment in <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.REACT_COMMENT:
-        message = f"✏️ <b>{upa.user_project.user.username}</b> left a react to the comment in <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> left a react to the comment in <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.COMPLETE_TASK :
-        message = f"✏️ <b>{upa.user_project.user.username}</b> completed the task <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> completed the task <b>{upa.task.name}</b>"
     
     member_list = UserProject.objects.select_related('user').filter(project=upa.user_project.project)
     
@@ -50,7 +50,7 @@ def push_notification(user: User, message: str, link: str) :
 def send_project_invitation_notification(user_project: UserProject) :
     push_notification(
         user = user_project.user,
-        message = f"📮 <b>{user_project.project.manager.username}</b> invited you to <b>{user_project.project.name}</b>",
+        message = f"<b>{user_project.project.manager.username}</b> invited you to <b>{user_project.project.name}</b>",
         link = f"/projects/{user_project.project.id}"
     )
     

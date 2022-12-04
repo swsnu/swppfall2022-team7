@@ -13,7 +13,7 @@ class ReactionTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_m_reaction(self):
         client = Client()
@@ -23,24 +23,4 @@ class ReactionTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_reaction_detail(self):
-        client = Client()
-        url = self.url+'detail/1/'
-        # Wrong Method Test
-        response = client.post(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_m_reaction_detail(self):
-        client = Client()
-        url = self.url+'detail/1/m/'
-        # Wrong Method Test
-        response = client.get(url)
-        self.assertEqual(response.status_code, 405)
-        # Right Test
-        response = client.put(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)

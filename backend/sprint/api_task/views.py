@@ -41,7 +41,7 @@ def get_task(request, project_id:int):
 
 @swagger_auto_schema(
     methods=['POST'],
-    request_body=RequestTaskDocuPOSTSerializer,
+    request_body=RequestTaskPOSTSerializer,
     responses={
         '201': BaseResponse
     }
@@ -60,7 +60,7 @@ def m_task(request, project_id:int):
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
     get_data = json.loads(request.body.decode())
-    ret_data = create_task(project, get_data)
+    ret_data = create_task(project, get_data, user)
     return JsonResponse(ret_data, status=201)
 
 @api_view(['GET'])
@@ -103,7 +103,7 @@ def m_task_detail(request, task_id:int):
         return HttpResponse(status=403)
     if request.method == 'PUT':
         get_data = json.loads(request.body.decode())
-        task = edit_task_detail(task, get_data)
+        task = edit_task_detail(task, get_data, user)
         return JsonResponse(task, status=200)
     elif request.method == 'DELETE':
         task.delete()
