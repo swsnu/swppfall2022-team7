@@ -24,6 +24,7 @@ const memberColumns = [
 
 const RandomRole: React.FC<RandomRoleProps> = ({ randomIdList, setRandomIdList, showModal, setShowModal }: RandomRoleProps) => {
   const project = useBindStore(state => state.selectedProject);
+  const selectProject = useBindStore(state => state.selectProject);
   const randomAssign = useBindStore(state => state.randomAssign);
   const [selectedList, setSelectedList] = useState<Key[]>();
   const onCancel: () => void = () => {
@@ -32,6 +33,7 @@ const RandomRole: React.FC<RandomRoleProps> = ({ randomIdList, setRandomIdList, 
   };
   const onOk: () => Promise<void> = async () => {
     await randomAssign(randomIdList as number[], selectedList as number[]);
+    if (project !== null) await selectProject(project.id);
     setRandomIdList([]);
     setSelectedList([]);
     setShowModal(false);
