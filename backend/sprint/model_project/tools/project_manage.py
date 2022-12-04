@@ -34,7 +34,7 @@ def get_project_task_list(project: Project) :
             "content": task.content,
             "until_at": task.until_at,
             "updated_at" :task.updated_at,
-            "document_space_list": get_project_document_space_list(task)
+            "document_space_list": get_task_document_space_list(task)
         })
     return task_list
 

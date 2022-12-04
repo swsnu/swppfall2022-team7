@@ -55,7 +55,7 @@ def edit_task_detail(task: Task, get_data: dict):
     task.until_at = string_to_date(until_at)
     user_project = UserProject.objects.get(user = task.assignee, project = task.project)
     ret = get_task_detail(task)
-    push_activity(user_project, task, UserProjectActivity.ActivityType.CREATE_TASK)
+    push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
     return ret
 
 def get_task_belong(user: get_user_model()):
