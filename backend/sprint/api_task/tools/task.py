@@ -9,13 +9,15 @@ def get_task_list(project: Project, user: get_user_model()):
         ret.append(get_task_detail(task))
     return ret
 
-def create_task(project: Project, get_data: dict):
+def create_task(project: Project, get_data: dict, requester):
     assignee_id = get_data['assignee']
     name = get_data['name']
     content = get_data['content']
     until_at = get_data['untilAt']
-    user = get_user_model().objects.get(id=assignee_id)
-    user_project = UserProject.objects.get(project = project, user = user)
+    if assignee_id != -1 :
+        user = get_user_model().objects.get(id=assignee_id)
+    else :
+        user = None
     task = Task.objects.create(
         name = name,
         project = project,
@@ -24,6 +26,8 @@ def create_task(project: Project, get_data: dict):
         until_at = string_to_date(until_at)
     )
     ret = get_task_detail(task)
+
+    user_project = UserProject.objects.get(project = project, user = requester)
     push_activity(user_project, task, UserProjectActivity.ActivityType.CREATE_TASK)
     return ret
 
@@ -31,7 +35,7 @@ def get_task_detail(task: Task):
     ret = {
         'id': task.id,
         'project': task.project.id,
-        'assignee': { 'id': task.assignee.id, 'name': task.assignee.username },
+        'assignee': { 'id': task.assignee.id, 'name': task.assignee.username } if task.assignee is not None else {'id': -1, 'name': 'none'},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),

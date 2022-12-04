@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from model_project.models import Project, UserProject, Task, DocumentSpace
+from model_project.models import Project, UserProject, Task, DocumentSpace, TaskDocumentSpace
 
 from datetime import datetime
 
@@ -29,16 +29,32 @@ def get_project_task_list(project: Project) :
         task_list.append({
             "id": task.id,
             "name": task.name,
-            "assignee": task.assignee.id if task.assignee is not None else None,
+            "assignee_id": task.assignee.id if task.assignee is not None else None,
+            "assignee": task.assignee.username if task.assignee is not None else None,
             "content": task.content,
             "until_at": task.until_at,
-            "updated_at" :task.updated_at
+            "updated_at" :task.updated_at,
+            "document_space_list": get_project_document_space_list(task)
         })
     return task_list
+
+def get_task_document_space_list(task: Task): 
+    qs_task_document_space = TaskDocumentSpace.objects.filter(task = task).select_related('document_space')
+    res = []
+    for task_document_space in qs_task_document_space:
+        document_space = task_document_space.document_space
+        res.append({
+            "id": document_space.pk,
+            "name": document_space.name,
+            "created_at" : document_space.created_at,
+            "head": document_space.head,
+        })
+    return res
 
 def get_project_document_space_list(project: Project) :
     qs_document_space = DocumentSpace.objects.filter(project = project)
     return [{
+        "id": document_space.pk,
         "name": document_space.name,
         "created_at" : document_space.created_at,
         "head": document_space.head,
