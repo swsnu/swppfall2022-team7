@@ -1,21 +1,28 @@
 import { useEffect, useMemo, useState } from 'react';
-import { List, Avatar, Button, Modal, AutoComplete, Input } from 'antd';
+import { List, Avatar, Button, Modal, AutoComplete, Input, message } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
 import UserCard from '@components/UserCard';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProjectManage: React.FC = () => {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
   const [openDissolve, setOpenDissolve] = useState(false);
   const [dissolve, setDissolve] = useState('');
   const [query, setQuery] = useState('');
   const [queryList, setQueryList] = useState<UserType[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>('');
+  const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
-  const [emailList, setEmailList] = useState<string[]>([]);
+  const [idList, setIdList] = useState<number[]>([]);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
+  const addMember = useBindStore(state => state.addMember);
+  const selectProject = useBindStore(state => state.selectProject);
+  const deleteProject = useBindStore(state => state.deleteProject);
 
   useEffect(() => {
     const asyncGetAutoComplete: () => Promise<void> = async () => {
@@ -29,31 +36,37 @@ const ProjectManage: React.FC = () => {
   const onSelect: (value: string, option: BaseOptionType) => void = (value, option) => {
     setQuery(value);
     setSelectedUser(option.name);
+    setSelectedUserId(option.id);
   };
   const onInviteClick: () => void = () => {
     setInviteList(inviteList => [...inviteList, { username: selectedUser, email: query }]);
-    setEmailList(emailList => [...emailList, query]);
+    setIdList(idList => [...idList, selectedUserId]);
     setQuery('');
   };
   const project = useBindStore(state => state.selectedProject);
 
-  const onAddConfirmClicked = (): void => {
+  const onAddConfirmClicked = async (): Promise<void> => {
+    if (projectId === undefined) return;
+    await addMember(parseInt(projectId), idList);
+    await selectProject(parseInt(projectId));
     setOpenAdd(false);
     setQuery('');
     setInviteList([]);
-    setEmailList([]);
+    setIdList([]);
   };
 
   const onAddCancelClicked = (): void => {
     setOpenAdd(false);
     setQuery('');
     setInviteList([]);
-    setEmailList([]);
+    setIdList([]);
   };
 
-  const onDissolveConfirmClicked = (): void => {
+  const onDissolveConfirmClicked = async (): Promise<void> => {
+    await deleteProject(parseInt(projectId ?? '0'));
     setOpenDissolve(false);
     setDissolve('');
+    navigate('/projects');
   };
 
   const onDissolveCancelClicked = (): void => {
@@ -102,11 +115,11 @@ const ProjectManage: React.FC = () => {
       <Modal
         open={openAdd}
         title={<div style={{ fontWeight: 'bold' }}>Add a new member</div>}
-        onOk={onAddConfirmClicked}
+        onOk={() => { void onAddConfirmClicked(); }}
         onCancel={onAddCancelClicked}
         footer={[
           <Button key="cancel" onClick={onAddCancelClicked}>Cancel</Button>,
-          <Button type="primary" key="confirm" onClick={onAddConfirmClicked}>Confirm</Button>
+          <Button type="primary" key="confirm" onClick={() => { void onAddConfirmClicked(); }}>Confirm</Button>
         ]}
         width={1000}
       >
@@ -122,7 +135,8 @@ const ProjectManage: React.FC = () => {
                   ? queryList.map(member => ({
                     value: member.email,
                     name: member.username,
-                    label: <AutoOption member={member} />
+                    label: <AutoOption member={member} />,
+                    id: member.id
                   }))
                   : []}
                 value={query}
@@ -151,11 +165,10 @@ const ProjectManage: React.FC = () => {
       <Modal
         open={openDissolve}
         title={<div style={{ fontWeight: 'bold' }}>Dissolve Project</div>}
-        onOk={onAddConfirmClicked}
-        onCancel={onAddCancelClicked}
+        onCancel={onDissolveCancelClicked}
         footer={[
           <Button key="cancel" onClick={onDissolveCancelClicked}>Cancel</Button>,
-          <Button danger key="confirm" onClick={onDissolveConfirmClicked}>Dissolve</Button>
+          <Button danger key="confirm" disabled={dissolve !== project?.name} onClick={() => { void onDissolveConfirmClicked(); }}>Dissolve</Button>
         ]}
         width={1000}
       >

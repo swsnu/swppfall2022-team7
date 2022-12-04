@@ -1,4 +1,4 @@
-import { ADD_PROJECT_URL, GET_PROJECTS_URL, GET_PROJECT_URL } from '@services/api';
+import { ADD_PROJECT_URL, GET_PROJECTS_URL, GET_PROJECT_URL, ADD_MEMBER_URL, UPDATE_PROJECT_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -31,7 +31,8 @@ export interface ProjectSlice {
   getProjects: (userId: string) => Promise<void>
   addProject: (name: string, subject: string, member_list: string[]) => Promise<void>
   editProject: () => Promise<void>
-  deleteProject: () => Promise<void>
+  deleteProject: (projectId: number) => Promise<void>
+  addMember: (projectId: number, idList: number[]) => Promise<void>
 };
 
 export const createProjectSlice: StateCreator<
@@ -55,5 +56,12 @@ ProjectSlice
     await axios.post(ADD_PROJECT_URL, newProject);
   },
   editProject: async () => {},
-  deleteProject: async () => {}
+  deleteProject: async (projectId: number) => {
+    await axios.delete(UPDATE_PROJECT_URL(projectId));
+  },
+  addMember: async (projectId: number, idList: number[]) => {
+    for (const id of idList) {
+      await axios.put(ADD_MEMBER_URL(projectId, id));
+    }
+  }
 });
