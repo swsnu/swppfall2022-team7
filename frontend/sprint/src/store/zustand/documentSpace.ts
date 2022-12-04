@@ -10,7 +10,7 @@ export interface DocumentSpaceType {
 
 export interface DocumentSpaceSlice {
   documentSpaces: DocumentSpaceType[]
-  fetchDocumentSpaces: (projectId: number) => Promise<void>
+  getDocumentSpaces: (projectId: number) => Promise<void>
   addDocumentSpace: () => Promise<void>
   editDocumentSpace: () => Promise<void>
   changeDocumentSpaceHead: (documentId: number) => Promise<void>
@@ -24,7 +24,7 @@ SliceType,
 DocumentSpaceSlice
 > = (set, get) => ({
   documentSpaces: [],
-  fetchDocumentSpaces: async (projectId: number) => {},
+  getDocumentSpaces: async (projectId: number) => {},
   addDocumentSpace: async () => {},
   editDocumentSpace: async () => {},
   changeDocumentSpaceHead: async (documentId: number) => {},
