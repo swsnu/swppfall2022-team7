@@ -168,3 +168,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://swppsprint.site',
     'https://www.swppsprint.site'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
