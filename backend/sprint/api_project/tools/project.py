@@ -32,16 +32,14 @@ def get_project_list(user: User):
     return project_list
 
 def get_project_detail(project: Project):
-    member_list = get_project_member_list(project)
-    task_list = get_project_task_list(project)
-    
     return {
         "id": project.id,
         "name": project.name,
         "subject": project.subject,
         "manager": project.manager.id,
-        "member_list": member_list,
-        "task_list": task_list,
+        "member_list": get_project_member_list(project),
+        "task_list": get_project_task_list(project),
+        "document_space_list": get_project_document_space_list(project)
     }
 
 def create_project(data: dict, user: User) :
