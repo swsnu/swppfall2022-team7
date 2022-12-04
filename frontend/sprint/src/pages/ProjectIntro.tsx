@@ -10,15 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
-  const { projectId } = useParams();
   const project = useBindStore(state => state.selectedProject);
-  const selectProject = useBindStore(state => state.selectProject);
-  const selectedProject = useBindStore(state => state.selectedProject);
-  console.log(selectedProject);
-  useEffect(() => {
-    if (projectId === undefined) return;
-    void selectProject(parseInt(projectId));
-  }, [projectId]);
   const [randomIdList, setRandomIdList] = useState<Key[]>([]);
   const [showModal, setShowModal] = useState(false);
   const taskColumns = [

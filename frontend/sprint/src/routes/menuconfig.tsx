@@ -1,5 +1,5 @@
 import { AppstoreOutlined, AuditOutlined, CalendarOutlined, HomeOutlined, PieChartOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
-import { TaskType } from '@utils/dummy';
+import { TaskType } from '@store/zustand/task';
 import { MenuProps } from 'antd';
 
 export type MenuItem = Required<MenuProps>['items'][number];
