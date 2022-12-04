@@ -1,3 +1,6 @@
+import { EDIT_TASK_URL } from './../../services/api';
+import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL } from '@services/api';
+import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 import { UserType } from './user';
@@ -15,10 +18,13 @@ export interface TaskType {
 
 export interface TaskSlice {
   tasks: TaskType[]
-  fetchTasks: (projectId: number) => Promise<void>
-  addTask: () => Promise<void>
-  editTask: () => Promise<void>
+  selectedTask: TaskType | null
+  selectTask: (taskId: number) => Promise<void>
+  getTasks: (projectId: number) => Promise<void>
+  addTask: (projectId: number, name: string, content: string, assignee: string, untilAt: string) => Promise<number>
+  editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
   deleteTask: () => Promise<void>
+  randomAssign: (taskList: number[], userList: number[]) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<
@@ -28,8 +34,25 @@ SliceType,
 TaskSlice
 > = (set, get) => ({
   tasks: [],
-  fetchTasks: async (projectId: number) => {},
-  addTask: async () => {},
-  editTask: async () => {},
-  deleteTask: async () => {}
+  selectedTask: null,
+  selectTask: async (taskId: number) => {
+    const res = await axios.get(GET_TASK_URL(taskId));
+    set({ selectedTask: res.data });
+  },
+  getTasks: async (projectId: number) => {
+    const res = await axios.get(GET_TASKS_URL(projectId));
+    set({ tasks: res.data });
+  },
+  addTask: async (projectId: number, name: string, content: string, assignee: string, untilAt: string) => {
+    const newTask = { name, content, assignee, untilAt };
+    const res = await axios.post(ADD_TASK_URL(projectId), newTask);
+    return res.data.id;
+  },
+  editTask: async (taskId: number, name: string, content: string, assignee: number, untilAt: string) => {
+    const editTask = { name, content, assignee, untilAt };
+    await axios.put(EDIT_TASK_URL(taskId), editTask);
+  },
+  deleteTask: async () => {},
+  randomAssign: async (taskList: number[], userList: number[]) => {
+  }
 });

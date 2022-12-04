@@ -1,4 +1,5 @@
 import AutoOption from '@components/AutoOption';
+import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { UserType } from '@store/zustand/user';
 import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
@@ -93,13 +94,7 @@ const NewProject: React.FC = () => {
             itemLayout="horizontal"
             dataSource={inviteList}
             renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
-                  title={item.username}
-                  description={item.email}
-                />
-              </List.Item>
+              <UserCard user={item} />
             )}
           />
         </div>

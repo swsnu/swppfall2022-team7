@@ -5,10 +5,8 @@ import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined, InboxOutlined, StarOutlined } from '@ant-design/icons';
 import AWS from 'aws-sdk';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { projectActions, selectProject } from '@store/slices/project';
-import { AppDispatch } from '@store/index';
 import moment from 'moment';
+import useBindStore from '@store/zustand';
 
 interface DocumentType {
   key: string | undefined
@@ -20,17 +18,16 @@ const { Dragger } = Upload;
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
-  const projectState = useSelector(selectProject);
-  const dispatch = useDispatch<AppDispatch>();
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
-  const task = useMemo(() =>
-    projectState.find(project => project.id === parseInt(projectId ?? '0'))?.tasks.find(task => task.id === parseInt(taskId ?? '0'))
-  , [projectId, taskId]);
+  const project = useBindStore(state => state.selectedProject);
+  const task = useBindStore(state => state.selectedTask);
+  const editTask = useBindStore(state => state.editTask);
+  const selectProject = useBindStore(state => state.selectProject);
+
   const [edit, setEdit] = useState(false);
   const [editedName, setEditedName] = useState(task?.name);
-  const [editedDate, setEditedDate] = useState(task?.dueDate);
-  const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.description, dueDate: task?.dueDate });
-  const [editedContent, setEditedContent] = useState(task?.description);
+  const [editedDate, setEditedDate] = useState(task?.untilAt);
+  const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
+  const [editedContent, setEditedContent] = useState(task?.content);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState<string | null>(null);
@@ -46,11 +43,11 @@ const TaskDetail: React.FC = () => {
   const s3 = new AWS.S3();
 
   useEffect(() => {
-    setTaskInfo({ name: task?.name, content: task?.description, dueDate: task?.dueDate });
+    setTaskInfo({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
     setEdit(false);
     setEditedName(task?.name);
-    setEditedContent(task?.description);
-    setEditedDate(task?.dueDate);
+    setEditedContent(task?.content);
+    setEditedDate(task?.untilAt);
   }, [task]);
 
   useEffect(() => {
@@ -155,16 +152,17 @@ const TaskDetail: React.FC = () => {
     <span key="comment-basic-reply-to">Reply to</span>
   ];
 
-  const onSaveClicked = (): void => {
+  const onSaveClicked: () => Promise<void> = async () => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
-    dispatch(projectActions.editTask({ projectId: parseInt(projectId ?? '0'), taskId: parseInt(taskId ?? '0'), newTaskName: editedName ?? '', newTaskDescription: editedContent ?? '', newTaskDate: editedDate ?? '' }));
+    await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
+    await selectProject(parseInt(projectId ?? '0'));
     setEdit(false);
   };
 
   const onCancelClicked = (): void => {
     setEdit(false);
     setEditedName(task?.name);
-    setEditedContent(task?.description);
+    setEditedContent(task?.content);
   };
 
   return (
@@ -176,7 +174,7 @@ const TaskDetail: React.FC = () => {
               <div className="edit-name-container">
                 <Input defaultValue={editedName} onChange={(e) => setEditedName(e.target.value)}/>
                 <div className="edit-name-button-container">
-                  <Button onClick={onSaveClicked}>Save</Button>
+                  <Button onClick={() => { void onSaveClicked(); }}>Save</Button>
                   <Button type='text' onClick={onCancelClicked}>Cancel</Button>
                 </div>
               </div>
@@ -187,9 +185,7 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  <Avatar.Group className="avatar">
-                    {task?.members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
-                  </Avatar.Group>
+                  <Avatar className="avatar">{task?.assignee?.username.substring(0, 1).toUpperCase()}</Avatar>
                 </div>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </div>
@@ -200,7 +196,7 @@ const TaskDetail: React.FC = () => {
       <div className="bottom-container">
         <div className="comment-container">
           <div className="comment-header">Comments</div>
-          {task?.comments.map(comment => (
+          {/* {task?.comments.map(comment => (
             <Comment
               key={comment.id}
               actions={actions}
@@ -209,7 +205,7 @@ const TaskDetail: React.FC = () => {
               content={<p>{comment.content}</p>}
               datetime={'2 weeks ago'}
             />
-          ))}
+          ))} */}
         </div>
         <div className="documents-container">
           <div className="document-header">Projects Documents<Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button></div>

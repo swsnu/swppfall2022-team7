@@ -1,9 +1,6 @@
-import { AppDispatch } from '@store/index';
-import { projectActions, selectProject } from '@store/slices/project';
+import useBindStore from '@store/zustand';
 import { Modal, Table } from 'antd';
 import { Dispatch, Key, SetStateAction, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
 interface RandomRoleProps {
   randomIdList: Key[]
@@ -15,8 +12,8 @@ interface RandomRoleProps {
 const memberColumns = [
   {
     title: 'Name',
-    key: 'name',
-    dataIndex: 'name'
+    key: 'username',
+    dataIndex: 'username'
   },
   {
     title: 'Email',
@@ -26,31 +23,29 @@ const memberColumns = [
 ];
 
 const RandomRole: React.FC<RandomRoleProps> = ({ randomIdList, setRandomIdList, showModal, setShowModal }: RandomRoleProps) => {
-  const projectState = useSelector(selectProject);
-  const dispatch = useDispatch<AppDispatch>();
-  const { projectId } = useParams();
-  const memberList = projectState.find(project => project.id === parseInt(projectId ?? '0'))?.members;
+  const project = useBindStore(state => state.selectedProject);
+  const randomAssign = useBindStore(state => state.randomAssign);
   const [selectedList, setSelectedList] = useState<Key[]>();
   const onCancel: () => void = () => {
     setSelectedList([]);
     setShowModal(false);
   };
-  const onOk: () => void = () => {
-    dispatch(projectActions.randomAssign({ projectId: parseInt(projectId ?? '0'), taskList: randomIdList as number[], memberList: selectedList as number[] }));
+  const onOk: () => Promise<void> = async () => {
+    await randomAssign(randomIdList as number[], selectedList as number[]);
     setRandomIdList([]);
     setSelectedList([]);
     setShowModal(false);
   };
   return (
-    <Modal title="Random Role Assignment" open={showModal} onCancel={onCancel} onOk={onOk} okText="Assign" okButtonProps={{ disabled: (selectedList?.length ?? 0) < randomIdList.length }}>
+    <Modal title="Random Role Assignment" open={showModal} onCancel={onCancel} onOk={() => { void onOk(); }} okText="Assign" okButtonProps={{ disabled: (selectedList?.length ?? 0) < randomIdList.length }}>
       Select at least {randomIdList.length} members to assign tasks randomly.
       <Table
-        dataSource={memberList?.map(member => ({ ...member, key: member.id }))}
+        dataSource={project?.member_list?.map(member => ({ ...member, key: member.id }))}
         columns={memberColumns}
         pagination={false}
         rowSelection={{
           type: 'checkbox',
-          onChange: (selectedRowKeys, selectedRows) => {
+          onChange: (selectedRowKeys, _) => {
             setSelectedList(selectedRowKeys);
           },
           selectedRowKeys: selectedList

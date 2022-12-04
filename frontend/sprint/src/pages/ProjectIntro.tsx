@@ -1,21 +1,16 @@
 import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
+import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
+import { DocumentSpaceCardType } from '@store/zustand/project';
 import { TaskType } from '@store/zustand/task';
-import { DocumentSpaceType, MemberType } from '@utils/dummy';
-import { Avatar, Button, List, Table, Tag } from 'antd';
-import { Key, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button, List, Table, Tag } from 'antd';
+import { Key, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
-  const { projectId } = useParams();
   const project = useBindStore(state => state.selectedProject);
-  const selectProject = useBindStore(state => state.selectProject);
-  useEffect(() => {
-    if (projectId === undefined) return;
-    void selectProject(parseInt(projectId));
-  }, [projectId]);
   const [randomIdList, setRandomIdList] = useState<Key[]>([]);
   const [showModal, setShowModal] = useState(false);
   const taskColumns = [
@@ -28,35 +23,34 @@ const ProjectIntro: React.FC = () => {
       }
     },
     {
-      title: 'Members',
-      key: 'members',
-      dataIndex: 'members',
-      render: (members: MemberType[]) => (
-        <Avatar.Group>
-          {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
-        </Avatar.Group>
+      title: 'Assignee',
+      key: 'assignee',
+      dataIndex: 'assignee',
+      render: (assignee: number) => (
+        assignee
       )
     },
     {
       title: 'Document Spaces',
-      key: 'documentSpaces',
-      dataIndex: 'documentSpaces',
-      render: (spaces: DocumentSpaceType[]) => (
+      key: 'document_space_list',
+      dataIndex: 'document_space_list',
+      render: (spaces: DocumentSpaceCardType[]) => (
         spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
       )
     },
     {
       title: 'Last Updated',
-      key: 'updatedAt',
-      dataIndex: 'updatedAt'
+      key: 'updated_at',
+      dataIndex: 'updated_at'
     }
   ];
+
   return (
     <>
       <div className="project-intro">
         <div className="project-info">{project?.name}: {project?.subject}</div>
-        <div className="project-header">Description</div>
-        {/* <div className="project-description">
+        {/* <div className="project-header">Description</div>
+        <div className="project-description">
           {project?.description}
         </div> */}
         <div className="project-flex">
@@ -70,13 +64,7 @@ const ProjectIntro: React.FC = () => {
                 itemLayout="horizontal"
                 dataSource={project?.member_list}
                 renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
-                      title={item.username}
-                      description={item.email}
-                    />
-                  </List.Item>
+                  <UserCard user={item} />
                 )}
               />
           </div>
@@ -86,9 +74,9 @@ const ProjectIntro: React.FC = () => {
               <div className="link" onClick={() => navigate('docs')}>Edit space</div>
             </div>
             <div className="member-container">
-              {/* {project?.documentSpaces.map(space => (
-                <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
-              ))} */}
+              {project?.document_space_list?.map(space => (
+                <SpaceCard key={space.created_at} name={space.name} email={space.created_at} />
+              ))}
             </div>
           </div>
         </div>
@@ -107,7 +95,7 @@ const ProjectIntro: React.FC = () => {
           pagination={false}
           rowSelection={{
             type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
+            onChange: (selectedRowKeys, _) => {
               setRandomIdList(selectedRowKeys);
             },
             getCheckboxProps: record => ({

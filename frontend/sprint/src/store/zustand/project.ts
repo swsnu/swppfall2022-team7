@@ -1,9 +1,16 @@
-import { ADD_PROJECT_URL, GET_PROJECTS_URL, GET_PROJECT_URL } from '@services/api';
+import { ADD_PROJECT_URL, GET_PROJECTS_URL, GET_PROJECT_URL, UPDATE_MEMBER_URL, UPDATE_PROJECT_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 import { TaskType } from './task';
 import { UserType } from './user';
+
+export interface DocumentSpaceCardType {
+  id: number
+  name: string
+  head: number
+  created_at: string
+}
 
 export interface ProjectType {
   id: number
@@ -14,6 +21,7 @@ export interface ProjectType {
   member_list: UserType[]
   document_number: number
   task_list?: TaskType[]
+  document_space_list?: DocumentSpaceCardType[]
 };
 
 export interface ProjectSlice {
@@ -23,7 +31,9 @@ export interface ProjectSlice {
   getProjects: (userId: string) => Promise<void>
   addProject: (name: string, subject: string, member_list: string[]) => Promise<void>
   editProject: () => Promise<void>
-  deleteProject: () => Promise<void>
+  deleteProject: (projectId: number) => Promise<void>
+  addMember: (projectId: number, idList: number[]) => Promise<void>
+  deleteMember: (projectId: number, userId: number) => Promise<void>
 };
 
 export const createProjectSlice: StateCreator<
@@ -44,9 +54,18 @@ ProjectSlice
   },
   addProject: async (name: string, subject: string, memberList: string[]) => {
     const newProject = { name, subject, member_list: memberList };
-    const res = await axios.post(ADD_PROJECT_URL, newProject);
-    console.log(res);
+    await axios.post(ADD_PROJECT_URL, newProject);
   },
   editProject: async () => {},
-  deleteProject: async () => {}
+  deleteProject: async (projectId: number) => {
+    await axios.delete(UPDATE_PROJECT_URL(projectId));
+  },
+  addMember: async (projectId: number, idList: number[]) => {
+    for (const id of idList) {
+      await axios.put(UPDATE_MEMBER_URL(projectId, id));
+    }
+  },
+  deleteMember: async (projectId: number, userId: number) => {
+    await axios.delete(UPDATE_MEMBER_URL(projectId, userId));
+  }
 });

@@ -1,15 +1,20 @@
 import { items, menuIdList } from '@routes/menuconfig';
-import { selectProject } from '@store/slices/project';
+import useBindStore from '@store/zustand';
 import { Menu, MenuProps } from 'antd';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 const ProjectMain: React.FC = () => {
   const navigate = useNavigate();
-  const projectState = useSelector(selectProject);
   const { projectId, menuId, taskId } = useParams();
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
+
+  const project = useBindStore(state => state.selectedProject);
+  const selectProject = useBindStore(state => state.selectProject);
+  const selectTask = useBindStore(state => state.selectTask);
+  useEffect(() => {
+    if (projectId !== undefined) void selectProject(parseInt(projectId));
+    if (taskId !== undefined) void selectTask(parseInt(taskId));
+  }, [projectId, taskId]);
 
   const onSelect: MenuProps['onSelect'] = ({ key }: { key: string }) => {
     if (projectId === undefined) return;
@@ -37,7 +42,7 @@ const ProjectMain: React.FC = () => {
           style={{ width: 256, height: 'calc(100vh - 164px)' }}
           defaultSelectedKeys={[projectId ?? '']}
           mode="inline"
-          items={items(project?.name ?? '', project?.tasks ?? [])}
+          items={items(project?.name ?? '', project?.task_list ?? [])}
           className="project-main-menu"
           selectedKeys={[selectedKey()]}
         />

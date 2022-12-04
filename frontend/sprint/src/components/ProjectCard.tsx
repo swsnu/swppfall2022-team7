@@ -17,7 +17,7 @@ const ProjectCard: React.FC<{ project: ProjectType }> = ({ project }: { project:
         <div className="info-tab">
           <Avatar.Group>
             {project.member_list.slice(0, 3).map(member => (
-              <Avatar key={member.id} size="small" className="avatar">{member.username.substring(0, 1)}</Avatar>
+              <Avatar key={member.id} size="small" className="avatar">{member.username.substring(0, 1).toUpperCase()}</Avatar>
             ))}
             {project.member_list.length > 3 && <Avatar size="small" className="avatar">+{project.member_list.length - 3}</Avatar>}
           </Avatar.Group>

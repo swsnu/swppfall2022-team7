@@ -31,9 +31,10 @@
     }
   }
   .dissolve-container{
+    margin-top: 24px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     .dissolve-left{
       display: flex;
       flex-direction: column;
