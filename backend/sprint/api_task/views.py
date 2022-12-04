@@ -41,7 +41,7 @@ def get_task(request, project_id:int):
 
 @swagger_auto_schema(
     methods=['POST'],
-    request_body=RequestTaskDocuPOSTSerializer,
+    request_body=RequestTaskPOSTSerializer,
     responses={
         '201': BaseResponse
     }
@@ -60,7 +60,6 @@ def m_task(request, project_id:int):
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
     get_data = json.loads(request.body.decode())
-    print(get_data)
     ret_data = create_task(project, get_data, user)
     return JsonResponse(ret_data, status=201)
 
