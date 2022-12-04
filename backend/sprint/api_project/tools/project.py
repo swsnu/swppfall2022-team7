@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from model_project.models import UserProject, Project, Task
+from model_project.models import UserProject, Project
 
 from model_project.tools.project_manage import (
     get_project_member_list,

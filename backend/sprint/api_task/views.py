@@ -60,7 +60,7 @@ def m_task(request, project_id:int):
     if not UserProject.objects.filter(user=user, project=project).exists():
         return HttpResponse(status=403)
     get_data = json.loads(request.body.decode())
-    ret_data = create_task(project, get_data)
+    ret_data = create_task(project, get_data, user)
     return JsonResponse(ret_data, status=201)
 
 @api_view(['GET'])
