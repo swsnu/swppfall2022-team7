@@ -103,7 +103,7 @@ def m_task_detail(request, task_id:int):
         return HttpResponse(status=403)
     if request.method == 'PUT':
         get_data = json.loads(request.body.decode())
-        task = edit_task_detail(task, get_data)
+        task = edit_task_detail(task, get_data, user)
         return JsonResponse(task, status=200)
     elif request.method == 'DELETE':
         task.delete()
