@@ -8,6 +8,7 @@ import { dummyMembers, MemberType } from '@utils/dummy';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
+import UserCard from '@components/UserCard';
 
 const ProjectManage: React.FC = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -144,13 +145,7 @@ const ProjectManage: React.FC = () => {
               itemLayout="horizontal"
               dataSource={inviteList}
               renderItem={item => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
-                    title={item.username}
-                    description={item.email}
-                  />
-                </List.Item>
+                <UserCard user={item} />
               )}
             />
           </div>

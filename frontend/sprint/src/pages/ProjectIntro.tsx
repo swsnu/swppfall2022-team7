@@ -1,5 +1,6 @@
 import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
+import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { TaskType } from '@store/zustand/task';
 import { DocumentSpaceType, MemberType } from '@utils/dummy';
@@ -12,6 +13,8 @@ const ProjectIntro: React.FC = () => {
   const { projectId } = useParams();
   const project = useBindStore(state => state.selectedProject);
   const selectProject = useBindStore(state => state.selectProject);
+  const selectedProject = useBindStore(state => state.selectedProject);
+  console.log(selectedProject);
   useEffect(() => {
     if (projectId === undefined) return;
     void selectProject(parseInt(projectId));
@@ -55,8 +58,8 @@ const ProjectIntro: React.FC = () => {
     <>
       <div className="project-intro">
         <div className="project-info">{project?.name}: {project?.subject}</div>
-        <div className="project-header">Description</div>
-        {/* <div className="project-description">
+        {/* <div className="project-header">Description</div>
+        <div className="project-description">
           {project?.description}
         </div> */}
         <div className="project-flex">
@@ -70,13 +73,7 @@ const ProjectIntro: React.FC = () => {
                 itemLayout="horizontal"
                 dataSource={project?.member_list}
                 renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
-                      title={item.username}
-                      description={item.email}
-                    />
-                  </List.Item>
+                  <UserCard user={item} />
                 )}
               />
           </div>
