@@ -4,6 +4,13 @@
   padding: 10px 50px 0px 0px;
   width: 100%;
   overflow-y: auto;
+  .due-tag{
+    display: flex;
+    align-items: center;
+    .status-tag{
+      margin-left: 8px;
+    }
+  }
   .task-info{
     display: flex;
     color: #BBBBBB;

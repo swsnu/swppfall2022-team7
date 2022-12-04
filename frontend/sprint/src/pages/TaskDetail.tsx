@@ -1,4 +1,4 @@
-import { Input, Avatar, Comment, Tooltip, Button, DatePicker } from 'antd';
+import { Input, Avatar, Comment, Tooltip, Button, DatePicker, Tag } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, createElement, useMemo } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
+import StatusTag from '@components/StatusTag';
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
@@ -111,7 +112,10 @@ const TaskDetail: React.FC = () => {
                   <Button type="primary" danger onClick={() => { void onDeleteTask(); }}>Delete</Button>
                 </div>
               </div>
-              <div className="task-due">Due: {taskInfo.dueDate}</div>
+              <div className="due-tag">
+                <div className="task-due">Due: {taskInfo.dueDate}</div>
+                {task?.status !== undefined ? <StatusTag status={task?.status} /> : null}
+              </div>
               <div className="task-content">{taskInfo.content}</div>
             </div>
       }
