@@ -43,7 +43,7 @@ const AddTask: React.FC = () => {
     if (projectId === undefined) return;
     const newTaskId = await addTask(parseInt(projectId), taskName, description, emailList.length === 0 ? '' : emailList[0], dueDate);
     await selectProject(parseInt(projectId));
-    if (newTaskId !== undefined) navigate(`/projects/${projectId}/tasks/${newTaskId}`);
+    navigate(`/projects/${projectId}/tasks/${newTaskId}`);
   };
   return (
     <div className="new-task">
