@@ -41,7 +41,7 @@ export interface TaskSlice {
   getTasks: (projectId: number) => Promise<void>
   addTask: (projectId: number, name: string, content: string, assignee: string, untilAt: string) => Promise<number>
   editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
-  deleteTask: () => Promise<void>
+  deleteTask: (taskId: number) => Promise<void>
   randomAssign: (taskList: number[], userList: number[]) => Promise<void>
 };
 
@@ -75,7 +75,9 @@ TaskSlice
     const editTask = { name, content, assignee, untilAt };
     await axios.put(EDIT_TASK_URL(taskId), editTask);
   },
-  deleteTask: async () => {},
+  deleteTask: async (taskId: number) => {
+    await axios.delete(EDIT_TASK_URL(taskId));
+  },
   randomAssign: async (taskList: number[], userList: number[]) => {
     const shuffleList = (list: number[]): number[] => {
       for (let i = list.length - 1; i > 0; i--) {

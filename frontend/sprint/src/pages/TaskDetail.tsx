@@ -2,7 +2,7 @@ import { Input, Avatar, Comment, Tooltip, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, createElement, useMemo } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
@@ -13,7 +13,9 @@ const TaskDetail: React.FC = () => {
   const task = useBindStore(state => state.selectedTask);
   const editTask = useBindStore(state => state.editTask);
   const selectProject = useBindStore(state => state.selectProject);
+  const deleteTask = useBindStore(state => state.deleteTask);
 
+  const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
   const [editedName, setEditedName] = useState(task?.name);
   const [editedDate, setEditedDate] = useState(task?.untilAt);
@@ -72,6 +74,16 @@ const TaskDetail: React.FC = () => {
     setEditedContent(task?.content);
   };
 
+  const onDeleteTask = async (): Promise<void> => {
+    if (taskId === undefined) return;
+    try {
+      await deleteTask(parseInt(taskId));
+      navigate(`/projects/${projectId ?? '0'}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="task-detail">
       <div className="task-info">{project?.name}: {project?.subject}: {taskInfo.name}</div>
@@ -94,7 +106,10 @@ const TaskDetail: React.FC = () => {
                   Task: {taskInfo.name}
                   <Avatar className="avatar">{task?.assignee?.username.substring(0, 1).toUpperCase()}</Avatar>
                 </div>
-                <Button onClick={() => setEdit(true)}>Edit</Button>
+                <div>
+                  <Button onClick={() => setEdit(true)}>Edit</Button>&nbsp;
+                  <Button type="primary" danger onClick={() => { void onDeleteTask(); }}>Delete</Button>
+                </div>
               </div>
               <div className="task-due">Due: {taskInfo.dueDate}</div>
               <div className="task-content">{taskInfo.content}</div>
