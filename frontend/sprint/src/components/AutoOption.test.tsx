@@ -1,6 +1,11 @@
 import { render } from '@testing-library/react';
-import { choi } from '@utils/dummy';
 import AutoOption from './AutoOption';
+
+const choi = {
+  username: 'asdf',
+  id: 1,
+  email: 'Asdf'
+};
 
 describe('<AutoOption />', () => {
   beforeAll(() => {
@@ -11,7 +16,7 @@ describe('<AutoOption />', () => {
       };
     };
   });
-  // it('should render', () => {
-  //   render(<AutoOption member={choi} />);
-  // });
+  it('should render', () => {
+    render(<AutoOption member={choi} />);
+  });
 });
