@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from model_project.models import UserProject, Project
+from model_project.models import UserProject, Project, Task
 
 from model_project.tools.project_manage import (
     get_project_member_list,
@@ -104,5 +104,10 @@ def delete_project_member(project: Project, member_id: int) :
     if member is None:
         raise ValueError("User does not exist")
     
+    qs_task = Task.objects.filter(project=project, assignee=member)
+    for task in qs_task:
+        task.assignee = None
+        task.save()
+        
     UserProject.objects.filter(user = member, project = project).delete()
     return
