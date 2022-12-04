@@ -1,9 +1,22 @@
-import { EDIT_TASK_URL, GET_USER_TASKS_URL } from './../../services/api';
-import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL } from '@services/api';
+import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
+import { DocumentSpaceCardType } from './project';
 import { UserType } from './user';
+
+interface ReactionType {
+  created_at: string
+  emoji: string
+  user: UserType
+}
+
+interface CommentType {
+  content: string
+  created_at: string
+  id: number
+  reaction_list: ReactionType[]
+}
 
 export interface TaskType {
   id: number
@@ -15,6 +28,8 @@ export interface TaskType {
   updatedAt: string
   untilAt: string
   status?: 'on-going' | 'done'
+  comment_list?: CommentType[]
+  document_space_list?: DocumentSpaceCardType[]
 };
 
 export interface TaskSlice {

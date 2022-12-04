@@ -165,6 +165,8 @@ const TaskDetail: React.FC = () => {
     setEditedContent(task?.content);
   };
 
+  console.log(task);
+
   return (
     <div className="task-detail">
       <div className="task-info">{project?.name}: {project?.subject}: {taskInfo.name}</div>
@@ -196,93 +198,55 @@ const TaskDetail: React.FC = () => {
       <div className="bottom-container">
         <div className="comment-container">
           <div className="comment-header">Comments</div>
-          {/* {task?.comments.map(comment => (
+          {task?.comment_list?.map(comment => (
             <Comment
               key={comment.id}
               actions={actions}
-              author={<a>{comment.author}</a>}
+              author={<a>{'Author'}</a>}
               avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="alt" />}
               content={<p>{comment.content}</p>}
-              datetime={'2 weeks ago'}
+              datetime={comment.created_at}
             />
-          ))} */}
+          ))}
         </div>
         <div className="documents-container">
           <div className="document-header">Projects Documents<Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button></div>
-          {project?.id === 1 && task?.id === 1 && <Collapse accordion>
-            <Panel header='Abstract' key='1'>
-            <div className="document-container">
-                <div className="document-left">
+          {task?.document_space_list?.map(documentSpace => (
+            <Collapse accordion key={documentSpace.id}>
+              <Panel header={documentSpace.name} key={documentSpace.id}>
+                <div className="document-container">
+                  <div className="document-left">
+                    {fileList.map((file, i) => {
+                      return (
+                        <a href={file.url} className="document-uploaded" key={file.key}>
+                          <div className="file-name-container">
+                            <div className="uploaded-file">{file.key}</div>
+                            {(i === 0) && <StarOutlined size={10} />}
+                          </div>
+                          <div className="file-info">
+                            <div className="uploaded-time">{file.time?.toISOString().substring(0, 10)}</div>
+                            <div className="file-uploader">SangHyun Yi</div>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                  <div className="document-right">
+                    <Dragger {...props}>
+                      <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                      <p className="ant-upload-hint">
+                        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                        band files
+                      </p>
+                    </Dragger>
+                  </div>
                 </div>
-                <div className="document-right">
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      band files
-                    </p>
-                  </Dragger>
-                </div>
-              </div>
-            </Panel>
-          </Collapse>}
-          {project?.id === 1 && task?.id === 1 && <Collapse accordion>
-            <Panel header='User Stories' key='2'>
-              <div className="document-container">
-                <div className="document-left">
-                  {fileList.map((file, i) => {
-                    return (
-                      <a href={file.url} className="document-uploaded" key={file.key}>
-                        <div className="file-name-container">
-                          <div className="uploaded-file">{file.key}</div>
-                          {(i === 0) && <StarOutlined size={10} />}
-                        </div>
-                        <div className="file-info">
-                          <div className="uploaded-time">{file.time?.toISOString().substring(0, 10)}</div>
-                          <div className="file-uploader">SangHyun Yi</div>
-                        </div>
-                      </a>
-                    );
-                  })}
-                </div>
-                <div className="document-right">
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      band files
-                    </p>
-                  </Dragger>
-                </div>
-              </div>
-            </Panel>
-          </Collapse>}
-          {project?.id === 1 && task?.id === 2 && <Collapse accordion>
-            <Panel header='Testing Plan' key='3'>
-            <div className="document-container">
-                <div className="document-left">
-                </div>
-                <div className="document-right">
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      band files
-                    </p>
-                  </Dragger>
-                </div>
-              </div>
-            </Panel>
-          </Collapse>}
+              </Panel>
+            </Collapse>
+          ))}
         </div>
       </div>
     </div>
