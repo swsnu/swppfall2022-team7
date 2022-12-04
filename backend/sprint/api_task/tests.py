@@ -99,7 +99,7 @@ class TaskTestCase(TestCase):
             content_type='application/json',
             **{'HTTP_AUTHORIZATION': "Token " + self.test_token}
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
         response = client.delete(url, **{'HTTP_AUTHORIZATION': "Token " + self.test_token})
         self.assertEqual(response.status_code, 204)
 
