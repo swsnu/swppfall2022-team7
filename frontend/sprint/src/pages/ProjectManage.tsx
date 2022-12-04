@@ -1,10 +1,6 @@
-import { selectProject } from '@store/slices/project';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { List, Avatar, Button, Modal, AutoComplete, Input } from 'antd';
 import AutoOption from '@components/AutoOption';
-import { dummyMembers, MemberType } from '@utils/dummy';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
@@ -20,6 +16,7 @@ const ProjectManage: React.FC = () => {
   const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
   const [emailList, setEmailList] = useState<string[]>([]);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
+
   useEffect(() => {
     const asyncGetAutoComplete: () => Promise<void> = async () => {
       if (query === '') return;
@@ -28,6 +25,7 @@ const ProjectManage: React.FC = () => {
     };
     void asyncGetAutoComplete();
   }, [query]);
+
   const onSelect: (value: string, option: BaseOptionType) => void = (value, option) => {
     setQuery(value);
     setSelectedUser(option.name);
@@ -37,21 +35,20 @@ const ProjectManage: React.FC = () => {
     setEmailList(emailList => [...emailList, query]);
     setQuery('');
   };
-  const { projectId } = useParams();
-  const projectState = useSelector(selectProject);
-  const projectInfo = useMemo(() => (
-    projectState.find(project => project.id === parseInt(projectId ?? '0'))
-  ), [projectId]);
+  const project = useBindStore(state => state.selectedProject);
 
   const onAddConfirmClicked = (): void => {
-    console.log(emailList);
     setOpenAdd(false);
+    setQuery('');
     setInviteList([]);
+    setEmailList([]);
   };
 
   const onAddCancelClicked = (): void => {
     setOpenAdd(false);
+    setQuery('');
     setInviteList([]);
+    setEmailList([]);
   };
 
   const onDissolveConfirmClicked = (): void => {
@@ -67,7 +64,7 @@ const ProjectManage: React.FC = () => {
   return (
     <>
       <div className="project-manage">
-        <div className="project-info">{projectInfo?.name}: {projectInfo?.subject}: Contribution</div>
+        <div className="project-info">{project?.name}: {project?.subject}: Contribution</div>
         <div className="settings-header">Project Management</div>
         <div className="team-members">
           <div className="team-members-title">
@@ -76,14 +73,14 @@ const ProjectManage: React.FC = () => {
           </div>
           <List
             itemLayout="horizontal"
-            dataSource={projectInfo?.members}
+            dataSource={project?.member_list}
             renderItem={item => (
               <List.Item
                 actions={[<a key="list-delete">delete</a>]}
               >
                 <List.Item.Meta
-                  avatar={<Avatar>{item.avatar}</Avatar>}
-                  title={item.name}
+                  avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
+                  title={item.username}
                   description={item.email}
                 />
               </List.Item>
@@ -164,9 +161,9 @@ const ProjectManage: React.FC = () => {
       >
         <div className="dissolve-container">
           <div className="dissolve-warning">Please read carefully. This work is irreversible.</div>
-          <p className="dissolve-desc">This action <strong>cannot</strong> be undone. This will permanently delete the <strong>{projectInfo?.name}</strong> project, documents, schedules and every task infos.</p>
+          <p className="dissolve-desc">This action <strong>cannot</strong> be undone. This will permanently delete the <strong>{project?.name}</strong> project, documents, schedules and every task infos.</p>
           <p className="dissolve-desc">This will not affect your status as member of Sprint. If you want to exit this project, you can be deleted by authorzied project members.</p>
-          <p className="dissolve-desc">Please type <strong>{projectInfo?.name}</strong> to confirm.</p>
+          <p className="dissolve-desc">Please type <strong>{project?.name}</strong> to confirm.</p>
           <Input value={dissolve} onChange={(e) => { setDissolve(e.target.value); }} />
         </div>
       </Modal>
