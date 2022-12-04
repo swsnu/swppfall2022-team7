@@ -1,4 +1,4 @@
-import { EDIT_TASK_URL } from './../../services/api';
+import { EDIT_TASK_URL, GET_USER_TASKS_URL } from './../../services/api';
 import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
@@ -14,12 +14,15 @@ export interface TaskType {
   createdAt: string
   updatedAt: string
   untilAt: string
+  status?: 'on-going' | 'done'
 };
 
 export interface TaskSlice {
   tasks: TaskType[]
+  userTasks: TaskType[]
   selectedTask: TaskType | null
   selectTask: (taskId: number) => Promise<void>
+  getUserTasks: (userId: string) => Promise<void>
   getTasks: (projectId: number) => Promise<void>
   addTask: (projectId: number, name: string, content: string, assignee: string, untilAt: string) => Promise<number>
   editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
@@ -34,10 +37,15 @@ SliceType,
 TaskSlice
 > = (set, get) => ({
   tasks: [],
+  userTasks: [],
   selectedTask: null,
   selectTask: async (taskId: number) => {
     const res = await axios.get(GET_TASK_URL(taskId));
     set({ selectedTask: res.data });
+  },
+  getUserTasks: async (userId: string) => {
+    const res = await axios.get(GET_USER_TASKS_URL(userId));
+    set({ userTasks: res.data });
   },
   getTasks: async (projectId: number) => {
     const res = await axios.get(GET_TASKS_URL(projectId));

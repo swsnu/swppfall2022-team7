@@ -1,49 +1,26 @@
-import { selectProject } from '@store/slices/project';
+import useBindStore from '@store/zustand';
 import { Badge, List, Tabs, Tag } from 'antd';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-interface MyTaskType {
-  task: string
-  project: string
-  status: string
-  taskId: number
-  projectId: number
-  dueDate: string
-}
+import { useEffect } from 'react';
+import { TaskType } from '@store/zustand/task';
 
 const MyTasks: React.FC = () => {
-  const projectState = useSelector(selectProject);
+  const userTasks = useBindStore(state => state.userTasks);
+  const getUserTasks = useBindStore(state => state.getUserTasks);
+  useEffect(() => {
+    const getAsyncUserTasks = async (): Promise<void> => {
+      const userId = localStorage.getItem('userId');
+      if (userId !== null) await getUserTasks(userId);
+    };
+    void getAsyncUserTasks();
+  }, []);
   const navigate = useNavigate();
-  const onGoingTasks: MyTaskType[] = [];
-  const doneTasks: MyTaskType[] = [];
-  projectState.forEach(project => {
-    project.tasks.forEach(task => {
-      task.members.forEach(member => {
-        if (member.email === 'poding84@snu.ac.kr') {
-          if (task.status === 'done') {
-            doneTasks.push({
-              task: task.name,
-              project: project.name,
-              status: task.status,
-              taskId: task.id,
-              projectId: project.id,
-              dueDate: task.dueDate
-            });
-          } else {
-            onGoingTasks.push({
-              task: task.name,
-              project: project.name,
-              status: task.status,
-              taskId: task.id,
-              projectId: project.id,
-              dueDate: task.dueDate
-            });
-          }
-        }
-      });
-    });
-  });
+  const onGoingTasks: TaskType[] = [];
+  const doneTasks: TaskType[] = [];
+  for (const task of userTasks) {
+    if (task.status === 'on-going') onGoingTasks.push(task);
+    else doneTasks.push(task);
+  }
   return (
     <Tabs
       style={{
@@ -58,14 +35,14 @@ const MyTasks: React.FC = () => {
             <List
               dataSource={onGoingTasks}
               renderItem={(item, i) => (
-                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.project}/tasks/${item.id}`)}>
                   <List.Item.Meta
-                    title={item.task}
+                    title={item.name}
                     description={item.project}
                   />
                   <>
                     <Tag color='volcano'>On Going</Tag>
-                    {item.dueDate}
+                    {item.untilAt}
                   </>
                 </List.Item>
               )}
@@ -79,14 +56,14 @@ const MyTasks: React.FC = () => {
             <List
               dataSource={doneTasks}
               renderItem={(item, i) => (
-                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.taskId}`)}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.project}/tasks/${item.id}`)}>
                   <List.Item.Meta
-                    title={item.task}
+                    title={item.name}
                     description={item.project}
                   />
                   <>
                     <Tag color='geekblue'>Done</Tag>
-                    {item.dueDate}
+                    {item.untilAt}
                   </>
                 </List.Item>
               )}
