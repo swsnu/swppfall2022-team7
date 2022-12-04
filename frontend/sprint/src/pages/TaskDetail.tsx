@@ -1,4 +1,4 @@
-import { Input, Avatar, Comment, Tooltip, Button, DatePicker, Tag } from 'antd';
+import { Input, Avatar, Comment, Tooltip, Button, DatePicker, Tag, Modal } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, createElement, useMemo } from 'react';
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
@@ -9,6 +9,7 @@ import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
 
 const TaskDetail: React.FC = () => {
+  const { confirm } = Modal;
   const { projectId, taskId } = useParams();
   const project = useBindStore(state => state.selectedProject);
   const task = useBindStore(state => state.selectedTask);
@@ -77,6 +78,7 @@ const TaskDetail: React.FC = () => {
 
   const onDeleteTask = async (): Promise<void> => {
     if (taskId === undefined) return;
+    if (!window.confirm('Do you want to delete this task?')) return;
     try {
       await deleteTask(parseInt(taskId));
       navigate(`/projects/${projectId ?? '0'}`);

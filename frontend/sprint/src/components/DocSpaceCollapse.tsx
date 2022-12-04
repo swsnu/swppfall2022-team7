@@ -104,7 +104,7 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
   return (
     <div className="documents-container">
       <div className="document-header">
-        Projects Documents
+        Task Documents
         <Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button>
       </div>
       {documentSpaces.map(documentSpace => (
