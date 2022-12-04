@@ -71,7 +71,7 @@ const AddTask: React.FC = () => {
         <div className="input-form">
           <label htmlFor="invite-email">Send Invitiation to..</label>
           <div className="invite-input">
-            <AutoComplete
+            {/* <AutoComplete
               id="invite-email"
               style={{ width: '100%' }}
               placeholder="example@snu.ac.kr"
@@ -88,7 +88,7 @@ const AddTask: React.FC = () => {
                 if (option === undefined) return false;
                 return option.value.toUpperCase().includes(inputValue.toUpperCase()) || option.name.toUpperCase().includes(inputValue.toUpperCase());
               }}
-            />
+            /> */}
             <Button
               type="primary"
               disabled={email.length === 0}

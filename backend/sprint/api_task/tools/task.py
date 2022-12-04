@@ -78,6 +78,8 @@ def get_document_space(docu: DocumentSpace):
     return ret
 
 def edit_task_document(task: Task, docuspace: DocumentSpace):
+    if TaskDocumentSpace.objects.filter(task=task, document_space=docuspace).exists():
+        return
     TaskDocumentSpace.objects.create(
         task = task,
         document_space = docuspace,
@@ -85,6 +87,8 @@ def edit_task_document(task: Task, docuspace: DocumentSpace):
     return
 
 def delete_task_document(task: Task, docuspace: DocumentSpace):
+    if not TaskDocumentSpace.objects.filter(task=task, document_space=docuspace).exists():
+        return
     TaskDocumentSpace.objects.get(
         task=task,
         document_space = docuspace

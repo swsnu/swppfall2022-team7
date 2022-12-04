@@ -11,11 +11,10 @@ const Login: React.FC = () => {
   const handleLogin: () => Promise<void> = async () => {
     const token = await logIn(email, password);
     if (token === null) {
-      await message.error('Wrong email or password', 1);
       setPassword('');
       localStorage.clear();
+      await message.error('Wrong email or password', 1);
     } else {
-      localStorage.clear();
       localStorage.setItem('token', token);
       navigate('/projects');
     }

@@ -1,9 +1,9 @@
 import { renderWithProviders } from '@utils/mocks';
-import { dummyProjects, ProjectType } from '@utils/testDummy';
+import { dummyProjects, DProjectType } from '@utils/testDummy';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import MenuRouter from './MenuRouter';
 
-const stubInitialState: ProjectType[] = dummyProjects;
+const stubInitialState: DProjectType[] = dummyProjects;
 
 const mockState = { preloadedState: { project: stubInitialState } };
 

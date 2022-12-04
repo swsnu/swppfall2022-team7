@@ -1,19 +1,23 @@
 import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
-import { selectProject } from '@store/slices/project';
-import { DocumentSpaceType, MemberType, TaskType } from '@utils/dummy';
+import useBindStore from '@store/zustand';
+import { TaskType } from '@store/zustand/task';
+import { DocumentSpaceType, MemberType } from '@utils/dummy';
 import { Avatar, Button, List, Table, Tag } from 'antd';
-import { Key, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Key, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
-  const projectState = useSelector(selectProject);
   const { projectId } = useParams();
+  const project = useBindStore(state => state.selectedProject);
+  const selectProject = useBindStore(state => state.selectProject);
+  useEffect(() => {
+    if (projectId === undefined) return;
+    void selectProject(parseInt(projectId));
+  }, [projectId]);
   const [randomIdList, setRandomIdList] = useState<Key[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   const taskColumns = [
     {
       title: 'Task',
@@ -52,9 +56,9 @@ const ProjectIntro: React.FC = () => {
       <div className="project-intro">
         <div className="project-info">{project?.name}: {project?.subject}</div>
         <div className="project-header">Description</div>
-        <div className="project-description">
+        {/* <div className="project-description">
           {project?.description}
-        </div>
+        </div> */}
         <div className="project-flex">
           <div className="team-members">
             <div className="team-members-title">
@@ -64,12 +68,12 @@ const ProjectIntro: React.FC = () => {
               <List
                 className="invite-list"
                 itemLayout="horizontal"
-                dataSource={project?.members}
+                dataSource={project?.member_list}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
-                      avatar={<Avatar>{item.avatar}</Avatar>}
-                      title={item.name}
+                      avatar={<Avatar>{item.username.substring(0, 1)}</Avatar>}
+                      title={item.username}
                       description={item.email}
                     />
                   </List.Item>
@@ -82,9 +86,9 @@ const ProjectIntro: React.FC = () => {
               <div className="link" onClick={() => navigate('docs')}>Edit space</div>
             </div>
             <div className="member-container">
-              {project?.documentSpaces.map(space => (
+              {/* {project?.documentSpaces.map(space => (
                 <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
@@ -98,7 +102,7 @@ const ProjectIntro: React.FC = () => {
           </span>
         </div>
         <Table
-          dataSource={project?.tasks.map(task => ({ ...task, key: task.id }))}
+          dataSource={project?.task_list?.map(task => ({ ...task, key: task.id }))}
           columns={taskColumns}
           pagination={false}
           rowSelection={{
@@ -107,7 +111,7 @@ const ProjectIntro: React.FC = () => {
               setRandomIdList(selectedRowKeys);
             },
             getCheckboxProps: record => ({
-              disabled: record.members.length > 0
+              disabled: record.assignee !== null
             }),
             selectedRowKeys: randomIdList
           }}
