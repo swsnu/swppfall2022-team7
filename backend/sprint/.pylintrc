@@ -113,6 +113,7 @@ disable=
       R0801, # Duplicate lines 
       R1705, # if, elif struct
       R1710, # if, elif struct
+      R0903, # few public methods
 
 [BASIC]
 
