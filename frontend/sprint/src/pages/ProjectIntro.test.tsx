@@ -100,12 +100,12 @@ describe('project intro test', () => {
     AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:project' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
     renderWithProviders(AD, mockState);
   });
-  it('should handle checkbox click', () => {
-    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState2);
-    const checkbox = screen.getAllByRole('checkbox')[2];
-    fireEvent.click(checkbox);
-    const button = screen.getAllByRole('button')[0];
-    fireEvent.click(button);
-  });
+  // it('should handle checkbox click', () => {
+  //   AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectIntro />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+  //   renderWithProviders(AD, mockState2);
+  //   const checkbox = screen.getAllByRole('checkbox')[2];
+  //   fireEvent.click(checkbox);
+  //   const button = screen.getAllByRole('button')[0];
+  //   fireEvent.click(button);
+  // });
 });
