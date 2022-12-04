@@ -5,6 +5,7 @@ from api_reaction.tools.reaction_manage import get_reaction_list_by_comment_id
 def convert_comment_to_dict(comment: Comment): 
     return {
         "id": comment.pk,
+        "writer": { "id": comment.user.id, "username": comment.user.username },
         "content": comment.content,
         "created_at": comment.created_at,
         "reaction_list": get_reaction_list_by_comment_id(comment.id)
