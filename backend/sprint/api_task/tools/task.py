@@ -35,7 +35,7 @@ def get_task_detail(task: Task):
     ret = {
         'id': task.id,
         'project': task.project.id,
-        'assignee': { 'id': task.assignee.id, 'name': task.assignee.username } if task.assignee is not None else {'id': -1, 'name': 'none'},
+        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),
