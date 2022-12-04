@@ -50,7 +50,7 @@ def push_notification(user: User, message: str, link: str) :
 def send_project_invitation_notification(user_project: UserProject) :
     push_notification(
         user = user_project.user,
-        message = f"📮 <b>{user_project.project.manager.username}</b> invited you to <b>{user_project.project.name}</b>",
+        message = f"<b>{user_project.project.manager.username}</b> invited you to <b>{user_project.project.name}</b>",
         link = f"/projects/{user_project.project.id}"
     )
     
