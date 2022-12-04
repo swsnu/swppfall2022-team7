@@ -29,4 +29,5 @@ def edit_docuspace_detail(docuspace: DocumentSpace, get_data: dict):
     head = get_data['head']
     docuspace.name = name
     docuspace.head = head
+    docuspace.save()
     return get_docuspace_detail(docuspace)
