@@ -2,6 +2,9 @@ from model_project.models import Task, Project, TaskDocumentSpace, DocumentSpace
 from model_user.models import get_user_model
 from utility.date_string import date_to_string, string_to_date
 from model_project.tools.activity_manage import push_activity
+from model_project.tools.project_manage import get_task_document_space_list
+from api_comment.tools.comment_manage import get_comment_list_by_task_id
+
 def get_task_list(project: Project, user: get_user_model()):
     tasks = Task.objects.filter(project=project)
     ret = []
@@ -40,23 +43,31 @@ def get_task_detail(task: Task):
         'content': task.content,
         'createdAt': date_to_string(task.created_at),
         'updatedAt': date_to_string(task.updated_at),
-        'untilAt': date_to_string(task.until_at)
+        'untilAt': date_to_string(task.until_at),
+        'comment_list': get_comment_list_by_task_id(task.id),
+        'document_space_list': get_task_document_space_list(task),
+        'status': task.status
     }
     return ret
 
 def edit_task_detail(task: Task, get_data: dict, requester):
-    assignee_email = get_data['assignee']
-    name = get_data['name']
-    content = get_data['content']
-    until_at = get_data['untilAt']
-    if assignee_email != '' :
-        user = get_user_model().objects.get(email=assignee_email)
-    else :
-        user = None
-    task.assignee = user
-    task.name = name
-    task.content = content
-    task.until_at = string_to_date(until_at)
+    if 'assignee' in get_data :
+        assignee_id = get_data['assignee']
+        user = get_user_model().objects.get(id=assignee_id)
+        task.assignee = user
+
+    if 'name' in get_data :
+        task.name = get_data['name']
+    
+    if 'content' in get_data :
+        task.content = get_data['content']
+
+    if 'untilAt' in get_data :
+        task.until_at = string_to_date(get_data['untilAt'])
+
+    if 'status' in get_data:
+        task.status = get_data['status']
+    
     task.save()
     ret = get_task_detail(task)
 

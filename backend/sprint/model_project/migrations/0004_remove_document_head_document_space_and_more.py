@@ -27,4 +27,8 @@ class Migration(migrations.Migration):
             name='document',
             field=models.CharField(max_length=100),
         ),
+        migrations.RemoveField(
+            model_name='document',
+            name='head',
+        ),
     ]
