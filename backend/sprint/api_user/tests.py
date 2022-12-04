@@ -133,7 +133,7 @@ class UserTestCase(TestCase):
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
-        response = client.get(url)
+        response = client.get(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 200)
 
 

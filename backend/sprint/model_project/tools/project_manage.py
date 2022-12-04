@@ -37,7 +37,12 @@ def get_project_task_list(project: Project) :
     return task_list
 
 def get_project_document_space_list(project: Project) :
-    return DocumentSpace.objects.filter(project = project).values()
+    qs_document_space = DocumentSpace.objects.filter(project = project)
+    return [{
+        "name": document_space.name,
+        "created_at" : document_space.created_at,
+        "head": document_space.head,
+    } for document_space in qs_document_space]
 
 def get_last_modified_timestamp(project: Project) :
     task_list = get_project_task_list(project)
