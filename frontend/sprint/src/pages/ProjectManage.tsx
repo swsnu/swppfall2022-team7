@@ -50,6 +50,7 @@ const ProjectManage: React.FC = () => {
   const onDeleteClick = async (userId: number): Promise<void> => {
     if (projectId === undefined) return;
     await deleteMember(parseInt(projectId), userId);
+    await selectProject(parseInt(projectId));
   };
 
   const onAddConfirmClicked = async (): Promise<void> => {

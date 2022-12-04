@@ -24,6 +24,7 @@ export interface TaskSlice {
   addTask: (projectId: number, name: string, content: string, assignee: string, untilAt: string) => Promise<number>
   editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
   deleteTask: () => Promise<void>
+  randomAssign: (taskList: number[], userList: number[]) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<
@@ -51,5 +52,7 @@ TaskSlice
     const editTask = { name, content, assignee, untilAt };
     await axios.put(EDIT_TASK_URL(taskId), editTask);
   },
-  deleteTask: async () => {}
+  deleteTask: async () => {},
+  randomAssign: async (taskList: number[], userList: number[]) => {
+  }
 });

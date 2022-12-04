@@ -44,7 +44,7 @@ const ProjectIntro: React.FC = () => {
       dataIndex: 'updated_at'
     }
   ];
-  console.log(project);
+
   return (
     <>
       <div className="project-intro">
@@ -95,7 +95,7 @@ const ProjectIntro: React.FC = () => {
           pagination={false}
           rowSelection={{
             type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
+            onChange: (selectedRowKeys, _) => {
               setRandomIdList(selectedRowKeys);
             },
             getCheckboxProps: record => ({
