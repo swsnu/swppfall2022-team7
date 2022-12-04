@@ -13,3 +13,4 @@ export const GET_PROJECT_URL: (projectId: number) => string = (projectId: number
 export const GET_TASKS_URL: (projectId: number) => string = (projectId: number) => `task/${projectId}/`;
 export const ADD_TASK_URL: (projectId: number) => string = (projectId: number) => `task/${projectId}/m/`;
 export const GET_TASK_URL: (taskId: number) => string = (taskId: number) => `task/detail/${taskId}/`;
+export const EDIT_TASK_URL: (taskId: number) => string = (taskId: number) => `task/detail/${taskId}/m/`;

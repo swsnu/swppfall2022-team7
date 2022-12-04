@@ -5,6 +5,12 @@ import { SliceType } from '.';
 import { TaskType } from './task';
 import { UserType } from './user';
 
+interface DocumentSpaceCardType {
+  name: string
+  head: number
+  created_at: string
+}
+
 export interface ProjectType {
   id: number
   name: string
@@ -14,6 +20,7 @@ export interface ProjectType {
   member_list: UserType[]
   document_number: number
   task_list?: TaskType[]
+  document_space_list?: DocumentSpaceCardType[]
 };
 
 export interface ProjectSlice {

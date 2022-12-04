@@ -1,3 +1,4 @@
+import { EDIT_TASK_URL } from './../../services/api';
 import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
@@ -21,7 +22,7 @@ export interface TaskSlice {
   selectTask: (taskId: number) => Promise<void>
   getTasks: (projectId: number) => Promise<void>
   addTask: (projectId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
-  editTask: () => Promise<void>
+  editTask: (taskId: number, name: string, content: string, assignee: number, untilAt: string) => Promise<void>
   deleteTask: () => Promise<void>
 };
 
@@ -46,6 +47,9 @@ TaskSlice
     const res = await axios.post(ADD_TASK_URL(projectId), newTask);
     console.log(res);
   },
-  editTask: async () => {},
+  editTask: async (taskId: number, name: string, content: string, assignee: number, untilAt: string) => {
+    const editTask = { name, content, assignee, untilAt };
+    await axios.put(EDIT_TASK_URL(taskId), editTask);
+  },
   deleteTask: async () => {}
 });

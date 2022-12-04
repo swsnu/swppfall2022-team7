@@ -3,10 +3,9 @@ import SpaceCard from '@components/SpaceCard';
 import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { TaskType } from '@store/zustand/task';
-import { DocumentSpaceType, MemberType } from '@utils/dummy';
 import { Avatar, Button, List, Table, Tag } from 'antd';
-import { Key, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Key, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectIntro: React.FC = () => {
   const navigate = useNavigate();
@@ -24,29 +23,26 @@ const ProjectIntro: React.FC = () => {
     },
     {
       title: 'Assignee',
-      key: 'members',
-      dataIndex: 'members',
-      render: (members: MemberType[]) => (
-        <Avatar.Group>
-          {members.map(member => <Avatar key={member.id}>{member.avatar}</Avatar>)}
-        </Avatar.Group>
+      key: 'assignee',
+      dataIndex: 'assignee',
+      render: (assignee: number) => (
+        assignee
       )
     },
-    {
-      title: 'Document Spaces',
-      key: 'documentSpaces',
-      dataIndex: 'documentSpaces',
-      render: (spaces: DocumentSpaceType[]) => (
-        spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
-      )
-    },
+    // {
+    //   title: 'Document Spaces',
+    //   key: 'documentSpaces',
+    //   dataIndex: 'documentSpaces',
+    //   render: (spaces: DocumentSpaceType[]) => (
+    //     spaces.map(space => <Tag key={space.id}>{space.name}</Tag>)
+    //   )
+    // },
     {
       title: 'Last Updated',
-      key: 'updatedAt',
-      dataIndex: 'updatedAt'
+      key: 'updated_at',
+      dataIndex: 'updated_at'
     }
   ];
-  console.log(project);
   return (
     <>
       <div className="project-intro">
@@ -76,9 +72,9 @@ const ProjectIntro: React.FC = () => {
               <div className="link" onClick={() => navigate('docs')}>Edit space</div>
             </div>
             <div className="member-container">
-              {/* {project?.documentSpaces.map(space => (
-                <SpaceCard key={space.id} name={space.name} email={space.updatedAt} />
-              ))} */}
+              {project?.document_space_list?.map(space => (
+                <SpaceCard key={space.created_at} name={space.name} email={space.created_at} />
+              ))}
             </div>
           </div>
         </div>
