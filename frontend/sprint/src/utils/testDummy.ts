@@ -111,3 +111,24 @@ export const fakeProject2: ProjectType = {
   ],
   task_list: [fakeTask2]
 };
+
+export const fakeProject3: ProjectType = {
+  document_number: 1,
+  id: 1,
+  last_modified: 'a',
+  manager: 1,
+  member_list: [],
+  name: 'a',
+  subject: 'a',
+  document_space_list: [
+    {
+      created_at: '1',
+      ...fakeDocumentSpace1
+    },
+    {
+      created_at: 'b',
+      ...fakeDocumentSpace2
+    }
+  ],
+  task_list: [fakeTask1, emptyTask1]
+};

@@ -1,9 +1,9 @@
 import useBindStore from "@store/zustand";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { fakeProject1 } from "@utils/testDummy";
+import { fakeProject1, fakeProject3, fakeUser1, fakeUser2 } from "@utils/testDummy";
 import axios from "axios";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ProjectManage from "./ProjectManage";
+import ReactRouter from 'react-router';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
@@ -11,7 +11,7 @@ jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNav
 describe('<ProjectManage />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
-    AD = <MemoryRouter initialEntries={ ['/1'] }><Routes><Route element={<ProjectManage />} path='/:projectId' /></Routes></MemoryRouter>;
+    AD = <ProjectManage />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -19,13 +19,13 @@ describe('<ProjectManage />', () => {
       };
     };
   });
-  it('should render without error', async () => {
+  it('should render without error/handle dissolve', async () => {
     axios.delete = jest.fn();
     const i = useBindStore.getState();
     i.selectedProject = fakeProject1;
     useBindStore.setState(i, true);
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
     const { container } = render(AD);
-    const addButton = screen.getAllByRole('button')[0];
     const dissolveButton = screen.getAllByRole('button')[1];
     fireEvent.click(dissolveButton);
     await waitFor(() => { expect(container.getElementsByClassName('dissolve-desc')[0]).toBeInTheDocument(); });
@@ -35,5 +35,20 @@ describe('<ProjectManage />', () => {
     await waitFor(() => { expect(buttons[4]).toBeEnabled() });
     fireEvent.click(buttons[4]);
     await waitFor(() => { expect(mockNavigate).toBeCalled(); });
+  });
+  it('should handle add new member', async () => {
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject3;
+    useBindStore.setState(i, true);
+    axios.get = jest.fn().mockResolvedValue({ data: [fakeUser1, fakeUser2] });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    render(AD);
+    const addButton = screen.getByText('Add a new member');
+    fireEvent.click(addButton);
+    const emailInput = screen.getByRole('combobox');
+    fireEvent.change(emailInput, { target: { value: 'asdf' } });
+    await waitFor(() => { expect(screen.getAllByText('fakeUser2@fake.com')[0]).toBeInTheDocument(); });
+    const optionButton = screen.getAllByText('fakeUser2@fake.com')[1];
+    fireEvent.click(optionButton);
   });
 });
