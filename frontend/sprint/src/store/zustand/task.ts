@@ -5,7 +5,14 @@ import { SliceType } from '.';
 import { DocumentSpaceCardType } from './project';
 import { UserType } from './user';
 
-type EmojiType = 'good' | 'heart' | 'eyes';
+export const emojis = ['good', 'bad', 'heart', 'eyes'] as const;
+export type EmojiType = typeof emojis[number];
+export const emojiIcons = {
+  good: '👍🏻',
+  bad: '👎🏻',
+  heart: '♥️',
+  eyes: '👀'
+};
 
 export interface ReactionType {
   created_at: string
@@ -47,6 +54,7 @@ export interface TaskSlice {
   deleteTask: (taskId: number) => Promise<void>
   randomAssign: (taskList: number[], userList: number[]) => Promise<void>
   toggleStatus: (taskId: number, isDone: boolean) => Promise<void>
+  addReaction: (commendId: number, emoji: EmojiType) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<

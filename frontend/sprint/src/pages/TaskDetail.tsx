@@ -32,8 +32,8 @@ const TaskDetail: React.FC = () => {
     setEditedDate(task?.untilAt);
   }, [task]);
 
-  const commentActions: (reactionList: ReactionType[]) => JSX.Element = (reactionList: ReactionType[]) => (
-    <Reaction reactionList={reactionList} />
+  const commentActions = (commentId: number, reactionList: ReactionType[]): JSX.Element => (
+    <Reaction commentId={commentId} reactionList={reactionList} />
   );
 
   const onSaveClicked: () => Promise<void> = async () => {
@@ -100,7 +100,7 @@ const TaskDetail: React.FC = () => {
           {task?.comment_list?.map(comment => (
             <Comment
               key={comment.id}
-              actions={[commentActions(comment.reaction_list)]}
+              actions={[commentActions(comment.id, comment.reaction_list)]}
               author={<a>{comment.writer.username}</a>}
               avatar={<Avatar>{comment.writer.username.substring(0, 1).toUpperCase()}</Avatar>}
               content={<p>{comment.content}</p>}

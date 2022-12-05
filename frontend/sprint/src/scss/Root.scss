@@ -34,3 +34,14 @@
     display: flex;
     flex-flow: column;
 }
+
+.ant-comment-actions{
+    li{
+      span{
+        color: initial;
+      }
+      span:hover{
+        color: initial;
+      }
+    }
+  }
