@@ -15,4 +15,5 @@ urlpatterns = [
     path('image/<int:user_id>/', views.image),
     path('image/<int:user_id>/m/', views.m_image),
     path('token/', views.csrf_token, name='token'),
+    path('verify/<str:hash_str>/', views.verify),
 ]
