@@ -73,7 +73,10 @@ def edit_task_detail(task: Task, get_data: dict, requester):
     ret = get_task_detail(task)
 
     user_project = UserProject.objects.get(user = requester, project = task.project)
-    push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
+    if task.status == 'done':
+        push_activity(user_project, task, UserProjectActivity.ActivityType.COMPLETE_TASK)
+    else :
+        push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
     return ret
 
 def get_task_belong(user: get_user_model()):
