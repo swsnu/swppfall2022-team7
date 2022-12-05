@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth import logout
-from django.http import  HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view
@@ -26,6 +26,7 @@ from .tools.account import (
     delete_user,
     convert_user_to_dict,
     listup_user_by_query,
+    verify_user,
 )
 
 from .tools.notification import (
@@ -186,3 +187,8 @@ def m_image(request, user_id:int):
 @require_http_methods(['GET'])
 def csrf_token(request):
     return HttpResponse(status=204)
+
+@require_http_methods(['GET'])
+def verify(request, hash_str: str):
+    verify_user(hash_str)
+    return HttpResponseRedirect(redirect_to="https://www.swppsprint.site")
