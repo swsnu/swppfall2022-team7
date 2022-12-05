@@ -56,7 +56,7 @@ def create_project(data: dict, user: User) :
         if member.exists() :
             add_project_member(project, member.first().id)
         else :
-            send_invite_email(member_email)
+            send_invite_email(member_email, project)
 
     return {
         "id": project.id,
