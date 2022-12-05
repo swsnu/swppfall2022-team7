@@ -4,15 +4,15 @@ import { TaskType } from "@store/zustand/task";
 import { UserType } from "@store/zustand/user";
 
 export const fakeUser1: UserType = {
-  email: 'a',
+  email: 'fakeUser1@fake.com',
   id: 1,
-  username: 'a'
+  username: 'fakeUser1'
 };
 
 export const fakeUser2: UserType = {
-  email: 'b',
+  email: 'fakeUser2@fake.com',
   id: 2,
-  username: 'b'
+  username: 'fakeUser2'
 };
 
 export const fakeDocumentSpace1: DocumentSpaceType = {
