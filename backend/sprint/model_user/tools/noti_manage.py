@@ -32,12 +32,12 @@ def send_notification_upa(upa: UserProjectActivity) :
         return
 
     message = convert_upa_to_message(upa)
-    
+    user = upa.user_project.user
     member_list = UserProject.objects.select_related('user').filter(project=upa.user_project.project)
     
     for member in member_list :
         member: UserProject
-        if member.id != UserProjectActivity.user_project.user.id:
+        if member.user.id != user.id:
             push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
 
     return
