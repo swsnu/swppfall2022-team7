@@ -90,7 +90,7 @@ const AddTask: React.FC = () => {
             />
             <Button
               type="primary"
-              disabled={query.length === 0}
+              disabled={query.length === 0 || emailList.length === 1}
               onClick={onInviteClick}
             >
               Invite
@@ -107,7 +107,13 @@ const AddTask: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={() => { void createTask(); }}>Create Task</Button>
+        <Button
+          type="primary"
+          onClick={() => { void createTask(); }}
+          disabled={taskName === '' || description === '' || dueDate === ''}
+        >
+          Create Task
+        </Button>
       </div>
     </div>
   );
