@@ -57,7 +57,7 @@ const ProjectIntro: React.FC = () => {
           <div className="team-members">
             <div className="team-members-title">
               Team Members
-              <div className="link">Edit team</div>
+              <div className="link" onClick={() => navigate('settings')}>Edit team</div>
             </div>
               <List
                 className="invite-list"
