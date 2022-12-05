@@ -10,7 +10,7 @@ export type EmojiType = typeof emojis[number];
 export const emojiIcons = {
   good: '👍🏻',
   bad: '👎🏻',
-  heart: '♥️',
+  heart: '🧡',
   eyes: '👀'
 };
 
