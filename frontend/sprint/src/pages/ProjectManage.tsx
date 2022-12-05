@@ -6,6 +6,7 @@ import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
 import UserCard from '@components/UserCard';
 import { useNavigate, useParams } from 'react-router-dom';
+import { iconString } from '@utils/utils';
 
 const ProjectManage: React.FC = () => {
   const { projectId } = useParams();
@@ -100,7 +101,7 @@ const ProjectManage: React.FC = () => {
                 actions={[<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>]}
               >
                 <List.Item.Meta
-                  avatar={<Avatar>{item.username.substring(0, 1).toUpperCase()}</Avatar>}
+                  avatar={<Avatar>{iconString(item.username)}</Avatar>}
                   title={item.username}
                   description={item.email}
                 />

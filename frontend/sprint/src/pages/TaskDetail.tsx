@@ -7,6 +7,7 @@ import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
 import CommentBox from '@components/CommentBox';
+import { iconString } from '@utils/utils';
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
@@ -74,7 +75,7 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  {task?.assignee.id !== -1 && <Avatar className="avatar">{task?.assignee?.username.substring(0, 1).toUpperCase()}</Avatar>}
+                  {task?.assignee.id !== -1 && <Avatar className="avatar">{iconString(task?.assignee?.username ?? '')}</Avatar>}
                 </div>
                 <div>
                   <Button onClick={() => setEdit(true)}>Edit</Button>&nbsp;

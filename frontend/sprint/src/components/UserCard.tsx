@@ -1,4 +1,5 @@
 import { UserType } from '@store/zustand/user';
+import { iconString } from '@utils/utils';
 import { Avatar, List } from 'antd';
 
 interface UserCardProps {
@@ -9,7 +10,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }: UserCardProps) => {
   return (
     <List.Item>
       <List.Item.Meta
-        avatar={<Avatar>{user.username.substring(0, 1).toUpperCase()}</Avatar>}
+        avatar={<Avatar>{iconString(user.username)}</Avatar>}
         title={user.username}
         description={user.email}
       />

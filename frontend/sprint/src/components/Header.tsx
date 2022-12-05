@@ -4,6 +4,7 @@ import Notification from './Notification';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
 import UserMenu from './UserMenu';
+import { iconString } from '@utils/utils';
 
 const { Header: AntdHeader } = Layout;
 
@@ -27,7 +28,7 @@ const Header: React.FC = () => {
             </Button>
           </Popover>
           <Popover trigger="click" content={<UserMenu />} placement="bottomRight">
-            <Avatar className="avatar">{user?.username.substring(0, 1).toUpperCase()}</Avatar>
+            <Avatar className="avatar">{iconString(user?.username ?? '')}</Avatar>
           </Popover>
         </div>
       </>

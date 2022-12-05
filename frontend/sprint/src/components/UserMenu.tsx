@@ -1,5 +1,6 @@
 import { LogoutOutlined } from '@ant-design/icons';
 import useBindStore from '@store/zustand';
+import { iconString } from '@utils/utils';
 import { Avatar, Button, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +19,7 @@ const UserMenu: React.FC = () => {
   return (
     <div>
       <Space className="user-drop">
-        <Avatar>{user?.username.substring(0, 1).toUpperCase()}</Avatar>
+        <Avatar>{iconString(user?.username ?? '')}</Avatar>
         {user?.username}
       </Space>
       <Button className="drop-menu" onClick={() => { void handleLogout(); }}>
