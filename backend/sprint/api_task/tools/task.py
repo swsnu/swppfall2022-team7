@@ -37,7 +37,8 @@ def create_task(project: Project, get_data: dict, requester):
 def get_task_detail(task: Task):
     ret = {
         'id': task.id,
-        'project': task.project.id,
+        'projectId': task.project.id,
+        'project': task.project.name,
         'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
         'name': task.name,
         'content': task.content,

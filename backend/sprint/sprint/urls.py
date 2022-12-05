@@ -27,6 +27,7 @@ schema_url_patterns = [
     path('document/', include('api_document_space.urls')),
     path('documents/', include('api_document.urls')),
     path('comment/', include('api_comment.urls')),
+    path('contribution/', include('api_contribution.urls')),
     path('reaction/', include('api_reaction.urls')),
 ]
 
