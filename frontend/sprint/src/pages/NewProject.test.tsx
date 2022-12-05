@@ -20,7 +20,7 @@ describe('<NewProject />', () => {
   it('should handle input', async () => {
     axios.get = jest.fn().mockResolvedValue({ data: [fakeUser1, fakeUser2] });
     axios.post = jest.fn();
-    const { container } = render(AD);
+    render(AD);
     const projectNameInput = screen.getByPlaceholderText('Project Name');
     const subjectNameInput = screen.getByPlaceholderText('Subject Name');
     const createButton = screen.getAllByRole('button')[1];

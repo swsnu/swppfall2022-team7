@@ -38,7 +38,8 @@ export const fakeTask1: TaskType = {
   project: 1,
   untilAt: 'a',
   updatedAt: 'a',
-  status: 'on-going'
+  status: 'on-going',
+  document_space_list: [{ created_at: 'a', ...fakeDocumentSpace1 }]
 };
 export const fakeTask2: TaskType = {
   assignee: {
@@ -53,7 +54,20 @@ export const fakeTask2: TaskType = {
   project: 2,
   untilAt: 'b',
   updatedAt: 'b',
-  status: 'done'
+  status: 'done',
+  document_space_list: [{ created_at: 'b', ...fakeDocumentSpace2 }]
+};
+export const emptyTask1: TaskType = {
+  assignee: null,
+  content: 'b',
+  createdAt: 'b',
+  id: 2,
+  name: 'b',
+  project: 2,
+  untilAt: 'b',
+  updatedAt: 'b',
+  status: 'done',
+  document_space_list: [{ created_at: 'b', ...fakeDocumentSpace2 }]
 };
 
 export const fakeProject1: ProjectType = {
@@ -74,7 +88,7 @@ export const fakeProject1: ProjectType = {
       ...fakeDocumentSpace2
     }
   ],
-  task_list: [fakeTask1]
+  task_list: [fakeTask1, emptyTask1]
 };
 
 export const fakeProject2: ProjectType = {
