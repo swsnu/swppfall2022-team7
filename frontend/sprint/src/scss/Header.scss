@@ -20,8 +20,32 @@
             font-size: 20px;
         }
         .avatar{
-            font-size: 20px;
             margin-left: 10px;
         }
     }
+    .pop-button{
+        border: none;
+        box-shadow: none;
+        transform: translateY(2px);
+        overflow: hidden;
+    }
+    .pop-button:hover{
+        border: none;
+    }
+}
+
+.drop-menu{
+    display: flex;
+    align-items: center;
+    width: 240px;
+    font-size: 14px;
+    border: none;
+    padding-left: 0;
+    box-shadow: none;
+}
+
+.user-drop{
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 12px;
 }

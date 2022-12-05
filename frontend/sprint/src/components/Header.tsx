@@ -1,25 +1,16 @@
-import { Layout, Avatar, Badge, Popover, Button } from 'antd';
+import { Layout, Avatar, Popover, Button } from 'antd';
 import { BellFilled, UserOutlined, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
+import UserMenu from './UserMenu';
 
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const logOut = useBindStore(state => state.logOut);
-  const handleLogout = async (): Promise<void> => {
-    try {
-      await logOut();
-      navigate('/login');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const [showNotification, setShowNotification] = useState(false);
+  const user = useBindStore(state => state.user);
   return (
     <AntdHeader className="header">
       <div className="header-logo" onClick={() => navigate('/projects')}>
@@ -30,14 +21,15 @@ const Header: React.FC = () => {
       token !== null
         ? <>
         <div className="header-user-menu">
-          <Popover trigger="click" content={<Notification />} autoAdjustOverflow={false} placement="bottomRight">
-            <Button className="bell-button">
-              <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
+          <Popover trigger="click" content={<Notification />} placement="bottomRight">
+            <Button className="pop-button">
+              <BellFilled className="bell-icon" />
             </Button>
           </Popover>
-          <Avatar className="avatar" icon={<UserOutlined />} onClick={() => { void handleLogout(); }}/>
+          <Popover trigger="click" content={<UserMenu />} placement="bottomRight">
+            <Avatar className="avatar">{user?.username.substring(0, 1).toUpperCase()}</Avatar>
+          </Popover>
         </div>
-        {/* {showNotification && <Notification />} */}
       </>
         : null}
     </AntdHeader>
