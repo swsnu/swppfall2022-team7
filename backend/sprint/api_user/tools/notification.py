@@ -10,6 +10,7 @@ def get_notification_list(user: User) :
             "link": notification.link,
             "checked": notification.checked,
             "created_at": notification.created_at,  
+            "id": notification.id,
         })
         if not notification.checked:
             notification.checked = True
@@ -26,6 +27,7 @@ def get_notification_list_short(user: User, num: int) :
             "link": notification.link,
             "checked": notification.checked,
             "created_at": notification.created_at,  
+            "id": notification.id
         })
 
     return noti_list

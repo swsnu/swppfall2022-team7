@@ -2,11 +2,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.db.models import Q
 
+from django.core.mail import EmailMessage
+
+def send_email(email: str, title: str, content: str): 
+    email = EmailMessage(
+        'title',
+        'content',
+        to=[email],
+    )
+    # email.send()
+
 def create_user(data: dict) :
     username=data['username']
     email=data['email']
     password=data['password']
-    if User.objects.filter(email=email).exists() :
+    if User.objects.filter(email=email).exists() or User.objects.filter(username=username):
         return None
     return User.objects.create_user(username=username, password=password, email=email)
 
@@ -34,11 +44,12 @@ def edit_user(data: dict, user: User) -> User :
 def delete_user(user: User) :
     user.delete()
 
-def send_invite_email(user_email: str) :
-    print(f"send user email with email `{user_email}`")
-    """
-    TODO: send invite email
-    """
+def send_invite_email(user_email: str, project) :
+    send_email(
+        user_email,
+        f"[SPRINT] Register to SPRINT and join the team '{project.name}'",
+        f"{project.manager.username} has invited you to the '{project.name}'!"
+    )
     return
 
 def listup_user_by_query(query: str) :

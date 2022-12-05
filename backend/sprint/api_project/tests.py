@@ -80,8 +80,7 @@ class ProjectTestCase(TestCase):
             "name": "name",
             "subject": "subject",
             "member_list": [
-                "email2@gmail.com",
-                "nonexist@email.com"
+                "email2@gmail.com"
             ]
         }, content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 201)
