@@ -16,3 +16,16 @@ def get_notification_list(user: User) :
             notification.save()
 
     return noti_list
+
+def get_notification_list_short(user: User, num: int) :
+    notifications = Notification.objects.filter(user = user).order_by('-created_at')
+    noti_list = []
+    for notification in notifications[:num] :
+        noti_list.append({
+            "content": notification.content,
+            "link": notification.link,
+            "checked": notification.checked,
+            "created_at": notification.created_at,  
+        })
+
+    return noti_list

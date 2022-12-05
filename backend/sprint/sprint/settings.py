@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'model_user',
     'model_project',
     'api_comment',
+    'api_contribution',
     'api_document',
     'api_document_space',
     'api_meeting',
