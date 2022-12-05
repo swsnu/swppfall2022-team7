@@ -80,4 +80,5 @@ class UserProjectActivity(models.Model) :
     document_space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE, null=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null = True)
     activity_type = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
     

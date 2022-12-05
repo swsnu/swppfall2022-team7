@@ -1,10 +1,9 @@
-import { useSelector } from 'react-redux';
-import { selectProject } from '@store/slices/project';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
 import { message, Table, Tag, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import useBindStore from '@store/zustand';
 
 interface TableDataType {
   key: React.Key
@@ -59,10 +58,19 @@ const columns: ColumnsType<TableDataType> = [
 ];
 
 const ProjectDocument: React.FC = () => {
-  const projectState = useSelector(selectProject);
   const { projectId } = useParams();
-  const project = projectState.find(project => project.id === parseInt(projectId ?? '0'));
   const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const project = useBindStore(state => state.selectedProject);
+  const documentSpaces = useBindStore(state => state.documentSpaces);
+  const getDocumentSpaces = useBindStore(state => state.getDocumentSpaces);
+
+  useEffect(() => {
+    if (projectId === undefined) return;
+    const getAsyncDocumentSpaces = async (): Promise<void> => {
+      await getDocumentSpaces(parseInt(projectId));
+    };
+    void getAsyncDocumentSpaces();
+  }, [projectId]);
 
   AWS.config.region = 'ap-northeast-2';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -114,11 +122,13 @@ const ProjectDocument: React.FC = () => {
     <div className="project-document">
       <div className="project-info">{project?.name}: {project?.subject}: Documents</div>
       <div className="project-header">Document Spaces</div>
-      <div className="space-header">Abstract</div>
-      <div className="space-header">User Stories<Button>Change Head to Selected</Button></div>
-      <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
-      <br/>
-      <div className="space-header">Testing Plan</div>
+      {documentSpaces.map(documentSpace => (
+        <React.Fragment key={documentSpace.id}>
+          <div className="space-header">{documentSpace.name}<Button>Change Head to Selected</Button></div>
+          <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
+          <br />
+        </React.Fragment>
+      ))}
     </div>
   );
 };

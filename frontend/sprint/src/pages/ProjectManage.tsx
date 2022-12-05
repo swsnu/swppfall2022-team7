@@ -117,7 +117,7 @@ const ProjectManage: React.FC = () => {
               This will lead to irreversible consequence, like permanent loss of project files, tasks, etc. Please be certain.
             </div>
           </div>
-          <Button danger onClick={() => { setOpenDissolve(true); }}>Dissolve Project</Button>
+          <Button type="primary" danger onClick={() => { setOpenDissolve(true); }}>Dissolve Project</Button>
         </div>
       </div>
       <Modal
@@ -176,7 +176,7 @@ const ProjectManage: React.FC = () => {
         onCancel={onDissolveCancelClicked}
         footer={[
           <Button key="cancel" onClick={onDissolveCancelClicked}>Cancel</Button>,
-          <Button danger key="confirm" disabled={dissolve !== project?.name} onClick={() => { void onDissolveConfirmClicked(); }}>Dissolve</Button>
+          <Button type="primary" danger key="confirm" disabled={dissolve !== project?.name} onClick={() => { void onDissolveConfirmClicked(); }}>Dissolve</Button>
         ]}
         width={1000}
       >
