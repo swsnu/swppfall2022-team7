@@ -41,6 +41,7 @@ export interface TaskType {
   status?: 'on-going' | 'done'
   comment_list?: CommentType[]
   document_space_list?: DocumentSpaceCardType[]
+  until_at?: string
 };
 
 export interface TaskSlice {
