@@ -46,15 +46,15 @@ describe('<MyTask />', () => {
   });
   it('should render my task', async () => {
     createMockLocalStorage({ userId: 1 });
-    axios.get = jest.fn().mockResolvedValue({ data: [fakeTask1, fakeTask2] })
+    axios.get = jest.fn().mockResolvedValue({ data: [fakeTask1, fakeTask2] });
     render(AD);
-    await waitFor(() => { expect(useBindStore.getState().userTasks).toEqual([fakeTask1, fakeTask2]) });
+    await waitFor(() => { expect(useBindStore.getState().userTasks).toEqual([fakeTask1, fakeTask2]); });
   });
   it('should handle task click', async () => {
     createMockLocalStorage({ userId: 1 });
-    axios.get = jest.fn().mockResolvedValue({ data: [fakeTask1, fakeTask2] })
+    axios.get = jest.fn().mockResolvedValue({ data: [fakeTask1, fakeTask2] });
     render(AD);
-    await waitFor(() => { expect(useBindStore.getState().userTasks).toEqual([fakeTask1, fakeTask2]) });
+    await waitFor(() => { expect(useBindStore.getState().userTasks).toEqual([fakeTask1, fakeTask2]); });
     const tab = screen.getAllByRole('tab')[1];
     fireEvent.click(tab);
     const task = screen.getByRole('listitem');

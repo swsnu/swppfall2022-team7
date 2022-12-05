@@ -29,13 +29,13 @@ describe('<NewProject />', () => {
     fireEvent.click(createButton);
     fireEvent.change(subjectNameInput, { target: { value: 'Subject Name' } });
     const emailInput = screen.getByRole('combobox');
-    fireEvent.change(emailInput, { target: { value: 'asdf' }});
-    await waitFor(() => { expect(screen.getByText('fakeUser2@fake.com')).toBeInTheDocument() });
+    fireEvent.change(emailInput, { target: { value: 'asdf' } });
+    await waitFor(() => { expect(screen.getByText('fakeUser2@fake.com')).toBeInTheDocument(); });
     const optionButton = screen.getByText('fakeUser2@fake.com');
     fireEvent.click(optionButton);
     const inviteButton = screen.getAllByRole('button')[0];
     fireEvent.click(inviteButton);
     fireEvent.click(createButton);
-    await waitFor(() => { expect(mockNavigate).toBeCalled() });
+    await waitFor(() => { expect(mockNavigate).toBeCalled(); });
   });
 });

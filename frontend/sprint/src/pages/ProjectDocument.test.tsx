@@ -29,6 +29,6 @@ describe('<ProjectDocument />', () => {
   it('should render', async () => {
     axios.get = jest.fn().mockResolvedValue({ data: [fakeDocumentSpace1] });
     render(AD);
-    await waitFor(() => { expect(useBindStore.getState().documentSpaces).toEqual([fakeDocumentSpace1]) });
+    await waitFor(() => { expect(useBindStore.getState().documentSpaces).toEqual([fakeDocumentSpace1]); });
   });
 });

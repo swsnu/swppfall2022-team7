@@ -1,7 +1,7 @@
-import { DocumentSpaceType } from "@store/zustand/documentSpace";
-import { ProjectType } from "@store/zustand/project";
-import { TaskType } from "@store/zustand/task";
-import { UserType } from "@store/zustand/user";
+import { DocumentSpaceType } from '@store/zustand/documentSpace';
+import { ProjectType } from '@store/zustand/project';
+import { TaskType } from '@store/zustand/task';
+import { UserType } from '@store/zustand/user';
 
 export const fakeUser1: UserType = {
   email: 'fakeUser1@fake.com',
@@ -38,7 +38,7 @@ export const fakeTask1: TaskType = {
   project: 1,
   untilAt: 'a',
   updatedAt: 'a',
-  status: "on-going"
+  status: 'on-going'
 };
 export const fakeTask2: TaskType = {
   assignee: {
@@ -53,7 +53,7 @@ export const fakeTask2: TaskType = {
   project: 2,
   untilAt: 'b',
   updatedAt: 'b',
-  status: "done"
+  status: 'done'
 };
 
 export const fakeProject1: ProjectType = {
@@ -95,7 +95,5 @@ export const fakeProject2: ProjectType = {
       ...fakeDocumentSpace2
     }
   ],
-  task_list: [
-    
-  ]
+  task_list: [fakeTask2]
 };

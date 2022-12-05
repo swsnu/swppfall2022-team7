@@ -19,7 +19,7 @@ describe('<RandomRole />', () => {
     };
   });
   it('should render well', async () => {
-    let i = useBindStore.getState();
+    const i = useBindStore.getState();
     i.selectedProject = fakeProject1;
     useBindStore.setState(i, true);
     axios.put = jest.fn().mockResolvedValue(null);
@@ -29,10 +29,10 @@ describe('<RandomRole />', () => {
     fireEvent.click(checkbox);
     const ok = screen.getAllByRole('button')[2];
     fireEvent.click(ok);
-    await waitFor(() => { expect(mockSetModal).toBeCalled() });
+    await waitFor(() => { expect(mockSetModal).toBeCalled(); });
     const cancel = screen.getAllByRole('button')[1];
     fireEvent.click(cancel);
-    await waitFor(() => { expect(mockSetModal).toBeCalled() });
+    await waitFor(() => { expect(mockSetModal).toBeCalled(); });
   });
   it('should render w/o projectId', () => {
     AD = <MemoryRouter initialEntries={['/dummy']}><Routes><Route path='/:project' element={<RandomRole randomIdList={[1]} setRandomIdList={() => {}} showModal={true} setShowModal={() => {}} />} /></Routes></MemoryRouter>;

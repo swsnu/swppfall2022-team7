@@ -1,9 +1,9 @@
-import useBindStore from "@store/zustand";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { fakeTask1 } from "@utils/testDummy";
-import axios from "axios";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import StatusTag from "./StatusTag";
+import useBindStore from '@store/zustand';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fakeTask1 } from '@utils/testDummy';
+import axios from 'axios';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import StatusTag from './StatusTag';
 
 describe('<StatusTag />', () => {
   let AD: JSX.Element;
@@ -22,7 +22,7 @@ describe('<StatusTag />', () => {
     render(AD);
     const tag = screen.getByText('On Going');
     fireEvent.click(tag);
-    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1) });
+    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1); });
   });
   it('should render done', async () => {
     AD = <MemoryRouter initialEntries={['/1']} ><Routes><Route element={<StatusTag status="done" />} path='/:taskId'/></Routes></MemoryRouter>;
@@ -31,7 +31,7 @@ describe('<StatusTag />', () => {
     render(AD);
     const tag = screen.getByText('Done');
     fireEvent.click(tag);
-    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1) });
+    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1); });
   });
   it('should render without taskId', async () => {
     AD = <StatusTag status="done"/>;
@@ -40,6 +40,6 @@ describe('<StatusTag />', () => {
     render(AD);
     const tag = screen.getByText('Done');
     fireEvent.click(tag);
-    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(null) });
+    await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(null); });
   });
 });
