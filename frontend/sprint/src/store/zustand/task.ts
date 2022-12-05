@@ -1,4 +1,4 @@
-import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL, ADD_REACTION_URL, ADD_COMMENT_URL } from '@services/api';
+import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL, ADD_REACTION_URL, ADD_COMMENT_URL, UPDATE_COMMENT_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -56,6 +56,7 @@ export interface TaskSlice {
   toggleStatus: (taskId: number, isDone: boolean) => Promise<void>
   addReaction: (commendId: number, emoji: EmojiType) => Promise<void>
   addComment: (taskId: number, content: string) => Promise<void>
+  deleteComment: (commentId: number) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<
@@ -115,5 +116,8 @@ TaskSlice
   addComment: async (taskId: number, content: string) => {
     const comment = { content };
     await axios.post(ADD_COMMENT_URL(taskId), comment);
+  },
+  deleteComment: async (commentId: number) => {
+    await axios.delete(UPDATE_COMMENT_URL(commentId));
   }
 });

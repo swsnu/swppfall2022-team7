@@ -14,6 +14,7 @@ const CommentBox: React.FC<CommentProps> = ({ commentList }: CommentProps) => {
   const user = useBindStore(state => state.user);
   const selectTask = useBindStore(state => state.selectTask);
   const addComment = useBindStore(state => state.addComment);
+  const deleteComment = useBindStore(state => state.deleteComment);
   const commentActions = (commentId: number, reactionList: ReactionType[]): JSX.Element => (
     <Reaction commentId={commentId} reactionList={reactionList} />
   );
@@ -24,6 +25,12 @@ const CommentBox: React.FC<CommentProps> = ({ commentList }: CommentProps) => {
     await addComment(parseInt(taskId ?? '0'), content);
     await selectTask(parseInt(taskId ?? '0'));
     setContent('');
+  };
+
+  const onClickDelete = async (commentId: number): Promise<void> => {
+    if (!window.confirm('Do you want to delete the comment?')) return;
+    await deleteComment(commentId);
+    await selectTask(parseInt(taskId ?? '0'));
   };
 
   const Editor =
@@ -38,7 +45,18 @@ const CommentBox: React.FC<CommentProps> = ({ commentList }: CommentProps) => {
       {commentList?.map(comment => (
         <Comment
           key={comment.id}
-          actions={[commentActions(comment.id, comment.reaction_list)]}
+          actions={[
+            commentActions(comment.id, comment.reaction_list),
+            comment.writer.id === user?.id
+              ? <span
+                className="comment-delete"
+                key="comment-delete"
+                onClick={() => { void onClickDelete(comment.id); }}
+              >
+                Delete
+              </span>
+              : null
+          ]}
           author={<a>{comment.writer.username}</a>}
           avatar={<Avatar>{comment.writer.username.substring(0, 1).toUpperCase()}</Avatar>}
           content={<p>{comment.content}</p>}
