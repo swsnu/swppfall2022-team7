@@ -1,4 +1,4 @@
-import { Layout, Avatar, Badge } from 'antd';
+import { Layout, Avatar, Badge, Popover, Button } from 'antd';
 import { BellFilled, UserOutlined, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useState } from 'react';
@@ -30,12 +30,14 @@ const Header: React.FC = () => {
       token !== null
         ? <>
         <div className="header-user-menu">
-          <Badge count={3} size="small">
-            <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
-          </Badge>
+          <Popover trigger="click" content={<Notification />} autoAdjustOverflow={false} placement="bottomRight">
+            <Button className="bell-button">
+              <BellFilled className="bell-icon" onClick={() => setShowNotification(show => !show)} />
+            </Button>
+          </Popover>
           <Avatar className="avatar" icon={<UserOutlined />} onClick={() => { void handleLogout(); }}/>
         </div>
-        {showNotification && <Notification />}
+        {/* {showNotification && <Notification />} */}
       </>
         : null}
     </AntdHeader>
