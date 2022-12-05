@@ -20,12 +20,14 @@ const ProjectManage: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
   const [idList, setIdList] = useState<number[]>([]);
+  const user = useBindStore(state => state.user);
   const project = useBindStore(state => state.selectedProject);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
   const addMember = useBindStore(state => state.addMember);
   const deleteMember = useBindStore(state => state.deleteMember);
   const selectProject = useBindStore(state => state.selectProject);
   const deleteProject = useBindStore(state => state.deleteProject);
+  const isManager = project?.manager === user?.id;
 
   useEffect(() => {
     const asyncGetAutoComplete = async (): Promise<void> => {
@@ -98,7 +100,7 @@ const ProjectManage: React.FC = () => {
             dataSource={project?.member_list}
             renderItem={item => (
               <List.Item
-                actions={[<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>]}
+                actions={isManager ? [<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>] : []}
               >
                 <List.Item.Meta
                   avatar={<Avatar>{iconString(item.username)}</Avatar>}
@@ -109,7 +111,7 @@ const ProjectManage: React.FC = () => {
             )}
           />
         </div>
-        <div className="dissolve-container">
+        {isManager && <div className="dissolve-container">
           <div className="dissolve-left">
             <div className="dissolve-header">
               Dissolve Project
@@ -119,7 +121,7 @@ const ProjectManage: React.FC = () => {
             </div>
           </div>
           <Button type="primary" danger onClick={() => { setOpenDissolve(true); }}>Dissolve Project</Button>
-        </div>
+        </div>}
       </div>
       <Modal
         open={openAdd}
