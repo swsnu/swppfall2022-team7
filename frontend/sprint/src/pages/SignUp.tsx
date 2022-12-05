@@ -22,7 +22,7 @@ const SignUp: React.FC = () => {
       await message.success('Signup complete! Please login');
       navigate('/login');
     } catch (error) {
-      await message.error('The email already exists!');
+      await message.error('The email or username already exists!');
       console.log(error);
     }
   };
