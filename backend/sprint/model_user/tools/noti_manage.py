@@ -37,7 +37,8 @@ def send_notification_upa(upa: UserProjectActivity) :
     
     for member in member_list :
         member: UserProject
-        push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
+        if member.id != UserProjectActivity.user_project.user.id:
+            push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
 
     return
 

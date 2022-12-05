@@ -123,7 +123,6 @@ def change(request: Request):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def info(request: Request, user_id:int):
-    print(user_id)
     user = get_user_by_id(user_id)
     if user is None :
         return HttpResponse(status=403)
