@@ -1,17 +1,11 @@
-import { renderWithProviders } from '@utils/mocks';
-import { dummyProjects } from '@utils/testDummy';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ProjectDocument from './ProjectDocument';
 import * as AWSMock from 'aws-sdk-mock';
 import AWS from 'aws-sdk';
-
-const stubInitialState = dummyProjects;
-
-const mockState = {
-  preloadedState: {
-    project: stubInitialState
-  }
-};
+import { render, waitFor } from '@testing-library/react';
+import axios from 'axios';
+import { fakeDocumentSpace1 } from '@utils/testDummy';
+import useBindStore from '@store/zustand';
 
 describe('<ProjectDocument />', () => {
   let AD: JSX.Element;
@@ -32,7 +26,9 @@ describe('<ProjectDocument />', () => {
       };
     };
   });
-  it('should render', () => {
-    renderWithProviders(AD, mockState);
+  it('should render', async () => {
+    axios.get = jest.fn().mockResolvedValue({ data: [fakeDocumentSpace1] });
+    render(AD);
+    await waitFor(() => { expect(useBindStore.getState().documentSpaces).toEqual([fakeDocumentSpace1]) });
   });
 });

@@ -4,102 +4,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Route, Routes, MemoryRouter } from "react-router-dom";
 import axios from "axios";
 import ProjectMain from "./ProjectMain";
+import { fakeProject1, fakeProject2 } from "@utils/testDummy";
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
-
-
-const fakeProject1: ProjectType = {
-  document_number: 1,
-  id: 1,
-  last_modified: 'a',
-  manager: 1,
-  member_list: [
-    {
-      email: 'a',
-      id: 1,
-      username: 'a'
-    }
-  ],
-  name: 'a',
-  subject: 'a',
-  document_space_list: [
-    {
-      created_at: 'a',
-      head: 1,
-      id: 1,
-      name: 'a'
-    },
-    {
-      created_at: 'b',
-      head: 2,
-      id: 2,
-      name: 'b'
-    }
-  ],
-  task_list: [
-    {
-      assignee: {
-        email: 'a',
-        id: 1,
-        username: 'a'
-      },
-      content: 'a',
-      createdAt: 'a',
-      id: 1,
-      name: 'a',
-      project: 1,
-      untilAt: 'a',
-      updatedAt: 'a'
-    }
-  ]
-};
-
-const fakeProject2: ProjectType = {
-  document_number: 2,
-  id: 2,
-  last_modified: 'a',
-  manager: 2,
-  member_list: [
-    {
-      email: 'a',
-      id: 1,
-      username: 'a'
-    }
-  ],
-  name: 'b',
-  subject: 'b',
-  document_space_list: [
-    {
-      created_at: 'a',
-      head: 1,
-      id: 1,
-      name: 'a'
-    },
-    {
-      created_at: 'b',
-      head: 2,
-      id: 2,
-      name: 'b'
-    }
-  ],
-  task_list: [
-    {
-      assignee: {
-        email: 'a',
-        id: 1,
-        username: 'a'
-      },
-      content: 'b',
-      createdAt: 'b',
-      id: 2,
-      name: 'b',
-      project: 2,
-      untilAt: 'b',
-      updatedAt: 'b'
-    }
-  ]
-}
 
 const fakeProjects: ProjectType[] = [ fakeProject1, fakeProject2 ];
 

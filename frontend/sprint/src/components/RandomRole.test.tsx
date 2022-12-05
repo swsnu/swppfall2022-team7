@@ -1,52 +1,11 @@
 import useBindStore from '@store/zustand';
-import { ProjectType } from '@store/zustand/project';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fakeProject1 } from '@utils/testDummy';
+import axios from 'axios';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import RandomRole from './RandomRole';
 
 const mockSetModal = jest.fn();
-
-const initialState: ProjectType = {
-  document_number: 1,
-  id: 1,
-  last_modified: 'lm',
-  manager: 1,
-  member_list: [
-    {
-      email: 'a',
-      id: 1,
-      username: 'a'
-    },
-    {
-      email: 'b',
-      id: 2,
-      username: 'b'
-    },
-    {
-      email: 'c',
-      id: 3,
-      username: 'c'
-    }
-  ],
-  name: 'na',
-  subject: 'su',
-  task_list: [
-    {
-      assignee: {
-        email: 'a',
-        id: 1,
-        username: 'a'
-      },
-      content: 'con',
-      createdAt: 'a',
-      id: 1,
-      name: 'a',
-      project: 1,
-      untilAt: 'a',
-      updatedAt: 'a'
-    }
-  ]
-};
 
 describe('<RandomRole />', () => {
   let AD: JSX.Element;
@@ -61,8 +20,10 @@ describe('<RandomRole />', () => {
   });
   it('should render well', async () => {
     let i = useBindStore.getState();
-    i.selectedProject = initialState;
+    i.selectedProject = fakeProject1;
     useBindStore.setState(i, true);
+    axios.put = jest.fn().mockResolvedValue(null);
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
     render(AD);
     const checkbox = screen.getAllByRole('checkbox')[0];
     fireEvent.click(checkbox);
