@@ -19,7 +19,7 @@ const NewProject: React.FC = () => {
   const addProject = useBindStore(state => state.addProject);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
   useEffect(() => {
-    const asyncGetAutoComplete: () => Promise<void> = async () => {
+    const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
       const autoComplete = await getAutoComplete(query);
       setQueryList(autoComplete);

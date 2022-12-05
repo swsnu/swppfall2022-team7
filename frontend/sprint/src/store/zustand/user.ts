@@ -1,4 +1,4 @@
-import { AUTO_COMPLETE_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
+import { AUTO_COMPLETE_URL, GET_NOTI_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -9,8 +9,18 @@ export interface UserType {
   email: string
 };
 
+export interface NotificationType {
+  id: number
+  created_at: string
+  link: string
+  content: string
+  checked: boolean
+};
+
 export interface UserSlice {
   user: UserType | null
+  noti: NotificationType[] | null
+  getNoti: () => Promise<void>
   logIn: (email: string, password: string) => Promise<string | null>
   logOut: () => Promise<void>
   signUp: (name: string, email: string, password: string) => Promise<void>
@@ -25,6 +35,11 @@ SliceType,
 UserSlice
 > = (set, get) => ({
   user: null,
+  noti: null,
+  getNoti: async () => {
+    const res = await axios.get(GET_NOTI_URL);
+    set({ noti: res.data });
+  },
   logIn: async (email: string, password: string) => {
     try {
       const res = await axios.post(SIGNIN_URL, { email, password });

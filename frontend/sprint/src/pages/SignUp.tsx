@@ -16,13 +16,13 @@ const SignUp: React.FC = () => {
     password === confirm &&
     password !== ''
   );
-  const handleSignup: () => Promise<void> = async () => {
+  const handleSignup = async (): Promise<void> => {
     try {
       await signUp(name, email, password);
-      await message.success('Signup complete! Please login');
+      await message.success('Signup complete! Please check your email');
       navigate('/login');
     } catch (error) {
-      await message.error('The email already exists!');
+      await message.error('The email or username already exists!');
       console.log(error);
     }
   };

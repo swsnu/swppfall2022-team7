@@ -10,7 +10,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }: StatusTagProps) => {
   const toggleStatus = useBindStore(state => state.toggleStatus);
   const selectTask = useBindStore(state => state.selectTask);
   const { taskId } = useParams();
-  const onToggleStatus: (isDone: boolean) => Promise<void> = async (isDone: boolean) => {
+  const onToggleStatus = async (isDone: boolean): Promise<void> => {
     if (taskId === undefined) return;
     await toggleStatus(parseInt(taskId), isDone);
     await selectTask(parseInt(taskId));
