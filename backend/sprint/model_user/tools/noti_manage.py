@@ -3,13 +3,9 @@ from model_user.models import Notification
 
 from django.contrib.auth.models import User
 
-
-def send_notification_upa(upa: UserProjectActivity) :
-    if upa.activity_type == UserProjectActivity.ActivityType.DOWNLOAD_DOCUMENT :
-        return
-
+def convert_upa_to_message(upa: UserProjectActivity) :
     message = ""
-
+    
     if upa.activity_type == UserProjectActivity.ActivityType.CREATE_TASK :
         message = f"<b>{upa.user_project.user.username}</b> created a new task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_DOCUMENT_SPACE :
@@ -29,11 +25,20 @@ def send_notification_upa(upa: UserProjectActivity) :
     elif upa.activity_type == UserProjectActivity.ActivityType.COMPLETE_TASK :
         message = f"<b>{upa.user_project.user.username}</b> completed the task <b>{upa.task.name}</b>"
     
+    return message
+
+def send_notification_upa(upa: UserProjectActivity) :
+    if upa.activity_type == UserProjectActivity.ActivityType.DOWNLOAD_DOCUMENT :
+        return
+
+    message = convert_upa_to_message(upa)
+    user = upa.user_project.user
     member_list = UserProject.objects.select_related('user').filter(project=upa.user_project.project)
     
     for member in member_list :
         member: UserProject
-        push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
+        if member.user.id != user.id:
+            push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
 
     return
 

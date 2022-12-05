@@ -30,6 +30,7 @@ from .tools.account import (
 
 from .tools.notification import (
     get_notification_list,
+    get_notification_list_short
 )
 
 from .serializers import (
@@ -122,7 +123,6 @@ def change(request: Request):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def info(request: Request, user_id:int):
-    print(user_id)
     user = get_user_by_id(user_id)
     if user is None :
         return HttpResponse(status=403)
@@ -157,6 +157,12 @@ def m_timetable(request, user_id:int):
 @return_bad_request_if_anonymous
 def noti(request: Request):
     return Response(status=200, data=get_notification_list(request.user))
+
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def noti_short(request: Request, num: int):
+    return Response(status=200, data=get_notification_list_short(request.user, num))
 
 @require_http_methods(['GET'])
 def image(request, user_id:int):

@@ -53,9 +53,7 @@ class TaskDocumentSpace(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Document(models.Model):
-    name = models.CharField(max_length=100)
     space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE)
-    document = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class UserProjectActivity(models.Model) :
@@ -82,4 +80,5 @@ class UserProjectActivity(models.Model) :
     document_space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE, null=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null = True)
     activity_type = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
     

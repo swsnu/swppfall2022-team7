@@ -32,7 +32,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://api.swppsprint.site',
-    'http://api.swppsprint.site'
+    'https://swppsprint.site',
+    'https://www.swppsprint.site'
 )
 
 # Application definition
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'model_user',
     'model_project',
     'api_comment',
+    'api_contribution',
     'api_document',
     'api_document_space',
     'api_meeting',
@@ -169,6 +171,14 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.swppsprint.site'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sprint.bot.noreply@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
