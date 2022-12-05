@@ -32,7 +32,7 @@ export interface CommentType {
 export interface TaskType {
   id: number
   project: number
-  assignee: UserType
+  assignee: UserType | null
   name: string
   content: string
   createdAt: string
