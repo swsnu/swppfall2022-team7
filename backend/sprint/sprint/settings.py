@@ -32,7 +32,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://api.swppsprint.site',
-    'http://api.swppsprint.site'
+    'https://swppsprint.site',
+    'https://www.swppsprint.site'
 )
 
 # Application definition
@@ -170,6 +171,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.swppsprint.site'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
