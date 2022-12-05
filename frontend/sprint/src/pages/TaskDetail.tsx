@@ -36,7 +36,7 @@ const TaskDetail: React.FC = () => {
     <Reaction commentId={commentId} reactionList={reactionList} />
   );
 
-  const onSaveClicked: () => Promise<void> = async () => {
+  const onSaveClicked = async (): Promise<void> => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
     await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
     await selectProject(parseInt(projectId ?? '0'));

@@ -16,7 +16,7 @@ const SignUp: React.FC = () => {
     password === confirm &&
     password !== ''
   );
-  const handleSignup: () => Promise<void> = async () => {
+  const handleSignup = async (): Promise<void> => {
     try {
       await signUp(name, email, password);
       await message.success('Signup complete! Please login');

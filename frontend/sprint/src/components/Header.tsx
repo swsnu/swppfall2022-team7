@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const logOut = useBindStore(state => state.logOut);
-  const handleLogout: () => Promise<void> = async () => {
+  const handleLogout = async (): Promise<void> => {
     try {
       await logOut();
       navigate('/login');

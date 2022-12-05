@@ -27,7 +27,7 @@ const ProjectManage: React.FC = () => {
   const deleteProject = useBindStore(state => state.deleteProject);
 
   useEffect(() => {
-    const asyncGetAutoComplete: () => Promise<void> = async () => {
+    const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
       const autoComplete = await getAutoComplete(query);
       setQueryList(autoComplete);

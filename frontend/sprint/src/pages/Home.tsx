@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const getProjects = useBindStore(state => state.getProjects);
 
   useEffect(() => {
-    const asyncGetProjects: () => Promise<void> = async () => {
+    const asyncGetProjects = async (): Promise<void> => {
       const userId = localStorage.getItem('userId');
       if (userId === null) return;
       await getProjects(userId);
