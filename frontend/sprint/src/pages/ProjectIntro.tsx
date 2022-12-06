@@ -4,7 +4,7 @@ import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { DocumentSpaceCardType } from '@store/zustand/project';
 import { TaskType } from '@store/zustand/task';
-import { Button, List, Table, Tag } from 'antd';
+import { Button, Empty, List, Table, Tag } from 'antd';
 import { Key, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -76,6 +76,7 @@ const ProjectIntro: React.FC = () => {
               {project?.document_space_list?.map(space => (
                 <SpaceCard key={space.created_at} name={space.name} email={space.created_at} />
               ))}
+              {project?.document_space_list?.length === 0 && <Empty className="empty-cell" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             </div>
           </div>
         </div>

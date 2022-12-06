@@ -38,16 +38,20 @@
 }
 
 .ant-comment-actions{
-    li{
-      span{
-        color: initial;
-      }
-      span:hover{
-        color: initial;
-      }
+  li{
+    span{
+      color: initial;
+    }
+    span:hover{
+      color: initial;
     }
   }
+}
 
-  .ant-picker-calendar-mode-switch{
-    display: none;
-  }
+.ant-picker-calendar-mode-switch{
+  display: none;
+}
+
+.empty-cell{
+  width: 100%;
+}
