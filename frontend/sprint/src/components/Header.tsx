@@ -12,6 +12,11 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const user = useBindStore(state => state.user);
+  const getNoti = useBindStore(state => state.getNoti);
+  const onOpenChange = async (open: boolean): Promise<void> => {
+    if (!open) return;
+    await getNoti();
+  };
   return (
     <AntdHeader className="header">
       <div className="header-logo" onClick={() => navigate('/projects')}>
@@ -22,7 +27,7 @@ const Header: React.FC = () => {
       token !== null
         ? <>
         <div className="header-user-menu">
-          <Popover trigger="click" content={<Notification />} placement="bottomRight">
+          <Popover trigger="click" content={<Notification />} placement="bottomRight" onOpenChange={(open) => { void onOpenChange(open); }}>
             <Button className="pop-button">
               <BellFilled className="bell-icon" />
             </Button>

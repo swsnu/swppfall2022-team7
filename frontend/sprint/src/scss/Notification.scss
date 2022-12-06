@@ -2,10 +2,14 @@
   display: flex;
   flex-flow: column;
   width: 360px;
+  max-height: 540px;
   border-radius: 20px;
   padding: 12px;
   background: white;
 
+  .noti-list{
+    overflow-y: auto;
+  }
   .notification-title{
     font-weight: bold;
     font-size: 18px;
