@@ -70,15 +70,17 @@ def edit_task_detail(task: Task, get_data: dict, requester):
         task.until_at = string_to_date(get_data['untilAt'])
 
     if 'status' in get_data:
-        task.status = get_data['status']
+        if task.assignee != None :
+            task.status = get_data['status']
     
     task.save()
     ret = get_task_detail(task)
 
-    user_project = UserProject.objects.get(user = requester, project = task.project)
     if task.status == 'done':
+        user_project = UserProject.objects.get(user = task.assignee, project = task.project)
         push_activity(user_project, task, UserProjectActivity.ActivityType.COMPLETE_TASK)
     else :
+        user_project = UserProject.objects.get(user = requester, project = task.project)
         push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
     return ret
 
