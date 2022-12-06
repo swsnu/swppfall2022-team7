@@ -1,0 +1,23 @@
+.new-project-card{
+  padding: 18px 24px;
+  color: #00000073;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow 0.3s;
+  min-height: 157.14px;
+  .plus-icon{
+    font-size: 18px;
+    margin-top: 6px;
+  }
+}
+
+.new-project-card:hover{
+  cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}

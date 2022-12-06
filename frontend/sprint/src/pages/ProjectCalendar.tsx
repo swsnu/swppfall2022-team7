@@ -19,9 +19,9 @@ const ProjectCalendar: React.FC = () => {
       if (task?.until_at !== undefined) {
         if (moment(task.until_at).month() === value.month()) {
           if (parseInt(task.until_at?.substring(8, 10)) === value.date()) {
-            const t = task.status === 'on-going' ? 'warning' : 'success';
-            const c = task.name;
-            listData.push({ type: t, content: c });
+            const taskStatus = task.status === 'on-going' ? 'warning' : 'success';
+            const taskName = task.name;
+            listData.push({ type: taskStatus, content: taskName });
           }
         }
       }
@@ -46,7 +46,7 @@ const ProjectCalendar: React.FC = () => {
     <div className="project-calendar">
       <div className="project-info">{project?.name}: {project?.subject}: Calendar</div>
       <div className="calendar-header">Project Calendar</div>
-      <Calendar dateCellRender={dateCellRender} style={{ zIndex: 0 }} mode="month" />
+      <Calendar className="calendar-cell" dateCellRender={dateCellRender} mode="month" />
     </div>
   );
 };

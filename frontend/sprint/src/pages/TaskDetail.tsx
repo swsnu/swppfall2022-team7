@@ -86,7 +86,9 @@ const TaskDetail: React.FC = () => {
                 <div className="task-due">Due: {taskInfo.dueDate}</div>
                 {task?.status !== undefined ? <StatusTag status={task?.status} /> : null}
               </div>
-              <div className="task-content">{taskInfo.content}</div>
+              <div className="task-content">
+                <p dangerouslySetInnerHTML={{ __html: taskInfo.content?.replaceAll('\n', '<br/>') ?? '' }} />
+              </div>
             </div>
       }
       <div className="bottom-container">
