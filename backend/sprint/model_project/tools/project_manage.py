@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from model_project.models import Project, UserProject, Task, DocumentSpace, TaskDocumentSpace
-from utility.date_string import date_to_string
+from utility.date_string import date_to_string, date_to_string_day
 
 def get_project_by_id(id: int) :
     project = Project.objects.filter(id=id)
@@ -32,7 +32,7 @@ def get_project_task_list(project: Project) :
             "assignee": task.assignee.username if task.assignee is not None else None,
             "content": task.content,
             "until_at_r": task.until_at,
-            "until_at": date_to_string(task.until_at),
+            "until_at": date_to_string_day(task.until_at.date()),
             "updated_at_r" : task.updated_at,
             "updated_at" : date_to_string(task.updated_at),
             "document_space_list": get_task_document_space_list(task)
