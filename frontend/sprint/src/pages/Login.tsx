@@ -13,7 +13,7 @@ const Login: React.FC = () => {
     if (token === null) {
       setPassword('');
       localStorage.clear();
-      await message.error('Wrong email or password', 1);
+      await message.error('Inactive account / Wrong email or password', 1);
     } else {
       localStorage.setItem('token', token);
       navigate('/projects');

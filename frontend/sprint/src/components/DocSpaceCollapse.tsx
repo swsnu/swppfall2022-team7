@@ -1,8 +1,9 @@
 import { InboxOutlined, StarOutlined } from '@ant-design/icons';
 import { DocumentSpaceCardType } from '@store/zustand/project';
-import { Button, Collapse, message, Upload, UploadFile, UploadProps } from 'antd';
+import { Button, Collapse, Empty, message, Upload, UploadFile, UploadProps } from 'antd';
 import AWS from 'aws-sdk';
 import { useState, useEffect } from 'react';
+import LinkModal from './LinkModal';
 
 interface DocumentType {
   key: string | undefined
@@ -21,6 +22,7 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
   const [uploadFile, setUploadFile] = useState<UploadFile[]>([]);
   const [fileList, setFileList] = useState<DocumentType[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
 
   AWS.config.region = 'ap-northeast-2';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -102,48 +104,57 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
     void handleUpload2();
   };
   return (
-    <div className="documents-container">
-      <div className="document-header">
-        Task Documents
-        <Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>Confirm</Button>
+    <>
+      <div className="documents-container">
+        <div className="document-header">
+          Task Documents
+          <Button size="small" onClick={() => setShowLinkModal(true)}>Link Space</Button>
+        </div>
+        {documentSpaces.map(documentSpace => (
+          <Collapse accordion key={documentSpace.id}>
+            <Panel header={documentSpace.name} key={documentSpace.id}>
+              <div className="document-container">
+                <div className="document-left">
+                  {fileList.map((file, i) => {
+                    return (
+                      <a href={file.url} className="document-uploaded" key={file.key}>
+                        <div className="file-name-container">
+                          <div className="uploaded-file">{file.key}</div>
+                          {(i === 0) && <StarOutlined size={10} />}
+                        </div>
+                        <div className="file-info">
+                          <div className="uploaded-time">{file.time?.toISOString().substring(0, 10)}</div>
+                          <div className="file-uploader">SangHyun Yi</div>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+                <div className="document-right">
+                  <Dragger {...props}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file for upload</p>
+                    <p className="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                      band files
+                    </p>
+                  </Dragger>
+                </div>
+              </div>
+              <div className="doc-button-tab">
+                <Button className="document-confirm" onClick={handleUpload} disabled={uploadFile.length === 0} loading={uploading} size='small'>
+                  Upload
+                </Button>
+              </div>
+            </Panel>
+          </Collapse>
+        ))}
+        {documentSpaces.length === 0 && <Empty className="empty-cell" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
       </div>
-      {documentSpaces.map(documentSpace => (
-        <Collapse accordion key={documentSpace.id}>
-          <Panel header={documentSpace.name} key={documentSpace.id}>
-            <div className="document-container">
-              <div className="document-left">
-                {fileList.map((file, i) => {
-                  return (
-                    <a href={file.url} className="document-uploaded" key={file.key}>
-                      <div className="file-name-container">
-                        <div className="uploaded-file">{file.key}</div>
-                        {(i === 0) && <StarOutlined size={10} />}
-                      </div>
-                      <div className="file-info">
-                        <div className="uploaded-time">{file.time?.toISOString().substring(0, 10)}</div>
-                        <div className="file-uploader">SangHyun Yi</div>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-              <div className="document-right">
-                <Dragger {...props}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                  <p className="ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                    band files
-                  </p>
-                </Dragger>
-              </div>
-            </div>
-          </Panel>
-        </Collapse>
-      ))}
-    </div>
+      <LinkModal showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal} />
+    </>
   );
 };
 

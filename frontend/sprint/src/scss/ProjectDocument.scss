@@ -11,18 +11,20 @@
     font-weight: bold;
   }
   .project-header{
-    font-size: 28px;
+    font-size: 26px;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .space-header{
     display: flex;
     justify-content: space-between;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin-bottom: 10px;
     padding-bottom: 5px;
-    border-bottom: 1px solid #dddddd;
   }
 }

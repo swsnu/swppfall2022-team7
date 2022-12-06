@@ -1,7 +1,7 @@
 import { CheckOutlined } from '@ant-design/icons';
 import useBindStore from '@store/zustand';
 import { QuestContribType } from '@store/zustand/contribution';
-import { Table, Tag, Timeline } from 'antd';
+import { Empty, Table, Tag, Timeline } from 'antd';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -79,6 +79,7 @@ const ProjectContribution: React.FC = () => {
             ))}
           </Timeline.Item>
         ))}
+        {timeline.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className="empty-cell" />}
       </Timeline>
     </div>
   );

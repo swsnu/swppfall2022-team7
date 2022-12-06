@@ -100,7 +100,7 @@ const NewProject: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={createProject} disabled={projectName === '' || subjectName === '' || emailList.length === 0}>
+        <Button type="primary" onClick={createProject} disabled={projectName === '' || subjectName === ''}>
           Create Project
         </Button>
       </div>
