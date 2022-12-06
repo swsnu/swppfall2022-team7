@@ -92,7 +92,6 @@ def signin(request: Request):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def signout(request: Request):
-    Token.objects.get(user = request.user).delete()
     logout(request)
     return HttpResponse(status=204)
 
