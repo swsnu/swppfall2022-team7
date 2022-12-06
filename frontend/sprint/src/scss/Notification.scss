@@ -12,4 +12,13 @@
     line-height: initial;
     padding-bottom: 20px;
   }
+
+  .noti-cell{
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.3s opacity;
+  }
+  .noti-cell:hover{
+    opacity: 1;
+  }
 }
