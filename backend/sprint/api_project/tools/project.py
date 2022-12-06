@@ -95,7 +95,8 @@ def add_project_member(project: Project, member_id: int) :
             user = member,
             project = project
         )
-        send_project_invitation_notification(up)
+        if project.manager != member :
+            send_project_invitation_notification(up)
     
     return get_project_detail(project)
 
