@@ -1,4 +1,5 @@
 import { GET_QUEST_URL, GET_TIMELINE_URL } from '@services/api';
+import { stringMap } from 'aws-sdk/clients/backup';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
@@ -14,10 +15,15 @@ export interface QuestContribType {
   }
 };
 
-export interface TimelineContribType {
+export interface LogType {
   user: UserType
   created_at: string
   message: string
+}
+
+export interface TimelineContribType {
+  date_str: string
+  logs: LogType[]
 };
 
 export interface ContribSlice {

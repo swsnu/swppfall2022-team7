@@ -19,7 +19,7 @@
   .quest-header{
     display: flex;
     justify-content: space-between;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin-bottom: 10px;
     padding-bottom: 5px;
@@ -28,7 +28,7 @@
   .timeline-header{
     display: flex;
     justify-content: space-between;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -56,5 +56,9 @@
     font-size: 14px;
     color: #111111;
     padding-left: 7px;
+    margin: 7px 0;
+    .bullet{
+      margin-right: 7px;
+    }
   }
 }
