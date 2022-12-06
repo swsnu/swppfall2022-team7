@@ -80,7 +80,7 @@ def send_invite_email(user_email: str, project) :
     return
 
 def listup_user_by_query(query: str) :
-    user_list = User.objects.filter(Q(email__contains=query) | Q(username__contains=query)).order_by('username').values()
+    user_list = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username').values()
     
     return [{
         "email": user['email'],

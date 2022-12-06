@@ -28,9 +28,6 @@ def date_to_string(date_time: datetime):
     return date_str
 
 def date_to_string_day(date_time: date):
-    if date_time.isinstance(datetime) :
-        date_time = date_time.date()
-
     if datetime.now().date() == date_time :
         date_str = "Today"
     elif datetime.now().date() == timedelta(days=1) + date_time:
