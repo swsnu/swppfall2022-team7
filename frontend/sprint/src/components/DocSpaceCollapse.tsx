@@ -1,6 +1,6 @@
 import { InboxOutlined, StarOutlined } from '@ant-design/icons';
 import { DocumentSpaceCardType } from '@store/zustand/project';
-import { Button, Collapse, message, Upload, UploadFile, UploadProps } from 'antd';
+import { Button, Collapse, Empty, message, Upload, UploadFile, UploadProps } from 'antd';
 import AWS from 'aws-sdk';
 import { useState, useEffect } from 'react';
 
@@ -143,6 +143,7 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
           </Panel>
         </Collapse>
       ))}
+      {documentSpaces.length === 0 && <Empty className="empty-cell" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import AWS from 'aws-sdk';
-import { message, Table, Tag, Button } from 'antd';
+import { message, Table, Tag, Button, Collapse, Empty, Modal, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import useBindStore from '@store/zustand';
 
@@ -58,11 +58,28 @@ const columns: ColumnsType<TableDataType> = [
 ];
 
 const ProjectDocument: React.FC = () => {
+  const { Panel } = Collapse;
   const { projectId } = useParams();
   const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [spaceName, setSpaceName] = useState('');
   const project = useBindStore(state => state.selectedProject);
   const documentSpaces = useBindStore(state => state.documentSpaces);
   const getDocumentSpaces = useBindStore(state => state.getDocumentSpaces);
+  const addDocumentSpace = useBindStore(state => state.addDocumentSpace);
+
+  const onOk = async (): Promise<void> => {
+    await addDocumentSpace(parseInt(projectId ?? '0'), spaceName);
+    await getDocumentSpaces(parseInt(projectId ?? '0'));
+    setShowAddModal(false);
+    setSpaceName('');
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLElement>): void => {
+    if (e.key === 'Enter') {
+      void onOk();
+    }
+  };
 
   useEffect(() => {
     if (projectId === undefined) return;
@@ -119,17 +136,34 @@ const ProjectDocument: React.FC = () => {
   };
 
   return (
-    <div className="project-document">
-      <div className="project-info">{project?.name}: {project?.subject}: Documents</div>
-      <div className="project-header">Document Spaces</div>
-      {documentSpaces.map(documentSpace => (
-        <React.Fragment key={documentSpace.id}>
-          <div className="space-header">{documentSpace.name}<Button>Change Head to Selected</Button></div>
-          <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
-          <br />
-        </React.Fragment>
-      ))}
-    </div>
+    <>
+      <div className="project-document">
+        <div className="project-info">{project?.name}: {project?.subject}: Documents</div>
+        <div className="project-header">
+          Document Spaces
+          <Button type="primary" onClick={() => setShowAddModal(true)}>Add Space</Button>
+        </div>
+        {documentSpaces.length > 0 && <Collapse>
+          {documentSpaces.map(documentSpace => (
+            <Panel header={documentSpace.name} key={documentSpace.id}>
+              <div className="space-header"><span /><Button>Change Head to Selected</Button></div>
+              <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
+              <br />
+            </Panel>
+          ))}
+        </Collapse>}
+        {documentSpaces.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className="empty-cell" />}
+      </div>
+      <Modal
+        title="Add Document Space"
+        open={showAddModal}
+        onCancel={() => setShowAddModal(false)}
+        okButtonProps={{ disabled: spaceName.length === 0 }}
+        onOk={() => { void onOk(); }}
+      >
+        <Input placeholder="Space name" value={spaceName} onChange={e => setSpaceName(e.target.value)} onKeyPress={onKeyPress} />
+      </Modal>
+    </>
   );
 };
 

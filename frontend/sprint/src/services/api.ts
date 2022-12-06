@@ -25,6 +25,7 @@ export const ADD_COMMENT_URL = (taskId: number): string => `comment/${taskId}/m/
 export const UPDATE_COMMENT_URL = (commentId: number): string => `comment/detail/${commentId}/m/`;
 
 export const GET_DOC_SPACES_URL = (projectId: number): string => `document/${projectId}/`;
+export const ADD_DOC_SPACES_URL = (projectId: number): string => `document/${projectId}/m/`;
 
 export const GET_QUEST_URL = (projectId: number): string => `contribution/quest/${projectId}/`;
 export const GET_TIMELINE_URL = (projectId: number): string => `contribution/timeline/${projectId}/`;
