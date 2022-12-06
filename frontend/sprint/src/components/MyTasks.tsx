@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { TaskType } from '@store/zustand/task';
 
+type UserTaskType = TaskType & { projectId: number };
+
 const MyTasks: React.FC = () => {
-  const userTasks = useBindStore(state => state.userTasks);
+  const userTasks = useBindStore(state => state.userTasks) as UserTaskType[];
   const getUserTasks = useBindStore(state => state.getUserTasks);
   useEffect(() => {
     const getAsyncUserTasks = async (): Promise<void> => {
@@ -15,8 +17,8 @@ const MyTasks: React.FC = () => {
     void getAsyncUserTasks();
   }, []);
   const navigate = useNavigate();
-  const onGoingTasks: TaskType[] = [];
-  const doneTasks: TaskType[] = [];
+  const onGoingTasks: UserTaskType[] = [];
+  const doneTasks: UserTaskType[] = [];
   for (const task of userTasks) {
     if (task.status === 'on-going') onGoingTasks.push(task);
     else doneTasks.push(task);
@@ -35,7 +37,7 @@ const MyTasks: React.FC = () => {
             <List
               dataSource={onGoingTasks}
               renderItem={(item, i) => (
-                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.project}/tasks/${item.id}`)}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.id}`)}>
                   <List.Item.Meta
                     title={item.name}
                     description={item.project}

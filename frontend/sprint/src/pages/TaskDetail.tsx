@@ -1,4 +1,4 @@
-import { Input, Avatar, Comment, Button, DatePicker } from 'antd';
+import { Input, Avatar, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,8 +6,8 @@ import moment from 'moment';
 import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
-import Reaction from '@components/Reaction';
-import { ReactionType } from '@store/zustand/task';
+import CommentBox from '@components/CommentBox';
+import { iconString } from '@utils/utils';
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
@@ -32,11 +32,7 @@ const TaskDetail: React.FC = () => {
     setEditedDate(task?.untilAt);
   }, [task]);
 
-  const commentActions: (reactionList: ReactionType[]) => JSX.Element = (reactionList: ReactionType[]) => (
-    <Reaction reactionList={reactionList} />
-  );
-
-  const onSaveClicked: () => Promise<void> = async () => {
+  const onSaveClicked = async (): Promise<void> => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
     await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
     await selectProject(parseInt(projectId ?? '0'));
@@ -59,7 +55,6 @@ const TaskDetail: React.FC = () => {
       console.log(error);
     }
   };
-
   return (
     <div className="task-detail">
       <div className="task-info">{project?.name}: {project?.subject}: {taskInfo.name}</div>
@@ -80,7 +75,7 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  <Avatar className="avatar">{task?.assignee?.username.substring(0, 1).toUpperCase()}</Avatar>
+                  {task?.assignee?.id !== -1 && <Avatar className="avatar">{iconString(task?.assignee?.username ?? '')}</Avatar>}
                 </div>
                 <div>
                   <Button onClick={() => setEdit(true)}>Edit</Button>&nbsp;
@@ -95,19 +90,7 @@ const TaskDetail: React.FC = () => {
             </div>
       }
       <div className="bottom-container">
-        <div className="comment-container">
-          <div className="comment-header">Comments</div>
-          {task?.comment_list?.map(comment => (
-            <Comment
-              key={comment.id}
-              actions={[commentActions(comment.reaction_list)]}
-              author={<a>{comment.writer.username}</a>}
-              avatar={<Avatar>{comment.writer.username.substring(0, 1).toUpperCase()}</Avatar>}
-              content={<p>{comment.content}</p>}
-              datetime={comment.created_at}
-            />
-          ))}
-        </div>
+        <CommentBox commentList={task?.comment_list} />
         <DocSpaceCollapse documentSpaces={task?.document_space_list ?? []} />
       </div>
     </div>

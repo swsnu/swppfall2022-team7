@@ -1,48 +1,52 @@
-import { ReactionType } from '@store/zustand/task';
+import useBindStore from '@store/zustand';
+import { emojiIcons, emojis, EmojiType, ReactionType } from '@store/zustand/task';
 import { Tag, Tooltip } from 'antd';
+import { useParams } from 'react-router-dom';
 
 interface ReactionProps {
+  commentId: number
   reactionList: ReactionType[]
 }
 
-const emoji = {
-  good: '👍',
-  heart: '❤',
-  eyes: '👀'
-};
-
-const Reaction: React.FC<ReactionProps> = ({ reactionList }: ReactionProps) => {
-  const goodList = [];
-  const heartList = [];
-  const eyesList = [];
+const Reaction: React.FC<ReactionProps> = ({ commentId, reactionList }: ReactionProps) => {
+  const addReaction = useBindStore(state => state.addReaction);
+  const selectTask = useBindStore(state => state.selectTask);
+  const { taskId } = useParams();
+  const userId = localStorage.getItem('userId');
+  const includesUser = {
+    good: false,
+    bad: false,
+    heart: false,
+    eyes: false
+  };
+  const emojiRecord: Record<EmojiType, ReactionType[]> = {
+    good: [],
+    bad: [],
+    heart: [],
+    eyes: []
+  };
   for (const reaction of reactionList) {
-    if (reaction.emoji === 'good') goodList.push(reaction);
-    else if (reaction.emoji === 'heart') heartList.push(reaction);
-    else eyesList.push(reaction);
+    emojiRecord[reaction.emoji].push(reaction);
+    if (userId !== null && reaction.user.id === parseInt(userId)) includesUser[reaction.emoji] = true;
   }
+  const reactedUserText = (reactionList: ReactionType[]): string => {
+    const userList = [];
+    for (const reaction of reactionList) userList.push(reaction.user.username);
+    return userList.join(', ');
+  };
+  const onClickTag = async (emoji: EmojiType): Promise<void> => {
+    await addReaction(commentId, emoji);
+    await selectTask(parseInt(taskId ?? '0'));
+  };
   return (
     <>
-      {
-        goodList.length > 0
-          ? <Tooltip title={goodList.map(reaction => reaction.user.username)}>
-            <Tag>{emoji.good} {goodList.length}</Tag>
+      {emojis.map(emoji => (
+        emojiRecord[emoji].length > 0
+          ? <Tooltip title={reactedUserText(emojiRecord[emoji])} key={emoji}>
+            <Tag onClick={() => { void onClickTag(emoji); }} color={includesUser[emoji] ? 'geekblue' : undefined}>{emojiIcons[emoji]} {emojiRecord[emoji].length}</Tag>
           </Tooltip>
-          : <Tag>{emoji.good} 0</Tag>
-      }
-      {
-        heartList.length > 0
-          ? <Tooltip title={heartList.map(reaction => reaction.user.username)}>
-            <Tag>{emoji.heart} {heartList.length}</Tag>
-          </Tooltip>
-          : <Tag>{emoji.heart} 0</Tag>
-      }
-      {
-        eyesList.length > 0
-          ? <Tooltip title={eyesList.map(reaction => reaction.user.username)}>
-            <Tag>{emoji.eyes} {eyesList.length}</Tag>
-          </Tooltip>
-          : <Tag>{emoji.eyes} 0</Tag>
-      }
+          : <Tag key={emoji} onClick={() => { void onClickTag(emoji); }}>{emojiIcons[emoji]} 0</Tag>
+      ))}
     </>
   );
 };

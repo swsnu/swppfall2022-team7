@@ -6,6 +6,7 @@ import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
 import UserCard from '@components/UserCard';
 import { useNavigate, useParams } from 'react-router-dom';
+import { iconString } from '@utils/utils';
 
 const ProjectManage: React.FC = () => {
   const { projectId } = useParams();
@@ -19,15 +20,17 @@ const ProjectManage: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const [inviteList, setInviteList] = useState<Array<Omit<UserType, 'id'>>>([]);
   const [idList, setIdList] = useState<number[]>([]);
+  const user = useBindStore(state => state.user);
   const project = useBindStore(state => state.selectedProject);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
   const addMember = useBindStore(state => state.addMember);
   const deleteMember = useBindStore(state => state.deleteMember);
   const selectProject = useBindStore(state => state.selectProject);
   const deleteProject = useBindStore(state => state.deleteProject);
+  const isManager = project?.manager === user?.id;
 
   useEffect(() => {
-    const asyncGetAutoComplete: () => Promise<void> = async () => {
+    const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
       const autoComplete = await getAutoComplete(query);
       setQueryList(autoComplete);
@@ -97,10 +100,10 @@ const ProjectManage: React.FC = () => {
             dataSource={project?.member_list}
             renderItem={item => (
               <List.Item
-                actions={[<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>]}
+                actions={isManager ? [<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>] : []}
               >
                 <List.Item.Meta
-                  avatar={<Avatar>{item.username.substring(0, 1).toUpperCase()}</Avatar>}
+                  avatar={<Avatar>{iconString(item.username)}</Avatar>}
                   title={item.username}
                   description={item.email}
                 />
@@ -108,7 +111,7 @@ const ProjectManage: React.FC = () => {
             )}
           />
         </div>
-        <div className="dissolve-container">
+        {isManager && <div className="dissolve-container">
           <div className="dissolve-left">
             <div className="dissolve-header">
               Dissolve Project
@@ -118,7 +121,7 @@ const ProjectManage: React.FC = () => {
             </div>
           </div>
           <Button type="primary" danger onClick={() => { setOpenDissolve(true); }}>Dissolve Project</Button>
-        </div>
+        </div>}
       </div>
       <Modal
         open={openAdd}
