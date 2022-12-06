@@ -1,5 +1,5 @@
 import { Layout, Avatar, Popover, Button } from 'antd';
-import { BellFilled, UserOutlined, FireFilled } from '@ant-design/icons';
+import { BellFilled, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
