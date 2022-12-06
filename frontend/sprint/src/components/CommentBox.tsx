@@ -1,7 +1,7 @@
 import useBindStore from '@store/zustand';
 import { CommentType, ReactionType } from '@store/zustand/task';
 import { iconString } from '@utils/utils';
-import { Avatar, Button, Comment, Form, Input } from 'antd';
+import { Avatar, Button, Comment, Input } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Reaction from './Reaction';

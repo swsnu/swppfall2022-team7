@@ -2,7 +2,7 @@ import AutoOption from '@components/AutoOption';
 import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { UserType } from '@store/zustand/user';
-import { AutoComplete, Avatar, Button, Divider, Input, List } from 'antd';
+import { AutoComplete, Button, Divider, Input, List } from 'antd';
 import { BaseOptionType } from 'antd/lib/select';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
