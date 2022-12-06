@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from model_project.models import Project, UserProject, Task, DocumentSpace, TaskDocumentSpace
-
-from datetime import datetime
+from utility.date_string import date_to_string
 
 def get_project_by_id(id: int) :
     project = Project.objects.filter(id=id)
@@ -33,7 +32,9 @@ def get_project_task_list(project: Project) :
             "assignee": task.assignee.username if task.assignee is not None else None,
             "content": task.content,
             "until_at": task.until_at,
-            "updated_at" :task.updated_at,
+            "until_at_str": date_to_string(task.until_at),
+            "updated_at" : task.updated_at,
+            "updated_at_str" : date_to_string(task.updated_at),
             "document_space_list": get_task_document_space_list(task)
         })
     return task_list
@@ -47,6 +48,7 @@ def get_task_document_space_list(task: Task):
             "id": document_space.pk,
             "name": document_space.name,
             "created_at" : document_space.created_at,
+            "created_at_str" : date_to_string(document_space.created_at),
             "head": document_space.head,
         })
     return res
@@ -57,6 +59,7 @@ def get_project_document_space_list(project: Project) :
         "id": document_space.pk,
         "name": document_space.name,
         "created_at" : document_space.created_at,
+        "created_at_str" : date_to_string(document_space.created_at),
         "head": document_space.head,
     } for document_space in qs_document_space]
 
@@ -67,4 +70,4 @@ def get_last_modified_timestamp(project: Project) :
     for task in task_list:
         if task['updated_at'] > timestamp :
             timestamp = task['updated_at']
-    return timestamp
+    return date_to_string(timestamp)
