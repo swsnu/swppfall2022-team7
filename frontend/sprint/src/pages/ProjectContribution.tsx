@@ -2,26 +2,8 @@ import { CheckOutlined } from '@ant-design/icons';
 import useBindStore from '@store/zustand';
 import { QuestContribType } from '@store/zustand/contribution';
 import { Table, Tag, Timeline } from 'antd';
-import { ColumnsType } from 'antd/es/table';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
-interface ContribTableDataType {
-  key: React.Key
-  hyun: boolean
-  hun: boolean
-  jin: boolean
-  woo: boolean
-  name: string
-}
-
-const _render = (q: boolean): JSX.Element => (
-  <>
-    {
-      q ? <Tag color='geekblue'>Done</Tag> : <Tag color='volcano'>On Going</Tag>
-    }
-  </>
-);
 
 const contribTag = (status: 'Done' | 'On Going'): JSX.Element => (
   <Tag color={status === 'Done' ? 'geekblue' : 'volcano'}>{status}</Tag>
