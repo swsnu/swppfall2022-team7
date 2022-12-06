@@ -6,7 +6,7 @@ const Notification: React.FC = () => {
   const navigate = useNavigate();
   const noti = useBindStore(state => state.noti);
 
-  const notiSummary = noti?.slice(0, 5);
+  const notiSummary = noti?.slice(0, 30);
 
   return (
     <div className="notification">
@@ -14,6 +14,7 @@ const Notification: React.FC = () => {
         Notifications
       </div>
       <List
+        className="noti-list"
         itemLayout="horizontal"
         dataSource={notiSummary}
         renderItem={(item) => (
