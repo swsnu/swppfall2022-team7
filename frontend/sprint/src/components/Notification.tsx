@@ -43,7 +43,7 @@ const Notification: React.FC = () => {
         itemLayout="horizontal"
         dataSource={notiSummary}
         renderItem={(item, i) => (
-          <List.Item onClick={() => navigate(item.link)}>
+          <List.Item onClick={() => navigate(item.link)} className="noti-cell">
             <List.Item.Meta
               title={<p dangerouslySetInnerHTML={{ __html: item.content }} />}
               description={item.created_at}
