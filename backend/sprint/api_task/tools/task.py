@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from model_project.models import Task, Project, TaskDocumentSpace, DocumentSpace, UserProject, UserProjectActivity
 from model_user.models import get_user_model
-from utility.date_string import date_to_string, string_to_date
+from utility.date_string import date_to_string, string_to_date, date_to_string_day
 from model_project.tools.activity_manage import push_activity
 from model_project.tools.project_manage import get_task_document_space_list
 from api_comment.tools.comment_manage import get_comment_list_by_task_id
@@ -44,7 +46,8 @@ def get_task_detail(task: Task):
         'content': task.content,
         'createdAt': date_to_string(task.created_at),
         'updatedAt': date_to_string(task.updated_at),
-        'untilAt': date_to_string(task.until_at),
+        'untilAt': datetime.strftime(task.until_at, '%Y-%m-%d'),
+        'untilAt_str': date_to_string_day(task.until_at),
         'comment_list': get_comment_list_by_task_id(task.id),
         'document_space_list': get_task_document_space_list(task),
         'status': task.status
