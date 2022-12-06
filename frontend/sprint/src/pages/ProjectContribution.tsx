@@ -1,9 +1,8 @@
 import { CheckOutlined } from '@ant-design/icons';
-import { selectProject } from '@store/slices/project';
+import useBindStore from '@store/zustand';
 import { Table, Tag, Timeline } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface ContribTableDataType {
@@ -95,14 +94,23 @@ const dummyData: ContribTableDataType[] = [
 
 const ProjectContribution: React.FC = () => {
   const { projectId } = useParams();
-  const projectState = useSelector(selectProject);
-  const projectInfo = useMemo(() => (
-    projectState.find(project => project.id === parseInt(projectId ?? '0'))
-  ), [projectId]);
+  const project = useBindStore(state => state.selectedProject);
+  const quest = useBindStore(state => state.quest);
+  const timeline = useBindStore(state => state.timeline);
+  const getQuest = useBindStore(state => state.getQuest);
+  const getTimeline = useBindStore(state => state.getTimeline);
+
+  useEffect(() => {
+    const getAsyncContrib = async (): Promise<void> => {
+      await getQuest(parseInt(projectId ?? '0'));
+      await getTimeline(parseInt(projectId ?? '0'));
+    };
+    void getAsyncContrib();
+  }, [projectId]);
 
   return (
     <div className="project-contrib">
-      <div className="project-info">{projectInfo?.name}: {projectInfo?.subject}: Contribution</div>
+      <div className="project-info">{project?.name}: {project?.subject}: Contribution</div>
       <div className="contrib-header">Contribution</div>
       <div className="quest-header">Project Quest</div>
       <Table dataSource={dummyData} columns={columns} pagination={false} />
