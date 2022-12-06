@@ -1,5 +1,6 @@
 from model_project.models import Task, Project, UserProject, DocumentSpace
 from model_user.models import get_user_model
+from utility.date_string import date_to_string
 
 def get_docuspace(project: Project):
     docus = DocumentSpace.objects.filter(project=project)
@@ -20,7 +21,8 @@ def get_docuspace_detail(docuspace: DocumentSpace):
         'id': docuspace.id,
         'name': docuspace.name,
         'project': docuspace.project.id,
-        'head': docuspace.head
+        'head': docuspace.head,
+        'created_at': date_to_string(docuspace.created_at)
     }
     return ret
 
