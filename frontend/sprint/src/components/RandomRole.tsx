@@ -31,7 +31,7 @@ const RandomRole: React.FC<RandomRoleProps> = ({ randomIdList, setRandomIdList, 
     setSelectedList([]);
     setShowModal(false);
   };
-  const onOk: () => Promise<void> = async () => {
+  const onOk = async (): Promise<void> => {
     await randomAssign(randomIdList as number[], selectedList as number[]);
     if (project !== null) await selectProject(project.id);
     setRandomIdList([]);

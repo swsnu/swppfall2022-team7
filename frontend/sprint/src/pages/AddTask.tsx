@@ -22,7 +22,7 @@ const AddTask: React.FC = () => {
   const selectProject = useBindStore(state => state.selectProject);
   const getAutoComplete = useBindStore(state => state.getAutoComplete);
   useEffect(() => {
-    const asyncGetAutoComplete: () => Promise<void> = async () => {
+    const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
       const autoComplete = await getAutoComplete(query);
       setQueryList(autoComplete);
@@ -38,7 +38,7 @@ const AddTask: React.FC = () => {
     setEmailList(emailList => [...emailList, query]);
     setQuery('');
   };
-  const createTask: () => Promise<void> = async () => {
+  const createTask = async (): Promise<void> => {
     if (taskName === '' || description === '' || dueDate === '') return;
     if (projectId === undefined) return;
     const newTaskId = await addTask(parseInt(projectId), taskName, description, emailList.length === 0 ? '' : emailList[0], dueDate);
@@ -90,7 +90,7 @@ const AddTask: React.FC = () => {
             />
             <Button
               type="primary"
-              disabled={query.length === 0}
+              disabled={query.length === 0 || emailList.length === 1}
               onClick={onInviteClick}
             >
               Invite
@@ -107,7 +107,13 @@ const AddTask: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={() => { void createTask(); }}>Create Task</Button>
+        <Button
+          type="primary"
+          onClick={() => { void createTask(); }}
+          disabled={taskName === '' || description === '' || dueDate === ''}
+        >
+          Create Task
+        </Button>
       </div>
     </div>
   );

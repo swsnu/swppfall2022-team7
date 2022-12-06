@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const logIn = useBindStore(state => state.logIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleLogin: () => Promise<void> = async () => {
+  const handleLogin = async (): Promise<void> => {
     const token = await logIn(email, password);
     if (token === null) {
       setPassword('');
@@ -19,7 +19,7 @@ const Login: React.FC = () => {
       navigate('/projects');
     }
   };
-  const onKeyPress: (e: React.KeyboardEvent<HTMLElement>) => Promise<void> = async (e: React.KeyboardEvent<HTMLElement>) => {
+  const onKeyPress = async (e: React.KeyboardEvent<HTMLElement>): Promise<void> => {
     if (e.key === 'Enter') await handleLogin();
   };
   return (

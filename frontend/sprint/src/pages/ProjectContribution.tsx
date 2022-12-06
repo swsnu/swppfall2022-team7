@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-interface contribTableDataType {
+interface ContribTableDataType {
   key: React.Key
   hyun: boolean
   hun: boolean
@@ -23,12 +23,12 @@ const _render = (q: boolean): JSX.Element => (
   </>
 );
 
-const columns: ColumnsType<contribTableDataType> = [
+const columns: ColumnsType<ContribTableDataType> = [
   {
     title: 'Quest Name',
     dataIndex: 'questname',
     key: 'questname',
-    render: (_: any, quest: contribTableDataType) => (
+    render: (_: any, quest: ContribTableDataType) => (
       <div className="quest-name">{quest.name}</div>
     )
   },
@@ -58,7 +58,7 @@ const columns: ColumnsType<contribTableDataType> = [
   }
 ];
 
-const dummyData: contribTableDataType[] = [
+const dummyData: ContribTableDataType[] = [
   {
     name: 'Compose a comment',
     hun: true,
