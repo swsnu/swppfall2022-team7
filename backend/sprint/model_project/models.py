@@ -23,7 +23,7 @@ class Task(models.Model):
     class StatusType:
         ON_GOING = "on-going"
         DONE = "done"
-        
+
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     content = models.TextField()
