@@ -5,6 +5,7 @@ from utility.date_string import date_to_string
 def get_notification_list(user: User) :
     notifications = Notification.objects.filter(user = user).order_by('-created_at')
     noti_list = []
+    bulk_update = []
     for notification in notifications :
         noti_list.append({
             "content": notification.content,
@@ -15,8 +16,10 @@ def get_notification_list(user: User) :
         })
         if not notification.checked:
             notification.checked = True
-            notification.save()
+            bulk_update.append(notification)
 
+    Notification.objects.bulk_update(bulk_update, ['checked'])
+    
     return noti_list
 
 def get_notification_list_short(user: User, num: int) :
@@ -31,4 +34,7 @@ def get_notification_list_short(user: User, num: int) :
             "id": notification.id
         })
 
-    return noti_list
+    return {
+        "notification_list": noti_list,
+        "new_notification_num": Notification.objects.filter(user = user, checked=False).count()
+    }
