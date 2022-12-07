@@ -1,6 +1,6 @@
 import useBindStore from '@store/zustand';
 import { DocumentSpaceType } from '@store/zustand/documentSpace';
-import { Button, Collapse, message, Table, Tag } from 'antd';
+import { Button, message, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AWS from 'aws-sdk';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ interface TableDataType {
   filename: string
   lastmodified: string
   uploader: string
-  head: string[]
+  head: boolean
   url: string
 }
 
@@ -43,26 +43,30 @@ const columns: ColumnsType<TableDataType> = [
     key: 'head',
     render: (_, { head }) => (
       <>
-        {head.map(tag => {
-          return (
-            <Tag color='geekblue' key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
+        {head &&
+          <Tag color='geekblue'>
+            HEAD
+          </Tag>
+        }
       </>
     )
   }
 ];
 
 const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: DocumentPanelProps) => {
-  const { Panel } = Collapse;
   const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const [nextHead, setNextHead] = useState<number>(documentSpace.head);
   const getUserName = useBindStore(state => state.getUserName);
+  const changeDocumentSpaceHead = useBindStore(state => state.changeDocumentSpaceHead);
   const rowSelection = {
     getCheckboxProps: (record: TableDataType) => ({
-      disabled: record.head.length === 1
-    })
+      disabled: record.head
+    }),
+    onChange: (selectedRowKeys: React.Key[], _: TableDataType[]) => {
+      const fileName = selectedRowKeys[0] as string;
+      const fileId = fileName.split(/[/,_]/)[2];
+      setNextHead(parseInt(fileId ?? '0'));
+    }
   };
   AWS.config.region = 'ap-northeast-2';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -93,12 +97,13 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
             ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
           });
           const parsedUserId = file.Key?.split(/[/,_]/)[1];
+          const parsedDocId = file.Key?.split(/[/,_]/)[2];
           const fileUploader = await getUserName(parsedUserId ?? '0');
           newList.unshift({
             key: file.Key ?? 'undefined',
             filename: file.Key ?? 'undefined',
             url,
-            head: [],
+            head: parseInt(parsedDocId ?? '0') === documentSpace.head,
             lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
             uploader: fileUploader
           });
@@ -109,10 +114,20 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
     });
   }, []);
 
+  const onClickChangeHead = async (): Promise<void> => {
+    await changeDocumentSpaceHead(documentSpace.id, 1);
+  };
+
   return (
     <>
-      <div className="space-header"><span /><Button>Change Head to Selected</Button></div>
-      <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false}/>
+      <div className="space-header"><span />
+        <Button
+          disabled={documentSpace.head === nextHead}
+          onClick={() => { void onClickChangeHead(); }}>
+            Change Head to Selected
+          </Button>
+      </div>
+      <Table rowSelection={{ type: 'radio', ...rowSelection }} dataSource={tableData} columns={columns} pagination={false} />
       <br />
     </>
   );

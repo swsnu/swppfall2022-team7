@@ -110,12 +110,13 @@ const DocUploader: React.FC<DocUploaderProps> = ({ documentSpace }: DocUploaderP
       <Panel header={documentSpace.name} key={documentSpace.id}>
         <div className="document-container">
           <div className="document-left">
-            {fileList.map((file, i) => {
+            {fileList.map((file) => {
+              const fileId = file.key?.split(/[/,_]/)[2];
               return (
                 <a href={file.url} className="document-uploaded" key={file.key}>
                   <div className="file-name-container">
                     <div className="uploaded-file">{file.key}</div>
-                    {(i === 0) && <StarOutlined size={10} />}
+                    {(parseInt(fileId ?? '0') === documentSpace.head) && <StarOutlined size={10} />}
                   </div>
                   <div className="file-info">
                     <div className="uploaded-time">{file.time?.toISOString().substring(0, 10)}</div>

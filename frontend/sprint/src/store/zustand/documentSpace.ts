@@ -1,4 +1,4 @@
-import { ADD_DOC_SPACES_URL, GET_DOC_ID_URL, GET_DOC_SPACES_URL, GET_TASK_DOCS_URL, LINK_TASK_DOC_URL } from '@services/api';
+import { ADD_DOC_SPACES_URL, CHANGE_HEAD_URL, GET_DOC_ID_URL, GET_DOC_SPACES_URL, GET_TASK_DOCS_URL, LINK_TASK_DOC_URL } from '@services/api';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 import axios from 'axios';
@@ -18,7 +18,7 @@ export interface DocumentSpaceSlice {
   getTaskSpaces: (taskId: number) => Promise<void>
   linkDocumentSpace: (taskId: number, spaceId: number, isLinked: boolean) => Promise<void>
   editDocumentSpace: () => Promise<void>
-  changeDocumentSpaceHead: (documentId: number) => Promise<void>
+  changeDocumentSpaceHead: (spaceId: number, documentId: number) => Promise<void>
   deleteDocumentSpace: () => Promise<void>
   getNewDocumentId: (spaceId: number) => Promise<number>
 };
@@ -47,7 +47,9 @@ DocumentSpaceSlice
     else await axios.delete(LINK_TASK_DOC_URL(taskId), { data: { documentId: spaceId } });
   },
   editDocumentSpace: async () => {},
-  changeDocumentSpaceHead: async (documentId: number) => {},
+  changeDocumentSpaceHead: async (spaceId: number, documentId: number) => {
+    await axios.put(CHANGE_HEAD_URL(spaceId), { head: documentId });
+  },
   deleteDocumentSpace: async () => {},
   getNewDocumentId: async (spaceId: number) => {
     const res = await axios.post(GET_DOC_ID_URL(spaceId));
