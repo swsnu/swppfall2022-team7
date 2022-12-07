@@ -75,7 +75,7 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  {task?.assignee?.id !== -1 && <Avatar className="avatar">{iconString(task?.assignee?.username ?? '')}</Avatar>}
+                  {/* {task?.assignee?.id !== -1 && <Avatar className="avatar">{iconString(task?.assignee?.username ?? '')}</Avatar>} */}
                 </div>
                 <div>
                   <Button onClick={() => setEdit(true)}>Edit</Button>&nbsp;
@@ -83,6 +83,8 @@ const TaskDetail: React.FC = () => {
                 </div>
               </div>
               <div className="due-tag">
+                <div className="task-assignee task-due">Assignee: {task?.assignee?.username}</div>
+                <div className="task-due divider">|</div>
                 <div className="task-due">Due: {taskInfo.dueDate}</div>
                 {task?.status !== undefined ? <StatusTag status={task?.status} /> : null}
               </div>
