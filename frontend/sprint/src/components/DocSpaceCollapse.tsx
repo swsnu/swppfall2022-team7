@@ -40,7 +40,7 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
   }, []);
 
   useEffect(() => {
-    s3?.listObjects({ Bucket: 'swppsprint' }, (e, d) => {
+    s3?.listObjects({ Bucket: 'swppsprint', Prefix: '1_1/' }, (e, d) => {
       if (e != null) void message.error('error during fetching document list');
       const newList: DocumentType[] = [];
       d.Contents?.forEach(file => {
@@ -75,7 +75,7 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
       const upload = new AWS.S3.ManagedUpload({
         params: {
           Bucket: 'swppsprint',
-          Key: file.name,
+          Key: '1_1/' + file.name,
           Body: uploadFile[0]
         }
       });
@@ -83,9 +83,9 @@ const DocSpaceCollapse: React.FC<DocSpaceCollapseProps> = ({ documentSpaces }: D
         .then(() => {
           const url = s3.getSignedUrl('getObject', {
             Bucket: 'swppsprint',
-            Key: file.name,
+            Key: '1_1/' + file.name,
             Expires: 604799,
-            ResponseContentDisposition: `attachment; filename ="${file.name ?? 'asdf.txt'}"`
+            ResponseContentDisposition: `attachment; filename ="${'1_1/' + file.name ?? 'asdf.txt'}"`
           });
           setFileList([{ key: file.name, time: file.lastModifiedDate, url }, ...fileList]);
         });

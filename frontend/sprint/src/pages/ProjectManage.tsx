@@ -137,13 +137,10 @@ const ProjectManage: React.FC = () => {
               dataSource={project?.member_list}
               renderItem={item => (
                 <List.Item
-                  actions={isManager
-                    ? [user?.id !== item.id
-                        ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>
-                        : <a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>
-                      ]
-                    : []
-                  }
+                  actions={[user?.id !== item.id
+                    ? isManager ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a> : null
+                    : <a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>
+                  ]}
                 >
                   <List.Item.Meta
                     avatar={<Avatar>{iconString(item.username)}</Avatar>}

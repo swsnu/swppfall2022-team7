@@ -7,6 +7,7 @@ export const GET_USER_URL = (userId: string): string => `user/info/${userId}/`;
 export const AUTO_COMPLETE_URL = (query: string): string => `user/search/${query}/`;
 
 export const GET_NOTI_URL = 'user/noti/';
+export const GET_NEW_NOTI_URL = 'user/noti/short/0/';
 
 export const GET_PROJECTS_URL = (userId: string): string => `project/${userId}`;
 export const ADD_PROJECT_URL = 'project/m/';
@@ -31,3 +32,5 @@ export const LINK_TASK_DOC_URL = (taskId: number): string => `task/document/${ta
 
 export const GET_QUEST_URL = (projectId: number): string => `contribution/quest/${projectId}/`;
 export const GET_TIMELINE_URL = (projectId: number): string => `contribution/timeline/${projectId}/`;
+
+export const GET_DOC_ID_URL = (spaceId: number): string => `documents/${spaceId}/m/`;
