@@ -17,6 +17,8 @@
 @import 'ProjectManage.scss';
 @import 'Login.scss';
 @import 'Signup.scss';
+@import 'Comment.scss';
+@import 'NewProjectCard.scss';
 
 *{
     font-family: 'Lato', sans-serif;
@@ -33,4 +35,27 @@
     min-height: 100%;
     display: flex;
     flex-flow: column;
+}
+
+.ant-comment-actions{
+  li{
+    span{
+      color: initial;
+    }
+    span:hover{
+      color: initial;
+    }
+  }
+}
+
+.ant-picker-calendar-mode-switch{
+  display: none;
+}
+
+.empty-cell{
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 }

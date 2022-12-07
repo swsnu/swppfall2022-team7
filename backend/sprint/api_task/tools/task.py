@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from model_project.models import Task, Project, TaskDocumentSpace, DocumentSpace, UserProject, UserProjectActivity
 from model_user.models import get_user_model
-from utility.date_string import date_to_string, string_to_date
+from utility.date_string import date_to_string, string_to_date, date_to_string_day
 from model_project.tools.activity_manage import push_activity
 from model_project.tools.project_manage import get_task_document_space_list
 from api_comment.tools.comment_manage import get_comment_list_by_task_id
@@ -37,13 +39,15 @@ def create_task(project: Project, get_data: dict, requester):
 def get_task_detail(task: Task):
     ret = {
         'id': task.id,
-        'project': task.project.id,
+        'projectId': task.project.id,
+        'project': task.project.name,
         'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),
         'updatedAt': date_to_string(task.updated_at),
-        'untilAt': date_to_string(task.until_at),
+        'untilAt': datetime.strftime(task.until_at, '%Y-%m-%d'),
+        'untilAt_str': date_to_string_day(task.until_at),
         'comment_list': get_comment_list_by_task_id(task.id),
         'document_space_list': get_task_document_space_list(task),
         'status': task.status
@@ -66,13 +70,18 @@ def edit_task_detail(task: Task, get_data: dict, requester):
         task.until_at = string_to_date(get_data['untilAt'])
 
     if 'status' in get_data:
-        task.status = get_data['status']
+        if task.assignee != None :
+            task.status = get_data['status']
     
     task.save()
     ret = get_task_detail(task)
 
-    user_project = UserProject.objects.get(user = requester, project = task.project)
-    push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
+    if task.status == 'done':
+        user_project = UserProject.objects.get(user = task.assignee, project = task.project)
+        push_activity(user_project, task, UserProjectActivity.ActivityType.COMPLETE_TASK)
+    else :
+        user_project = UserProject.objects.get(user = requester, project = task.project)
+        push_activity(user_project, task, UserProjectActivity.ActivityType.EDIT_TASK)
     return ret
 
 def get_task_belong(user: get_user_model()):

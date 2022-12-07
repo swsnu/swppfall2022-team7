@@ -1,11 +1,19 @@
-import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL, ADD_REACTION_URL } from '@services/api';
+import { GET_TASKS_URL, ADD_TASK_URL, GET_TASK_URL, EDIT_TASK_URL, GET_USER_TASKS_URL, ADD_REACTION_URL, ADD_COMMENT_URL, UPDATE_COMMENT_URL } from '@services/api';
+import { shuffleList } from '@utils/utils';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import { SliceType } from '.';
 import { DocumentSpaceCardType } from './project';
 import { UserType } from './user';
 
-type EmojiType = 'good' | 'heart' | 'eyes';
+export const emojis = ['good', 'bad', 'heart', 'eyes'] as const;
+export type EmojiType = typeof emojis[number];
+export const emojiIcons = {
+  good: '👍🏻',
+  bad: '👎🏻',
+  heart: '🧡',
+  eyes: '👀'
+};
 
 export interface ReactionType {
   created_at: string
@@ -13,7 +21,7 @@ export interface ReactionType {
   user: UserType
 }
 
-interface CommentType {
+export interface CommentType {
   content: string
   created_at: string
   id: number
@@ -33,6 +41,7 @@ export interface TaskType {
   status?: 'on-going' | 'done'
   comment_list?: CommentType[]
   document_space_list?: DocumentSpaceCardType[]
+  until_at?: string
 };
 
 export interface TaskSlice {
@@ -47,6 +56,9 @@ export interface TaskSlice {
   deleteTask: (taskId: number) => Promise<void>
   randomAssign: (taskList: number[], userList: number[]) => Promise<void>
   toggleStatus: (taskId: number, isDone: boolean) => Promise<void>
+  addReaction: (commendId: number, emoji: EmojiType) => Promise<void>
+  addComment: (taskId: number, content: string) => Promise<void>
+  deleteComment: (commentId: number) => Promise<void>
 };
 
 export const createTaskSlice: StateCreator<
@@ -83,13 +95,6 @@ TaskSlice
     await axios.delete(EDIT_TASK_URL(taskId));
   },
   randomAssign: async (taskList: number[], userList: number[]) => {
-    const shuffleList = (list: number[]): number[] => {
-      for (let i = list.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [list[i], list[j]] = [list[j], list[i]];
-      }
-      return list;
-    };
     taskList = shuffleList(taskList);
     for (let i = 0; i < taskList.length; i++) {
       await axios.put(EDIT_TASK_URL(taskList[i]), { assignee: userList[i] });
@@ -102,5 +107,12 @@ TaskSlice
   toggleStatus: async (taskId: number, isDone: boolean) => {
     const editStatus = { status: isDone ? 'done' : 'on-going' };
     await axios.put(EDIT_TASK_URL(taskId), editStatus);
+  },
+  addComment: async (taskId: number, content: string) => {
+    const comment = { content };
+    await axios.post(ADD_COMMENT_URL(taskId), comment);
+  },
+  deleteComment: async (commentId: number) => {
+    await axios.delete(UPDATE_COMMENT_URL(commentId));
   }
 });

@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth import logout
-from django.http import  HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view
@@ -26,10 +26,12 @@ from .tools.account import (
     delete_user,
     convert_user_to_dict,
     listup_user_by_query,
+    verify_user,
 )
 
 from .tools.notification import (
     get_notification_list,
+    get_notification_list_short
 )
 
 from .serializers import (
@@ -90,7 +92,6 @@ def signin(request: Request):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def signout(request: Request):
-    Token.objects.get(user = request.user).delete()
     logout(request)
     return HttpResponse(status=204)
 
@@ -122,7 +123,6 @@ def change(request: Request):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 def info(request: Request, user_id:int):
-    print(user_id)
     user = get_user_by_id(user_id)
     if user is None :
         return HttpResponse(status=403)
@@ -158,6 +158,12 @@ def m_timetable(request, user_id:int):
 def noti(request: Request):
     return Response(status=200, data=get_notification_list(request.user))
 
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def noti_short(request: Request, num: int):
+    return Response(status=200, data=get_notification_list_short(request.user, num))
+
 @require_http_methods(['GET'])
 def image(request, user_id:int):
     '''
@@ -180,3 +186,8 @@ def m_image(request, user_id:int):
 @require_http_methods(['GET'])
 def csrf_token(request):
     return HttpResponse(status=204)
+
+@require_http_methods(['GET'])
+def verify(request, hash_str: str):
+    verify_user(hash_str)
+    return HttpResponseRedirect(redirect_to="https://www.swppsprint.site")

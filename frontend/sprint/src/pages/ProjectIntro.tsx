@@ -4,7 +4,7 @@ import UserCard from '@components/UserCard';
 import useBindStore from '@store/zustand';
 import { DocumentSpaceCardType } from '@store/zustand/project';
 import { TaskType } from '@store/zustand/task';
-import { Button, List, Table, Tag } from 'antd';
+import { Button, Empty, List, Table, Tag } from 'antd';
 import { Key, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -57,10 +57,9 @@ const ProjectIntro: React.FC = () => {
           <div className="team-members">
             <div className="team-members-title">
               Team Members
-              <div className="link">Edit team</div>
+              <div className="link" onClick={() => navigate('settings')}>Edit team</div>
             </div>
               <List
-                className="invite-list"
                 itemLayout="horizontal"
                 dataSource={project?.member_list}
                 renderItem={item => (
@@ -73,10 +72,11 @@ const ProjectIntro: React.FC = () => {
               Document Spaces
               <div className="link" onClick={() => navigate('docs')}>Edit space</div>
             </div>
-            <div className="member-container">
+            <div className="doc-container">
               {project?.document_space_list?.map(space => (
                 <SpaceCard key={space.created_at} name={space.name} email={space.created_at} />
               ))}
+              {project?.document_space_list?.length === 0 && <Empty className="empty-cell" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             </div>
           </div>
         </div>

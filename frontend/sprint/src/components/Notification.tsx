@@ -1,38 +1,27 @@
-import { Avatar, List } from 'antd';
-
-const dummyNotifications = [
-  {
-    title: <div>✏️ <b>SangHun Kim</b> commented on <b>Requirements and Specs</b></div>,
-    description: '4 hours ago',
-    avatar: 'K'
-  },
-  {
-    title: <div>📎 <b>HyungJin Joo</b> uploaded a file to <b>Abstract</b></div>,
-    description: '1 week ago',
-    avatar: 'J'
-  },
-  {
-    title: <div>📩 <b>Sanghyun Yi</b> invited you to <b>SPRINT</b></div>,
-    description: '2 months ago',
-    avatar: 'Y'
-  }
-];
+import useBindStore from '@store/zustand';
+import { List } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const Notification: React.FC = () => {
+  const navigate = useNavigate();
+  const noti = useBindStore(state => state.noti);
+
+  const notiSummary = noti?.slice(0, 30);
+
   return (
     <div className="notification">
       <div className="notification-title">
         Notifications
       </div>
       <List
+        className="noti-list"
         itemLayout="horizontal"
-        dataSource={dummyNotifications}
-        renderItem={(item, i) => (
-          <List.Item>
+        dataSource={notiSummary}
+        renderItem={(item) => (
+          <List.Item onClick={() => navigate(item.link)} className="noti-cell">
             <List.Item.Meta
-              avatar={<Avatar>{item.avatar}</Avatar>}
-              title={item.title}
-              description={item.description}
+              title={<p dangerouslySetInnerHTML={{ __html: item.content }} />}
+              description={item.created_at}
             />
           </List.Item>
         )}

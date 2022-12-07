@@ -154,9 +154,11 @@
         font-weight: 600;
         font-size: 20px;
         margin-bottom: 10px;
-        .document-confirm{
-          font-size: 11px;
-        }
+      }
+      .doc-button-tab{
+        display: flex;
+        justify-content: right;
+        margin-top: 8px;
       }
       .document-container{
         display: flex;
@@ -167,7 +169,7 @@
           flex-direction: column;
           justify-content: flex-start;
           align-items: flex-start;
-          border-right: 2px #dddddd solid;
+          // border-right: 2px #dddddd solid;
           padding-right: 10px;
           width: 40%;
           .document-uploaded{
@@ -199,7 +201,7 @@
           flex-direction: column;
           align-items: flex-end;
           justify-content: flex-start;
-          padding: 0 10px;
+          padding-left: 10px;
         }
       }
     }

@@ -4,6 +4,7 @@ import { Button, Row } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
 import { useEffect } from 'react';
+import NewProjectCard from '@components/NewProjectCard';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Home: React.FC = () => {
   const getProjects = useBindStore(state => state.getProjects);
 
   useEffect(() => {
-    const asyncGetProjects: () => Promise<void> = async () => {
+    const asyncGetProjects = async (): Promise<void> => {
       const userId = localStorage.getItem('userId');
       if (userId === null) return;
       await getProjects(userId);
@@ -30,6 +31,7 @@ const Home: React.FC = () => {
       </div>
       <Row gutter={[24, 24]}>
         {projects.map(project => <ProjectCard key={project.id} project={project} />)}
+        <NewProjectCard />
       </Row>
       <div className="task-title-tab">
         My Tasks
