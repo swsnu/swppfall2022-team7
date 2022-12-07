@@ -17,17 +17,37 @@
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  .team-members{
-    padding-right: 16px;
+  .project-flex{
     display: flex;
-    flex-flow: column;
-    .team-members-title{
-      font-weight: bold;
-      font-size: 22px;
+    .project-name{
+      flex: 2;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 8px;
+      flex-flow: column;
+      margin-right: 24px;
+      .project-name-input{
+        margin-bottom: 16px;
+      }
+      .project-name-title{
+        font-weight: bold;
+        font-size: 22px;
+        padding-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .team-members{
+      display: flex;
+      flex: 3;
+      flex-flow: column;
+      .team-members-title{
+        font-weight: bold;
+        font-size: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 8px;
+      }
     }
   }
   .dissolve-container{
