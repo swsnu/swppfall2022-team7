@@ -23,6 +23,7 @@ describe('<ProjectManage />', () => {
     axios.delete = jest.fn();
     const i = useBindStore.getState();
     i.selectedProject = fakeProject3;
+    i.user = fakeUser1;
     useBindStore.setState(i, true);
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
     const { container } = render(AD);
@@ -67,6 +68,7 @@ describe('<ProjectManage />', () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
     const i = useBindStore.getState();
     i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
     useBindStore.setState(i, true);
     await act(async () => { render(AD); });
     const deletes = screen.getAllByText('delete');
@@ -143,5 +145,12 @@ describe('<ProjectManage />', () => {
     await act(async () => { render(AD); });
     const deletes = screen.getAllByText('delete');
     await act(async () => { fireEvent.click(deletes[0]); });
+  });
+  it('should handle no delete when not manager', async () => {
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser2;
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    await act(async () => { render(AD); });
   });
 });
