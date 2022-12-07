@@ -56,6 +56,7 @@ const columns: ColumnsType<TableDataType> = [
 const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: DocumentPanelProps) => {
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [nextHead, setNextHead] = useState<number>(documentSpace.head);
+  const [changingHead, setChangingHead] = useState(false);
   const getUserName = useBindStore(state => state.getUserName);
   const changeDocumentSpaceHead = useBindStore(state => state.changeDocumentSpaceHead);
   const rowSelection = {
@@ -112,10 +113,12 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
       };
       void setFile();
     });
-  }, []);
+  }, [changingHead]);
 
   const onClickChangeHead = async (): Promise<void> => {
-    await changeDocumentSpaceHead(documentSpace.id, 1);
+    setChangingHead(true);
+    await changeDocumentSpaceHead(documentSpace.id, nextHead);
+    setChangingHead(false);
   };
 
   return (
@@ -123,7 +126,9 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
       <div className="space-header"><span />
         <Button
           disabled={documentSpace.head === nextHead}
-          onClick={() => { void onClickChangeHead(); }}>
+          onClick={() => { void onClickChangeHead(); }}
+          loading={changingHead}
+        >
             Change Head to Selected
           </Button>
       </div>
