@@ -75,7 +75,6 @@ const TaskDetail: React.FC = () => {
               <div className="task-name">
                 <div className="task-avatar">
                   Task: {taskInfo.name}
-                  {/* {task?.assignee?.id !== -1 && <Avatar className="avatar">{iconString(task?.assignee?.username ?? '')}</Avatar>} */}
                 </div>
                 <div>
                   <Button onClick={() => setEdit(true)}>Edit</Button>&nbsp;

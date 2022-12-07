@@ -28,6 +28,7 @@ export interface UserSlice {
   signUp: (name: string, email: string, password: string) => Promise<void>
   getUser: () => Promise<void>
   getAutoComplete: (query: string) => Promise<UserType[]>
+  getUserName: (userId: string) => Promise<string>
 };
 
 export const createUserSlice: StateCreator<
@@ -76,5 +77,9 @@ UserSlice
   getAutoComplete: async (query: string) => {
     const res = await axios.get(AUTO_COMPLETE_URL(query));
     return res.data;
+  },
+  getUserName: async (userId: string) => {
+    const res = await axios.get(GET_USER_URL(userId));
+    return res.data.username as string;
   }
 });
