@@ -20,6 +20,10 @@ class Meeting(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Task(models.Model):
+    class StatusType:
+        ON_GOING = "on-going"
+        DONE = "done"
+        
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     content = models.TextField()
