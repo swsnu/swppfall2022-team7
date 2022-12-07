@@ -1,6 +1,6 @@
 import { DocumentSpaceType } from '@store/zustand/documentSpace';
 import { ProjectType } from '@store/zustand/project';
-import { TaskType } from '@store/zustand/task';
+import { CommentType, ReactionType, TaskType } from '@store/zustand/task';
 import { UserType } from '@store/zustand/user';
 
 export const fakeUser1: UserType = {
@@ -13,6 +13,40 @@ export const fakeUser2: UserType = {
   email: 'fakeUser2@fake.com',
   id: 2,
   username: 'fakeUser2'
+};
+
+export const fakeReaction1: ReactionType = {
+  created_at: 'a',
+  emoji: 'good',
+  user: fakeUser1
+};
+
+export const fakeReaction2: ReactionType = {
+  created_at: 'a',
+  emoji: 'heart',
+  user: fakeUser2
+};
+
+export const fakeComment1: CommentType = {
+  content: 'fakeComment1',
+  created_at: 'a',
+  id: 1,
+  reaction_list: [fakeReaction1],
+  writer: {
+    id: 1,
+    username: 'fakeUser1'
+  }
+};
+
+export const fakeComment2: CommentType = {
+  content: 'fakeComment2',
+  created_at: 'a',
+  id: 2,
+  reaction_list: [fakeReaction1, fakeReaction2],
+  writer: {
+    id: 2,
+    username: 'fakeUser2'
+  }
 };
 
 export const fakeDocumentSpace1: DocumentSpaceType = {
