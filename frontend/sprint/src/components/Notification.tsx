@@ -1,5 +1,5 @@
 import useBindStore from '@store/zustand';
-import { List } from 'antd';
+import { Badge, List } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const Notification: React.FC = () => {
@@ -21,7 +21,7 @@ const Notification: React.FC = () => {
           <List.Item onClick={() => navigate(item.link)} className="noti-cell">
             <List.Item.Meta
               title={<p dangerouslySetInnerHTML={{ __html: item.content }} />}
-              description={item.created_at}
+              description={!item.checked ? <Badge dot>{item.created_at}</Badge> : item.created_at}
             />
           </List.Item>
         )}

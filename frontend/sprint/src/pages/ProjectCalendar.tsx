@@ -17,7 +17,7 @@ const ProjectCalendar: React.FC = () => {
     const listData: ListDataType[] = [];
     project?.task_list?.forEach(task => {
       if (task?.until_at !== undefined) {
-        if (moment(task.until_at).month() === value.month()) {
+        if (moment(task.until_at).month() === value.month() && moment(task.until_at).year() === value.year()) {
           if (parseInt(task.until_at?.substring(8, 10)) === value.date()) {
             const taskStatus = task.status === 'on-going' ? 'warning' : 'success';
             const taskName = task.name;

@@ -30,7 +30,7 @@ export interface ProjectSlice {
   selectProject: (projectId: number) => Promise<void>
   getProjects: (userId: string) => Promise<void>
   addProject: (name: string, subject: string, member_list: string[]) => Promise<void>
-  editProject: () => Promise<void>
+  editProject: (projectId: number, name: string, subject: string) => Promise<void>
   deleteProject: (projectId: number) => Promise<void>
   addMember: (projectId: number, idList: number[]) => Promise<void>
   deleteMember: (projectId: number, userId: number) => Promise<void>
@@ -56,7 +56,9 @@ ProjectSlice
     const newProject = { name, subject, member_list: memberList };
     await axios.post(ADD_PROJECT_URL, newProject);
   },
-  editProject: async () => {},
+  editProject: async (projectId: number, name: string, subject: string) => {
+    await axios.put(UPDATE_PROJECT_URL(projectId), { name, subject });
+  },
   deleteProject: async (projectId: number) => {
     await axios.delete(UPDATE_PROJECT_URL(projectId));
   },

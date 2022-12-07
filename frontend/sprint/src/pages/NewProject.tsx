@@ -35,9 +35,9 @@ const NewProject: React.FC = () => {
     setEmailList(emailList => [...emailList, query]);
     setQuery('');
   };
-  const createProject: () => void = () => {
+  const createProject = async (): Promise<void> => {
     if (projectName === '' || subjectName === '') return;
-    void addProject(projectName, subjectName, emailList);
+    await addProject(projectName, subjectName, emailList);
     navigate('/projects');
   };
   return (
@@ -100,7 +100,7 @@ const NewProject: React.FC = () => {
         </div>
       </div>
       <div className="submit">
-        <Button type="primary" onClick={createProject} disabled={projectName === '' || subjectName === ''}>
+        <Button type="primary" onClick={() => { void createProject(); }} disabled={projectName === '' || subjectName === ''}>
           Create Project
         </Button>
       </div>

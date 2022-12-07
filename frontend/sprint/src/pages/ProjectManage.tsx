@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { List, Avatar, Button, Modal, AutoComplete, Input } from 'antd';
+import { List, Avatar, Button, Modal, AutoComplete, Input, message } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
@@ -26,8 +26,11 @@ const ProjectManage: React.FC = () => {
   const addMember = useBindStore(state => state.addMember);
   const deleteMember = useBindStore(state => state.deleteMember);
   const selectProject = useBindStore(state => state.selectProject);
+  const editProject = useBindStore(state => state.editProject);
   const deleteProject = useBindStore(state => state.deleteProject);
   const isManager = project?.manager === user?.id;
+  const [projectName, setProjectName] = useState(project?.name);
+  const [projectSubject, setProjectSubject] = useState(project?.subject);
 
   useEffect(() => {
     const asyncGetAutoComplete = async (): Promise<void> => {
@@ -50,10 +53,26 @@ const ProjectManage: React.FC = () => {
     setQuery('');
   };
 
+  const onSaveClick = async (): Promise<void> => {
+    const pProjectId = parseInt(projectId ?? '0');
+    await editProject(pProjectId, projectName ?? '', projectSubject ?? '');
+    await selectProject(pProjectId);
+    await message.success('Successfully edited!');
+  };
+
   const onDeleteClick = async (userId: number): Promise<void> => {
+    if (!window.confirm('Do you want to delete this user?')) return;
     if (projectId === undefined) return;
     await deleteMember(parseInt(projectId), userId);
     await selectProject(parseInt(projectId));
+  };
+
+  const onLeaveClick = async (userId: number): Promise<void> => {
+    if (!window.confirm('Do you want to leave this project?')) return;
+    if (projectId === undefined) return;
+    await deleteMember(parseInt(projectId), userId);
+    await selectProject(parseInt(projectId));
+    navigate('/projects');
   };
 
   const onAddConfirmClicked = async (): Promise<void> => {
@@ -90,26 +109,48 @@ const ProjectManage: React.FC = () => {
       <div className="project-manage">
         <div className="project-info">{project?.name}: {project?.subject}: Contribution</div>
         <div className="settings-header">Project Management</div>
-        <div className="team-members">
-          <div className="team-members-title">
-            Team Members
-            <Button onClick={() => { setOpenAdd(true); }}>Add a new member</Button>
-          </div>
-          <List
-            itemLayout="horizontal"
-            dataSource={project?.member_list}
-            renderItem={item => (
-              <List.Item
-                actions={isManager ? [<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>] : []}
+        <div className="project-flex">
+          <div className="project-name">
+            <div className="project-name-title">
+              Project Information
+              <Button
+                disabled={
+                  projectName === '' || projectSubject === '' || (project?.name === projectName && project?.subject === projectSubject)
+                }
+                onClick={() => { void onSaveClick(); }}
               >
-                <List.Item.Meta
-                  avatar={<Avatar>{iconString(item.username)}</Avatar>}
-                  title={item.username}
-                  description={item.email}
-                />
-              </List.Item>
-            )}
-          />
+                Save
+              </Button>
+            </div>
+            <div>Project Name</div>
+            <Input className="project-name-input" placeholder="Project Name" value={projectName} onChange={e => setProjectName(e.target.value)} />
+            <div>Project Subject</div>
+            <Input placeholder="Project Subject" value={projectSubject} onChange={e => setProjectSubject(e.target.value)} />
+          </div>
+          <div className="team-members">
+            <div className="team-members-title">
+              Team Members
+              <Button onClick={() => { setOpenAdd(true); }}>Add a new member</Button>
+            </div>
+            <List
+              itemLayout="horizontal"
+              dataSource={project?.member_list}
+              renderItem={item => (
+                <List.Item
+                  actions={[user?.id !== item.id
+                    ? isManager ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a> : null
+                    : <a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={<Avatar>{iconString(item.username)}</Avatar>}
+                    title={item.username}
+                    description={item.email}
+                  />
+                </List.Item>
+              )}
+            />
+          </div>
         </div>
         {isManager && <div className="dissolve-container">
           <div className="dissolve-left">
