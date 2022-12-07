@@ -67,6 +67,14 @@ const ProjectManage: React.FC = () => {
     await selectProject(parseInt(projectId));
   };
 
+  const onLeaveClick = async (userId: number): Promise<void> => {
+    if (!window.confirm('Do you want to leave this project?')) return;
+    if (projectId === undefined) return;
+    await deleteMember(parseInt(projectId), userId);
+    await selectProject(parseInt(projectId));
+    navigate('/projects');
+  };
+
   const onAddConfirmClicked = async (): Promise<void> => {
     if (projectId === undefined) return;
     await addMember(parseInt(projectId), idList);
@@ -129,7 +137,13 @@ const ProjectManage: React.FC = () => {
               dataSource={project?.member_list}
               renderItem={item => (
                 <List.Item
-                  actions={isManager ? [user?.id !== item.id ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a> : null] : []}
+                  actions={isManager
+                    ? [user?.id !== item.id
+                        ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>
+                        : <a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>
+                      ]
+                    : []
+                  }
                 >
                   <List.Item.Meta
                     avatar={<Avatar>{iconString(item.username)}</Avatar>}
