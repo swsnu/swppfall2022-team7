@@ -61,6 +61,7 @@ const ProjectManage: React.FC = () => {
   };
 
   const onDeleteClick = async (userId: number): Promise<void> => {
+    if (!window.confirm('Do you want to delete this user?')) return;
     if (projectId === undefined) return;
     await deleteMember(parseInt(projectId), userId);
     await selectProject(parseInt(projectId));
@@ -128,7 +129,7 @@ const ProjectManage: React.FC = () => {
               dataSource={project?.member_list}
               renderItem={item => (
                 <List.Item
-                  actions={isManager ? [<a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>] : []}
+                  actions={isManager ? [user?.id !== item.id ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a> : null] : []}
                 >
                   <List.Item.Meta
                     avatar={<Avatar>{iconString(item.username)}</Avatar>}

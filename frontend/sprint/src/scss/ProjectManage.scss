@@ -19,11 +19,12 @@
   }
   .project-flex{
     display: flex;
+    margin-bottom: 16px;
     .project-name{
       flex: 2;
       display: flex;
       flex-flow: column;
-      margin-right: 24px;
+      margin-right: 36px;
       .project-name-input{
         margin-bottom: 16px;
       }
