@@ -1,5 +1,4 @@
 import { InboxOutlined, StarOutlined } from '@ant-design/icons';
-import { DocumentSpaceType } from '@store/zustand/documentSpace';
 import { Button, Collapse, message, Upload, UploadFile, UploadProps } from 'antd';
 import { useEffect, useState } from 'react';
 import AWS from 'aws-sdk';
@@ -76,18 +75,6 @@ const DocUploader: React.FC<DocUploaderProps> = ({ documentSpace }: DocUploaderP
         }
       };
       void setFile();
-      // data.Contents?.forEach(async (file) => {
-      //   const url = s3.getSignedUrl('getObject', {
-      //     Bucket: 'swppsprint',
-      //     Key: file.Key,
-      //     Expires: 604799,
-      //     ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
-      //   });
-      //   const parsedUserId = file.Key?.split(/[/,_]/)[1];
-      //   const fileUploader = await getUserName(parsedUserId ?? '0');
-      //   newList.unshift({ key: file.Key, time: file.LastModified, url, uploader: fileUploader });
-      //   setFileList([...newList]);
-      // });
     });
   }, [uploading]);
 
