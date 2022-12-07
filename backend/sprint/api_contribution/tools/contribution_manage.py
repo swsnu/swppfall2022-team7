@@ -12,8 +12,8 @@ def get_user_quest_status(user_project: UserProject):
     compose_comment = qs_upa.filter(activity_type=UserProjectActivity.ActivityType.CREATE_COMMENT).exists()
     upload_document = qs_upa.filter(activity_type=UserProjectActivity.ActivityType.UPLOAD_DOCUMENT).exists()
     react_comment = qs_upa.filter(activity_type=UserProjectActivity.ActivityType.REACT_COMMENT).exists()
-    complete_task = qs_upa.filter(activity_type=UserProjectActivity.ActivityType.COMPLETE_TASK).exists()
-    
+    complete_task = Task.objects.filter(project=user_project.project, assignee=user_project.user, status=Task.StatusType.DONE).exists()
+        
     status = {
         "Compose a comment": "Done" if compose_comment else "On Going",
         "Upload a document": "Done" if upload_document else "On Going",
