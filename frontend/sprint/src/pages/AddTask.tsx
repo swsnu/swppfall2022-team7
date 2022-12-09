@@ -67,8 +67,8 @@ const AddTask: React.FC = () => {
       <Divider />
       <div className="form-tab">
         <div className="form-description">
-          <div className="form-title">Task Participants</div>
-          <div className="form-text">Add your task participants</div>
+          <div className="form-title">Task Assignee</div>
+          <div className="form-text">Add your task assignee</div>
         </div>
         <div className="input-form">
           <label htmlFor="invite-email">Send Invitiation to..</label>

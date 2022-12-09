@@ -57,8 +57,9 @@ def get_task_detail(task: Task):
 def edit_task_detail(task: Task, get_data: dict, requester):
     if 'assignee' in get_data :
         assignee_id = get_data['assignee']
-        user = get_user_model().objects.get(id=assignee_id)
-        task.assignee = user
+        if assignee_id != -1 :
+            user = get_user_model().objects.get(id=assignee_id)
+            task.assignee = user
 
     if 'name' in get_data :
         task.name = get_data['name']
