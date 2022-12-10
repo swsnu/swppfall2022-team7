@@ -24,7 +24,7 @@ const AddTask: React.FC = () => {
   useEffect(() => {
     const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
-      const autoComplete = await getAutoComplete(query);
+      const autoComplete = await getAutoComplete(query, parseInt(projectId ?? '0'));
       setQueryList(autoComplete);
     };
     void asyncGetAutoComplete();

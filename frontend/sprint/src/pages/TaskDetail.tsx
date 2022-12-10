@@ -1,4 +1,4 @@
-import { Input, Avatar, Button, DatePicker } from 'antd';
+import { Input, Button, DatePicker, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,6 @@ import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
 import CommentBox from '@components/CommentBox';
-import { iconString } from '@utils/utils';
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
@@ -15,6 +14,7 @@ const TaskDetail: React.FC = () => {
   const task = useBindStore(state => state.selectedTask);
   const editTask = useBindStore(state => state.editTask);
   const selectProject = useBindStore(state => state.selectProject);
+  const selectTask = useBindStore(state => state.selectTask);
   const deleteTask = useBindStore(state => state.deleteTask);
 
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ const TaskDetail: React.FC = () => {
   const [editedDate, setEditedDate] = useState(task?.untilAt);
   const [taskInfo, setTaskInfo] = useState({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
   const [editedContent, setEditedContent] = useState(task?.content);
+  const [editedAssignee, setEditedAssignee] = useState(task?.assignee?.id);
 
   useEffect(() => {
     setTaskInfo({ name: task?.name, content: task?.content, dueDate: task?.untilAt });
@@ -30,12 +31,14 @@ const TaskDetail: React.FC = () => {
     setEditedName(task?.name);
     setEditedContent(task?.content);
     setEditedDate(task?.untilAt);
+    setEditedAssignee(task?.assignee?.id);
   }, [task]);
 
   const onSaveClicked = async (): Promise<void> => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
-    await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', task?.assignee?.id ?? 0, editedDate ?? '');
+    await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', editedAssignee ?? 0, editedDate ?? '');
     await selectProject(parseInt(projectId ?? '0'));
+    await selectTask(parseInt(taskId ?? '0'));
     setEdit(false);
   };
 
@@ -68,7 +71,17 @@ const TaskDetail: React.FC = () => {
                   <Button type='text' onClick={onCancelClicked}>Cancel</Button>
                 </div>
               </div>
-              <DatePicker defaultValue={moment(editedDate, 'YYYY-MM-DD')} onChange={(_, dateString) => setEditedDate(dateString)} />
+              <div>
+                <Select
+                  allowClear
+                  style={{ width: 240, marginRight: 12 }}
+                  defaultValue={task?.assignee?.id}
+                  options={[{ value: -1, key: -1, label: 'no assignee' }, ...(project?.member_list.map(member => ({ value: member.id, label: member.username, key: member.id })) ?? [])]}
+                  onSelect={(value: number, _: any) => setEditedAssignee(value)}
+                  onClear={() => setEditedAssignee(-1)}
+                />
+                <DatePicker defaultValue={moment(editedDate, 'YYYY-MM-DD')} onChange={(_, dateString) => setEditedDate(dateString)} />
+              </div>
               <TextArea className="task-content" rows={10} defaultValue={taskInfo.content} onChange={(e) => { setEditedContent(e.target.value); }}/>
             </div>
           : <div>
