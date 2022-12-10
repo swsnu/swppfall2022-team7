@@ -2,7 +2,6 @@ import { InboxOutlined, StarOutlined } from '@ant-design/icons';
 import useBindStore from '@store/zustand';
 import { DocumentSpaceCardType } from '@store/zustand/project';
 import { Button, Collapse, Empty, message, Upload, UploadFile, UploadProps } from 'antd';
-import AWS from 'aws-sdk';
 import { useState, useEffect } from 'react';
 import DocUploader from './DocUploader';
 import LinkModal from './LinkModal';

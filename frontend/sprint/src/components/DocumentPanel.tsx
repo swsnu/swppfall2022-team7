@@ -108,8 +108,8 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
             lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
             uploader: fileUploader
           });
-          setTableData(newList);
         }
+        setTableData(newList);
       };
       void setFile();
     });

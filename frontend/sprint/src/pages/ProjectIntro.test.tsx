@@ -9,6 +9,7 @@ jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNav
 describe('project intro test', () => {
   let AD: JSX.Element;
   beforeAll(() => {
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
     AD = <ProjectIntro />;
     global.matchMedia = global.matchMedia ?? function () {
       return {

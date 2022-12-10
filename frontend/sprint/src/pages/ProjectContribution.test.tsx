@@ -1,28 +1,31 @@
-// import { renderWithProviders } from '@utils/mocks';
-// import { MemoryRouter } from 'react-router-dom';
-// import ProjectContribution from './ProjectContribution';
+import { render } from '@testing-library/react';
+import ProjectContribution from './ProjectContribution';
+import ReactRouter from 'react-router';
+import useBindStore from '@store/zustand';
+import { fakeProject1, fakeQuest1, fakeTimeline1 } from '@utils/testDummy';
+import axios from 'axios';
 
-// describe('<NewProject />', () => {
-//   let AD: JSX.Element;
-//   beforeAll(() => {
-//     AD = <MemoryRouter><ProjectContribution /></MemoryRouter>;
-//     global.matchMedia = global.matchMedia ?? function () {
-//       return {
-//         addListener: jest.fn(),
-//         removeListener: jest.fn()
-//       };
-//     };
-//   });
-//   it('should render', () => {
-//     renderWithProviders(AD);
-//   });
-// });
+const mockNavigate = jest.fn();
+jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
 
-describe('dummy', () => {
-  it('asdf', () => {
-    const a = 1;
-    expect(a).toEqual(1);
+describe('<ProjectContribution />', () => {
+  let AD: JSX.Element;
+  beforeAll(() => {
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
+    AD = <ProjectContribution />;
+    global.matchMedia = global.matchMedia ?? function () {
+      return {
+        addListener: jest.fn(),
+        removeListener: jest.fn()
+      };
+    };
+  });
+  it('should render', () => {
+    jest.spyOn(ReactRouter, 'useParams');
+    axios.get = jest.fn().mockResolvedValueOnce({ data: [fakeQuest1] }).mockResolvedValueOnce({ data: [fakeTimeline1] });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.quest = [fakeQuest1]
+    render(AD);
   });
 });
-
-export const a = 1;
