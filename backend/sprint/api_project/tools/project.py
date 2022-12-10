@@ -116,7 +116,7 @@ def delete_project_member(project: Project, member_id: int) :
     return
 
 def get_project_timetable(project: Project):
-    userlist = [user for user in UserProject.objects.filter(project=project)]
+    userlist = [user.user for user in UserProject.objects.filter(project=project)]
     tts = [get_timetable_of_user(user) for user in userlist]
     ret = tts[0]
     for tt in tts:
