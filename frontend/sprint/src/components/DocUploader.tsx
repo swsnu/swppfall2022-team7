@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import AWS from 'aws-sdk';
 import useBindStore from '@store/zustand';
 import { DocumentSpaceCardType } from '@store/zustand/project';
+import { parseDocId, parseUserId } from '@utils/utils';
 
 interface DocUploaderProps {
   documentSpace: DocumentSpaceCardType
@@ -68,7 +69,7 @@ const DocUploader: React.FC<DocUploaderProps> = ({ documentSpace }: DocUploaderP
             Expires: 604799,
             ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
           });
-          const parsedUserId = file.Key?.split(/[/,_]/)[1];
+          const parsedUserId = parseUserId(file.Key ?? '');
           const fileUploader = await getUserName(parsedUserId ?? '0');
           newList.unshift({ key: file.Key, time: file.LastModified, url, uploader: fileUploader });
           setFileList([...newList]);
@@ -111,7 +112,7 @@ const DocUploader: React.FC<DocUploaderProps> = ({ documentSpace }: DocUploaderP
         <div className="document-container">
           <div className="document-left">
             {fileList.map((file) => {
-              const fileId = file.key?.split(/[/,_]/)[2];
+              const fileId = parseDocId(file.key ?? '');
               return (
                 <a href={file.url} className="document-uploaded" key={file.key}>
                   <div className="file-name-container">

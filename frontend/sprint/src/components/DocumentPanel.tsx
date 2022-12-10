@@ -1,5 +1,6 @@
 import useBindStore from '@store/zustand';
 import { DocumentSpaceType } from '@store/zustand/documentSpace';
+import { parseDocId, parseUserId } from '@utils/utils';
 import { Button, message, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AWS from 'aws-sdk';
@@ -65,7 +66,7 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
     }),
     onChange: (selectedRowKeys: React.Key[], _: TableDataType[]) => {
       const fileName = selectedRowKeys[0] as string;
-      const fileId = fileName.split(/[/,_]/)[2];
+      const fileId = parseDocId(fileName);
       setNextHead(parseInt(fileId ?? '0'));
     }
   };
@@ -97,8 +98,8 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
             Expires: 604799,
             ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
           });
-          const parsedUserId = file.Key?.split(/[/,_]/)[1];
-          const parsedDocId = file.Key?.split(/[/,_]/)[2];
+          const parsedUserId = parseUserId(file.Key ?? '');
+          const parsedDocId = parseDocId(file.Key ?? '');
           const fileUploader = await getUserName(parsedUserId ?? '0');
           newList.unshift({
             key: file.Key ?? 'undefined',

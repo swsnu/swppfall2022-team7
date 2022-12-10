@@ -9,6 +9,7 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
   const signUp = useBindStore(state => state.signUp);
   const enableSignup: boolean = (
     name !== '' &&
@@ -17,6 +18,7 @@ const SignUp: React.FC = () => {
     password !== ''
   );
   const handleSignup = async (): Promise<void> => {
+    setLoading(true);
     try {
       await signUp(name, email, password);
       await message.success('Signup complete! Please check your email');
@@ -25,6 +27,7 @@ const SignUp: React.FC = () => {
       await message.error('The email or username already exists!');
       console.log(error);
     }
+    setLoading(false);
   };
   return (
     <div className="signup-body">
@@ -34,7 +37,9 @@ const SignUp: React.FC = () => {
         <Input className="form-input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
         <Input.Password className="form-input" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
         <Input.Password className="form-input" status={password !== confirm ? 'error' : ''} placeholder="Confirm Password" value={confirm} onChange={e => setConfirm(e.target.value)} />
-        <Button type="primary" disabled={!enableSignup} onClick={() => { void handleSignup(); }}>Create Account</Button>
+        <Button type="primary" disabled={!enableSignup} onClick={() => { void handleSignup(); }} loading={loading}>
+          Create Account
+        </Button>
       </div>
       <div>
         {'Have an account?'}&nbsp;&nbsp;<Link to="/login">Login!</Link>

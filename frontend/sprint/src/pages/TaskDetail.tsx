@@ -1,4 +1,4 @@
-import { Input, Avatar, Button, DatePicker } from 'antd';
+import { Input, Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,6 @@ import useBindStore from '@store/zustand';
 import DocSpaceCollapse from '@components/DocSpaceCollapse';
 import StatusTag from '@components/StatusTag';
 import CommentBox from '@components/CommentBox';
-import { iconString } from '@utils/utils';
 
 const TaskDetail: React.FC = () => {
   const { projectId, taskId } = useParams();
