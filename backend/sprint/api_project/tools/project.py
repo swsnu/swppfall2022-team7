@@ -121,7 +121,7 @@ def get_project_timetable(project: Project):
     ret = tts[0]
     for tt in tts:
         for i, t in enumerate(tt):
-            for key, val in t['board'].item():
+            for key, val in t['board'].items():
                 if val=='Occupied':
                     ret[i]['board'][key] = 'Occupied'
     return ret
