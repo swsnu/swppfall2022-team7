@@ -34,6 +34,12 @@ from .tools.notification import (
     get_notification_list_short
 )
 
+from .tools.user_detail import (
+    upload_profile,
+    get_profile,
+    delete_profile
+)
+
 from .serializers import (
     RequestSignupPOSTSerializer,
     RequestSigninPOSTSerializer,
@@ -170,23 +176,31 @@ def noti(request: Request):
 def noti_short(request: Request, num: int):
     return Response(status=200, data=get_notification_list_short(request.user, num))
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
-def image(request, user_id:int):
+@return_bad_request_if_anonymous
+def image(request):
     '''
     [GET] Get the image of the user
     '''
-    # TODO
-    return HttpResponse(status=200)
+    get_profile(request.user)
+    return Response(status=200, data=convert_user_to_dict(request.user))
 
-@require_http_methods(['POST', 'PUT', 'DELETE'])
-def m_image(request, user_id:int):
+@api_view(['POST', 'DELETE'])
+@require_http_methods(['POST', 'DELETE'])
+@return_bad_request_if_anonymous
+def m_image(request: Request):
     '''
     [POST] Set User image
     [PUT] Change User image
     [DELETE] Delete User image
     '''
-    # TODO
-    return HttpResponse(status=200)
+    if request.method == 'POST':
+        upload_profile(request.user, request.data["image"])
+        return Response(status=201, data=convert_user_to_dict(request.user))
+    elif request.method == 'DELETE':
+        delete_profile(request.user)
+        return Response(status=204)
 
 @ensure_csrf_cookie
 @require_http_methods(['GET'])

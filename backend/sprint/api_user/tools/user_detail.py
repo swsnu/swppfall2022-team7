@@ -1,7 +1,12 @@
-import datetime
-from model_user.models import Timetable, get_user_model
+import datetime, os
 
-def get_timetable_of_user(user: get_user_model):
+from model_user.models import Timetable, Image
+
+from django.contrib.auth.models import User
+from django.conf import settings
+
+
+def get_timetable_of_user(user: User):
     tt = None
     if Timetable.objects.filter(user=user).exists():
         tt = Timetable.objects.get(user=user)
@@ -20,3 +25,30 @@ def create_initial_timetable():
         })
         ti += datetime.timedelta(minutes=30)
     return ret
+
+def upload_profile(user: User, img): 
+    image = Image.objects.filter(user=user)
+    if image.exists() :
+        image = image.first()
+        image.image = img
+        image.save()
+    else :
+        image=Image.objects.create(
+            user=user,
+            image=img,
+        )
+    return image
+
+def get_profile(user: User): 
+    img = Image.objects.filter(user=user) 
+    if img.exists():
+        return img.first()
+    else :
+        return None
+
+def delete_profile(user: User):
+    img = Image.objects.filter(user=user)
+    if img.exists():
+        img = img.first()
+        os.remove(os.path.join(settings.MEDIA_ROOT, img.image.name))
+        img.delete()
