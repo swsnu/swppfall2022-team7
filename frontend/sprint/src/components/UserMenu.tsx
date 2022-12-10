@@ -1,4 +1,4 @@
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import useBindStore from '@store/zustand';
 import { iconString } from '@utils/utils';
 import { Avatar, Button, Space } from 'antd';
@@ -22,6 +22,10 @@ const UserMenu: React.FC = () => {
         <Avatar>{iconString(user?.username ?? '')}</Avatar>
         {user?.username}
       </Space>
+      <Button className="drop-menu" onClick={() => navigate('/profile')}>
+        <UserOutlined />
+        Profile Page
+      </Button>
       <Button className="drop-menu" onClick={() => { void handleLogout(); }}>
         <LogoutOutlined />
         Logout

@@ -24,7 +24,7 @@ const Header: React.FC = () => {
     const getAsyncNewNoti = async (): Promise<void> => {
       await getNewNoti();
     };
-    void getAsyncNewNoti();
+    if (user !== null) void getAsyncNewNoti();
   }, [navigate]);
   return (
     <AntdHeader className="header">

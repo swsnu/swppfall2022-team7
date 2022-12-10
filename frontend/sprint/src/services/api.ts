@@ -4,7 +4,8 @@ export const SIGNIN_URL = 'user/signin/';
 export const SIGNOUT_URL = 'user/signout/';
 export const SIGNUP_URL = 'user/signup/';
 export const GET_USER_URL = (userId: string): string => `user/info/${userId}/`;
-export const AUTO_COMPLETE_URL = (query: string): string => `user/search/${query}/`;
+export const AUTO_COMPLETE_URL = (query: string, projectId: number = -1): string => projectId === -1 ? `user/search/${query}/` : `user/search/${projectId}/${query}`;
+export const EDIT_USER_URL = 'user/change/';
 
 export const GET_NOTI_URL = 'user/noti/';
 export const GET_NEW_NOTI_URL = 'user/noti/short/0/';
