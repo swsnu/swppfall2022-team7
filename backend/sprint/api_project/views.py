@@ -120,7 +120,7 @@ def m_member(request, project_id:int, member_id: int):
         return HttpResponse(status=204)
 
 @api_view(['GET'])
-@require_http_methods(['PUT', 'DELETE'])
+@require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable(request, project_id:int):
@@ -131,18 +131,7 @@ def project_timetable(request, project_id:int):
     return JsonResponse(data, status=200)
 
 @api_view(['GET'])
-@require_http_methods(['PUT', 'DELETE'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_not_authorized(AuthType.PROJECT)
-def project_timetable(request, project_id:int):
-    project = get_project_by_id(project_id)
-    if project is None:
-        return HttpResponse(status=401)
-    data = get_project_timetable(project)
-    return JsonResponse(data, safe=False, status=200)
-
-@api_view(['GET'])
-@require_http_methods(['PUT', 'DELETE'])
+@require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable_detail(request, project_id:int, row:int, col:int):
