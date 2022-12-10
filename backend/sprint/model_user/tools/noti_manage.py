@@ -9,11 +9,11 @@ def convert_upa_to_message(upa: UserProjectActivity) :
     if upa.activity_type == UserProjectActivity.ActivityType.CREATE_TASK :
         message = f"<b>{upa.user_project.user.username}</b> created a new task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_DOCUMENT_SPACE :
-        message = f"<b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.user_project.project}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_COMMENT :
         message = f"<b>{upa.user_project.user.username}</b> commented on <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.UPLOAD_DOCUMENT :
-        message = f"<b>{upa.user_project.user.username}</b> uploaded a new document <b>{upa.document.name}</b> to <b>{upa.task.name}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> uploaded a new document <b>{upa.document.name}</b> to <b>{upa.user_project.project}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.ASSIGNED_TASK :
         message = f"<b>{upa.user_project.user.username}</b> assigned to the task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.EDIT_TASK :
@@ -38,7 +38,10 @@ def send_notification_upa(upa: UserProjectActivity) :
     for member in member_list :
         member: UserProject
         if member.user.id != user.id:
-            push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
+            if upa.task is None :
+                push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/docs")
+            else :
+                push_notification(member.user, message, f"/projects/{upa.user_project.project.id}/tasks/{upa.task.id}")
 
     return
 

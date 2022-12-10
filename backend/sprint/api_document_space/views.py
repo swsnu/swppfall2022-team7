@@ -51,7 +51,7 @@ def m_docuspace(request, project_id:int):
     '''
     project = Project.objects.get(id=project_id)
     get_data = json.loads(request.body.decode())
-    ret = create_docuspace(project, get_data)
+    ret = create_docuspace(project, get_data, request.user)
     return JsonResponse(ret, status=201)
 
 @api_view(['GET'])
