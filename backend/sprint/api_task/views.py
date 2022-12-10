@@ -6,7 +6,9 @@ from drf_yasg.utils import swagger_auto_schema
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception,
-    return_bad_request_if_does_not_exist
+    return_bad_request_if_does_not_exist,
+    return_bad_request_if_not_authorized,
+    AuthType
 )
 from utility.serializers import (
     BaseResponse
@@ -28,14 +30,13 @@ from .serializers import (
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def get_task(request, project_id:int):
     '''
     [GET] Get task list of the project
     '''
     project = Project.objects.get(id=project_id)
     user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     ret_data = get_task_list(project, user)
     return JsonResponse(ret_data, safe=False, status=200)
 
@@ -51,14 +52,13 @@ def get_task(request, project_id:int):
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_task(request, project_id:int):
     '''
     [POST] Create new task for the project
     '''
     project = Project.objects.get(id=project_id)
     user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     get_data = json.loads(request.body.decode())
     ret_data = create_task(project, get_data, user)
     return JsonResponse(ret_data, status=201)
@@ -67,15 +67,12 @@ def m_task(request, project_id:int):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def task_detail(request, task_id:int):
     '''
     [GET] Get task detail
     '''
     task = Task.objects.get(id=task_id)
-    project = task.project
-    user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     ret_data = get_task_detail(task)
     return JsonResponse(ret_data, status=200)
 
@@ -91,16 +88,14 @@ def task_detail(request, task_id:int):
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def m_task_detail(request, task_id:int):
     '''
     [PUT] Change task detail(ex. Assignee)
     [DELETE] Delete the task
     '''
     task = Task.objects.get(id=task_id)
-    project = task.project
     user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     if request.method == 'PUT':
         get_data = json.loads(request.body.decode())
         task = edit_task_detail(task, get_data, user)
@@ -125,15 +120,12 @@ def task_belong(request, user_id:int):
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def task_document(request, task_id:int):
     '''
     [GET] Get document space list of the task
     '''
     task = Task.objects.get(id=task_id)
-    project = task.project
-    user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     ret = get_document_space_list(task)
     return JsonResponse(ret, safe=False, status=200)
 
@@ -149,16 +141,13 @@ def task_document(request, task_id:int):
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
 @return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def m_task_document(request, task_id:int):
     '''
     [POST] Connect documnet space and the task
     [DELETE] Disconnect document space and the task
     '''
     task = Task.objects.get(id=task_id)
-    project = task.project
-    user = request.user
-    if not UserProject.objects.filter(user=user, project=project).exists():
-        return HttpResponse(status=403)
     get_data = json.loads(request.body.decode())
     document_id = get_data['documentId']
     docuspace = DocumentSpace.objects.get(id=document_id)

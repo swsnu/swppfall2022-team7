@@ -134,6 +134,12 @@ def info(request: Request, user_id:int):
 def auto_compelete(request: Request, query: str) :
     return Response(status=200, data=listup_user_by_query(query))
 
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def auto_compelete_member(request: Request, project_id: int, query: str) :
+    return Response(status=200, data=listup_user_by_query(query, project_id))
+
 
 @require_http_methods(['GET'])
 def timetable(request, user_id:int):
