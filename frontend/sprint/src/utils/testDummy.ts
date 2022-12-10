@@ -1,7 +1,7 @@
 import { DocumentSpaceType } from '@store/zustand/documentSpace';
 import { ProjectType } from '@store/zustand/project';
 import { CommentType, ReactionType, TaskType } from '@store/zustand/task';
-import { UserType } from '@store/zustand/user';
+import { NotificationType, UserType } from '@store/zustand/user';
 
 export const fakeUser1: UserType = {
   email: 'fakeUser1@fake.com',
@@ -165,4 +165,20 @@ export const fakeProject3: ProjectType = {
     }
   ],
   task_list: [fakeTask1, emptyTask1]
+};
+
+export const fakeNoti1: NotificationType = {
+  checked: false,
+  content: 'testNoti1',
+  created_at: '11',
+  id: 1,
+  link: 'asdf'
+};
+
+export const fakeNoti2: NotificationType = {
+  checked: true,
+  content: 'testNoti2',
+  created_at: '22',
+  id: 2,
+  link: 'asdf2'
 };
