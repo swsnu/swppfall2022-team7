@@ -1,7 +1,7 @@
 import { AUTO_COMPLETE_URL, GET_NEW_NOTI_URL, GET_NOTI_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
-import { SliceType } from '.';
+import useBindStore, { SliceType } from '.';
 
 export interface UserType {
   id: number

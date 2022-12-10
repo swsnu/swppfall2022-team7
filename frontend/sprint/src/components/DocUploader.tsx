@@ -72,8 +72,8 @@ const DocUploader: React.FC<DocUploaderProps> = ({ documentSpace }: DocUploaderP
           const parsedUserId = parseUserId(file.Key ?? '');
           const fileUploader = await getUserName(parsedUserId ?? '0');
           newList.unshift({ key: file.Key, time: file.LastModified, url, uploader: fileUploader });
-          setFileList([...newList]);
         }
+        setFileList([...newList]);
       };
       void setFile();
     });
