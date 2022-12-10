@@ -27,7 +27,7 @@ export interface UserSlice {
   logOut: () => Promise<void>
   signUp: (name: string, email: string, password: string) => Promise<void>
   getUser: () => Promise<void>
-  getAutoComplete: (query: string) => Promise<UserType[]>
+  getAutoComplete: (query: string, projectId: number) => Promise<UserType[]>
   getUserName: (userId: string) => Promise<string>
 };
 
@@ -75,8 +75,8 @@ UserSlice
     const user = res.data;
     set({ user });
   },
-  getAutoComplete: async (query: string) => {
-    const res = await axios.get(AUTO_COMPLETE_URL(query));
+  getAutoComplete: async (query: string, projectId: number = -1) => {
+    const res = await axios.get(AUTO_COMPLETE_URL(query, projectId));
     return res.data;
   },
   getUserName: async (userId: string) => {
