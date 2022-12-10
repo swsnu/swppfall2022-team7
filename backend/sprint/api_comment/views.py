@@ -11,9 +11,9 @@ from api_comment.tools.comment_manage import(
     delete_comment
 )
 from utility.custom_decorator import (
-    return_bad_request_if_anonymous,
-    return_bad_request_if_exception,
-    return_bad_request_if_does_not_exist
+    return_bad_request_decorator,
+    return_bad_request_if_not_authorized,
+    AuthType
 )
 
 from utility.serializers import (
@@ -28,8 +28,8 @@ from .serializers import (
 # Create your views here.
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def comment(request: Request, task_id:int):
     '''
     [GET] Get comment list of the task
@@ -39,9 +39,8 @@ def comment(request: Request, task_id:int):
 
 @api_view(['POST'])
 @require_http_methods(['POST'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
-@return_bad_request_if_exception
+@return_bad_request_decorator
+@return_bad_request_if_not_authorized(AuthType.TASK)
 def m_comment(request: Request, task_id:int):
     '''
     [POST] Create new comment for the task
@@ -51,9 +50,7 @@ def m_comment(request: Request, task_id:int):
 
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
-@return_bad_request_if_exception
+@return_bad_request_decorator
 def m_comment_detail(request: Request, comment_id:int):
     '''
     [PUT] Change the comment

@@ -6,7 +6,7 @@ def get_timetable_of_user(user: get_user_model):
     if Timetable.objects.filter(user=user).exists():
         tt = Timetable.objects.get(user=user)
     if tt is None:
-        Timetable.objects.create(schedule=create_initial_timetable())
+        tt = Timetable.objects.create(schedule=create_initial_timetable())
     return tt.schedule
         
 def create_initial_timetable():
