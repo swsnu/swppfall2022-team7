@@ -1,8 +1,5 @@
-import useBindStore from '@store/zustand';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '@utils/mocks';
-import { fakeProject1, fakeProject2 } from '@utils/testDummy';
-import axios from 'axios';
 import Home from './Home';
 
 const mockNavigate = jest.fn();
@@ -16,25 +13,6 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<Home />', () => {
-  function createMockLocalStorage (storage: any): void {
-    const localStorageMock = (function () {
-      let store: any = storage;
-      return {
-        getItem: function (key: string) {
-          return store[key] ?? null;
-        },
-        setItem: function (key: string, value: string) {
-          store[key] = value.toString();
-        },
-        clear: function () {
-          store = {};
-        }
-      };
-    })();
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock
-    });
-  };
   beforeAll(() => {
     global.matchMedia = global.matchMedia ?? function () {
       return {
@@ -44,12 +22,12 @@ describe('<Home />', () => {
     };
   });
   it('should render', () => {
-    createMockLocalStorage({ userId: 'a' });
-    axios.get = jest.fn().mockResolvedValue({ data: [fakeProject1, fakeProject2] });
-    const AD = <Home />;
-    const i = useBindStore.getState();
-    i.selectedProject = fakeProject1;
-    useBindStore.setState(i, true);
-    render(AD);
+    renderWithProviders(<Home />);
+  });
+  it('should navigate', () => {
+    renderWithProviders(<Home />);
+    const toNewProject = screen.getByText('New Project');
+    fireEvent.click(toNewProject);
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
   });
 });
