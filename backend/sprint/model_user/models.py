@@ -16,7 +16,7 @@ class Notification(models.Model):
 
 class Image(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    image = models.URLField()
+    image = models.ImageField(upload_to="")
     created_at = models.DateTimeField(auto_now_add=True)
 
 class UserVerification(models.Model):
