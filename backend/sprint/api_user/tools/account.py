@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.db.models import Q
 from django.core.mail import EmailMessage
 
-from model_user.models import UserVerification
+from model_user.models import UserVerification, Image
 from model_project.models import Project, UserProject
 
 def send_email(email: str, title: str, content: str): 
@@ -58,10 +58,16 @@ def get_user(data: dict) -> User:
     return user
 
 def convert_user_to_dict(user: User) :
+    image = Image.objects.filter(user=user)
+    if image.exists():
+        image=image.first()
+    else :
+        image=None
     return {
         'email': user.email,
         'username': user.username,
-        'id': user.id
+        'id': user.id,
+        'image': image.image.name if image is not None else ""
     }
 
 def edit_user(data: dict, user: User) -> User :
