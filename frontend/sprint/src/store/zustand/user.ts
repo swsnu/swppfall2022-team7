@@ -63,6 +63,7 @@ UserSlice
   logOut: async () => {
     await axios.get(SIGNOUT_URL);
     localStorage.clear();
+    set({ user: null });
   },
   signUp: async (name: string, email: string, password: string) => {
     await axios.post(SIGNUP_URL, { username: name, email, password });
