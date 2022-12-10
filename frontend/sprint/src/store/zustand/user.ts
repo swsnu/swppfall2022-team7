@@ -1,12 +1,15 @@
+import { EDIT_IMAGE_URL } from './../../services/api';
 import { AUTO_COMPLETE_URL, EDIT_USER_URL, GET_NEW_NOTI_URL, GET_NOTI_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
+import { RcFile } from 'antd/lib/upload';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
-import useBindStore, { SliceType } from '.';
+import { SliceType } from '.';
 
 export interface UserType {
   id: number
   username: string
   email: string
+  image?: string
 };
 
 export interface NotificationType {
@@ -30,6 +33,7 @@ export interface UserSlice {
   getAutoComplete: (query: string, projectId: number) => Promise<UserType[]>
   getUserName: (userId: string) => Promise<string>
   editUser: (userName: string) => Promise<void>
+  uploadImage: (file: RcFile) => Promise<void>
 };
 
 export const createUserSlice: StateCreator<
@@ -86,5 +90,8 @@ UserSlice
   },
   editUser: async (userName: string) => {
     await axios.put(EDIT_USER_URL, { username: userName });
+  },
+  uploadImage: async (file: RcFile) => {
+    await axios.post(EDIT_IMAGE_URL, { image: file }, { headers: { 'Content-Type': 'multipart/form-data' } });
   }
 });

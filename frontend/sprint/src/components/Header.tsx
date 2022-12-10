@@ -1,11 +1,11 @@
-import { Layout, Avatar, Popover, Button, Badge } from 'antd';
+import { Layout, Popover, Button, Badge } from 'antd';
 import { BellFilled, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
 import UserMenu from './UserMenu';
-import { iconString } from '@utils/utils';
 import { useEffect, useState } from 'react';
+import UserAvatar from './UserAvatar';
 
 const { Header: AntdHeader } = Layout;
 
@@ -43,7 +43,7 @@ const Header: React.FC = () => {
             </Button>
           </Popover>
           <Popover open={openUser} trigger="click" content={<UserMenu setOpenUser={setOpenUser} />} placement="bottomRight" onOpenChange={open => setOpenUser(open)}>
-            <Avatar className="avatar">{iconString(user?.username ?? '')}</Avatar>
+            <div>{user !== null && <UserAvatar className="avatar" user={user} />}</div>
           </Popover>
         </div>
       </>

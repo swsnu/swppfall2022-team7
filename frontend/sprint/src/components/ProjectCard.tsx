@@ -1,8 +1,8 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { ProjectType } from '@store/zustand/project';
-import { iconString } from '@utils/utils';
 import { Avatar, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import UserAvatar from './UserAvatar';
 
 const ProjectCard: React.FC<{ project: ProjectType }> = ({ project }: { project: ProjectType }) => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const ProjectCard: React.FC<{ project: ProjectType }> = ({ project }: { project:
         <div className="info-tab">
           <Avatar.Group>
             {project.member_list.slice(0, 3).map(member => (
-              <Avatar key={member.id} size="small" className="avatar">{iconString(member.username)}</Avatar>
+              <UserAvatar key={member.id} size="small" className="avatar" user={member} />
             ))}
             {project.member_list.length > 3 && <Avatar size="small" className="avatar">+{project.member_list.length - 3}</Avatar>}
           </Avatar.Group>
