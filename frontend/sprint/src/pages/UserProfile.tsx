@@ -15,9 +15,11 @@ const UserProfile: React.FC = () => {
     <div className="user-profile">
       <div className="name-edit">
         Username
-        <div className="name-flex">
-          <Input placeholder="Username" value={editedName} onChange={e => setEditedName(e.target.value)} />
-          <Button className="name-save" disabled={user?.username === editedName || editedName === ''} onClick={() => { void onSaveClick(); }}>Save</Button>
+        <Input placeholder="Username" value={editedName} onChange={e => setEditedName(e.target.value)} />
+        <div className="save-div">
+          <Button type="primary" disabled={user?.username === editedName || editedName === ''} onClick={() => { void onSaveClick(); }}>
+            Save
+          </Button>
         </div>
       </div>
     </div>

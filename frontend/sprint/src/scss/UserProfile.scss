@@ -1,7 +1,15 @@
 .user-profile{
-  padding: 40px 10% 0 10%;
+  flex: 1;
+  width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
   .name-flex{
     display: flex;
+  }
+  .save-div{
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
   }
 }
