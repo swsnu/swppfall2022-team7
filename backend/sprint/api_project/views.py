@@ -114,7 +114,7 @@ def m_member(request, project_id:int, member_id: int):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable(request, project_id:int):
     project = get_project_by_id(project_id)
@@ -125,7 +125,7 @@ def project_timetable(request, project_id:int):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable_detail(request, project_id:int, row:int, col:int):
     project = get_project_by_id(project_id)
