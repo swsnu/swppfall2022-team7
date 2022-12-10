@@ -7,9 +7,9 @@ from rest_framework.request import Request
 from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
-    return_bad_request_if_anonymous,
-    return_bad_request_if_exception,
-    return_bad_request_if_does_not_exist
+    return_bad_request_decorator,
+    return_bad_request_if_not_authorized,
+    AuthType
 )
 from utility.serializers import (
     BaseResponseError,
@@ -27,8 +27,8 @@ from .tools.contribution_manage import (
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def member_quest(request, project_id:int):
     '''
     [GET] Get member quest board
@@ -37,8 +37,8 @@ def member_quest(request, project_id:int):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timeline(request, project_id:int):
     '''
     [GET] Get project timeline
