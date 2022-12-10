@@ -121,7 +121,7 @@ def project_timetable(request, project_id:int):
     if project is None:
         return HttpResponse(status=401)
     data = get_project_timetable(project)
-    return JsonResponse(data, status=200)
+    return JsonResponse(data, safe=False, status=200)
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
