@@ -33,12 +33,12 @@ def return_bad_request_if_does_not_exist(func):
             return HttpResponse(status=404)
     return capsule_func
 
-def return_bad_request_if_not_authorized(auth_type): 
-    def capsule_decorator(func): 
+def return_bad_request_if_not_authorized(auth_type):
+    def capsule_decorator(func):
         @wraps(func)
         def capsule_func(request: Request, *args, **kwargs) :
             project: Project = None
-            
+
             if auth_type == AuthType.TASK:
                 task = Task.objects.get(id=kwargs.get("task_id"))
                 project = task.project
