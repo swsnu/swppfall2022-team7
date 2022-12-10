@@ -8,6 +8,7 @@ urlpatterns = [
     path('change/', views.change),
     path('info/<int:user_id>/', views.info),
     path('search/<str:query>/', views.auto_compelete),
+    path('search/<int:project_id>/<str:query>/', views.auto_compelete_member),
     path('timetable/<int:user_id>/', views.timetable),
     path('timetable/<int:user_id>/m/', views.m_timetable),
     path('noti/', views.noti),

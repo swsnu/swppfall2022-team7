@@ -7,7 +7,10 @@ from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
-    return_bad_request_if_exception
+    return_bad_request_if_exception,
+    return_bad_request_if_not_authorized,
+    return_bad_request_if_does_not_exist,
+    AuthType
 )
 from utility.serializers import (
     BaseResponseError,
@@ -58,6 +61,8 @@ def m_project(request: HttpRequest):
 @api_view(['GET'])
 @require_http_methods(['GET'])
 @return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_detail(request, project_id:int):
     project = get_project_by_id(project_id)
     if project is None :
@@ -77,6 +82,8 @@ def project_detail(request, project_id:int):
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_exception
 @return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_project_detail(request: HttpRequest, project_id:int):
     # user = request.user
     project = get_project_by_id(project_id)
@@ -95,6 +102,8 @@ def m_project_detail(request: HttpRequest, project_id:int):
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
 @return_bad_request_if_anonymous
+@return_bad_request_if_does_not_exist
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_member(request, project_id:int, member_id: int):
     # user = request.user
     project = get_project_by_id(project_id)

@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.core.mail import EmailMessage
 
 from model_user.models import UserVerification
+from model_project.models import Project, UserProject
 
 def send_email(email: str, title: str, content: str): 
     email = EmailMessage(
@@ -79,9 +80,22 @@ def send_invite_email(user_email: str, project) :
     # )
     return
 
-def listup_user_by_query(query: str) :
-    user_list = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username').values()
-    
+def listup_user_by_query(query: str, project_id = -1) :
+    if project_id != -1 :
+        project = Project.objects.get(id=project_id)
+        user_projects = UserProject.objects.filter(
+            Q(project=project) & 
+            Q(user__is_active=True) & 
+            (Q(user__email__contains=query) | Q(user__username__contains=query))
+        ).select_related('user')
+        user_list = [{
+            "email": user_project.user.email,
+            "username": user_project.user.username,
+            "id": user_project.user.id
+        } for user_project in user_projects]
+    else :
+        user_list = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username').values()
+
     return [{
         "email": user['email'],
         "username": user['username'],
