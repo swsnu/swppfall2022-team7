@@ -48,8 +48,6 @@ from .serializers import (
     ResponseSignupPOSTSerializer401,
 )
 
-from model_user.models import Image
-
 # Create your views here.
 @swagger_auto_schema(
     methods=['POST'],
@@ -185,7 +183,7 @@ def image(request):
     '''
     [GET] Get the image of the user
     '''
-    img: Image = get_profile(request.user)
+    get_profile(request.user)
     return Response(status=200, data=convert_user_to_dict(request.user))
 
 @api_view(['POST', 'DELETE'])
