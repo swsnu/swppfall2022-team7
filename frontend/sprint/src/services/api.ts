@@ -6,6 +6,8 @@ export const SIGNUP_URL = 'user/signup/';
 export const GET_USER_URL = (userId: string): string => `user/info/${userId}/`;
 export const AUTO_COMPLETE_URL = (query: string, projectId: number = -1): string => projectId === -1 ? `user/search/${query}/` : `user/search/${projectId}/${query}`;
 export const EDIT_USER_URL = 'user/change/';
+export const GET_IMAGE_URL = 'user/image/';
+export const EDIT_IMAGE_URL = 'user/image/m/';
 
 export const GET_NOTI_URL = 'user/noti/';
 export const GET_NEW_NOTI_URL = 'user/noti/short/0/';

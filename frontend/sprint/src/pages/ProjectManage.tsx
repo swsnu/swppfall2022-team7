@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { List, Avatar, Button, Modal, AutoComplete, Input, message, Tag } from 'antd';
+import { List, Button, Modal, AutoComplete, Input, message, Tag } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
 import UserCard from '@components/UserCard';
 import { useNavigate, useParams } from 'react-router-dom';
-import { iconString } from '@utils/utils';
+import UserAvatar from '@components/UserAvatar';
 
 const ProjectManage: React.FC = () => {
   const { projectId } = useParams();
@@ -165,7 +165,7 @@ const ProjectManage: React.FC = () => {
                   ]}
                 >
                   <List.Item.Meta
-                    avatar={<Avatar>{iconString(item.username)}</Avatar>}
+                    avatar={<UserAvatar user={item} />}
                     title={
                     <div>
                       {item.username}

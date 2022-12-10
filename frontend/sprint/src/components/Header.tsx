@@ -1,15 +1,16 @@
-import { Layout, Avatar, Popover, Button, Badge } from 'antd';
+import { Layout, Popover, Button, Badge } from 'antd';
 import { BellFilled, FireFilled } from '@ant-design/icons';
 import Notification from './Notification';
 import { useNavigate } from 'react-router-dom';
 import useBindStore from '@store/zustand';
 import UserMenu from './UserMenu';
-import { iconString } from '@utils/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import UserAvatar from './UserAvatar';
 
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
+  const [openUser, setOpenUser] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const user = useBindStore(state => state.user);
@@ -41,8 +42,8 @@ const Header: React.FC = () => {
               {newNoti === 0 ? <BellFilled className="bell-icon" /> : <Badge size="small" count={newNoti}><BellFilled className="bell-icon" /></Badge>}
             </Button>
           </Popover>
-          <Popover trigger="click" content={<UserMenu />} placement="bottomRight">
-            <Avatar className="avatar">{iconString(user?.username ?? '')}</Avatar>
+          <Popover open={openUser} trigger="click" content={<UserMenu setOpenUser={setOpenUser} />} placement="bottomRight" onOpenChange={open => setOpenUser(open)}>
+            <div>{user !== null && <UserAvatar className="avatar" user={user} />}</div>
           </Popover>
         </div>
       </>
