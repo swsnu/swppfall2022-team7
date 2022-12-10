@@ -1,4 +1,4 @@
-import { AUTO_COMPLETE_URL, GET_NEW_NOTI_URL, GET_NOTI_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
+import { AUTO_COMPLETE_URL, EDIT_USER_URL, GET_NEW_NOTI_URL, GET_NOTI_URL, GET_USER_URL, SIGNIN_URL, SIGNOUT_URL, SIGNUP_URL } from '@services/api';
 import axios from 'axios';
 import { StateCreator } from 'zustand';
 import useBindStore, { SliceType } from '.';
@@ -29,6 +29,7 @@ export interface UserSlice {
   getUser: () => Promise<void>
   getAutoComplete: (query: string, projectId: number) => Promise<UserType[]>
   getUserName: (userId: string) => Promise<string>
+  editUser: (userName: string) => Promise<void>
 };
 
 export const createUserSlice: StateCreator<
@@ -82,5 +83,8 @@ UserSlice
   getUserName: async (userId: string) => {
     const res = await axios.get(GET_USER_URL(userId));
     return res.data.username as string;
+  },
+  editUser: async (userName: string) => {
+    await axios.put(EDIT_USER_URL, { username: userName });
   }
 });
