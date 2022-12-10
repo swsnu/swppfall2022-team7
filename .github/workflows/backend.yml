@@ -28,6 +28,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - run: |
+          # Hack to get setup-python to work on act
+          if [ ! -f "/etc/lsb-release" ] ; then
+            echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
+          fi
+          
       - name: Set up Python3.9.6
         uses: actions/setup-python@v2
         with:
