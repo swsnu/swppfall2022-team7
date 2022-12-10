@@ -5,6 +5,7 @@ import { Button, message, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AWS from 'aws-sdk';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface DocumentPanelProps {
   documentSpace: DocumentSpaceType
@@ -55,11 +56,13 @@ const columns: ColumnsType<TableDataType> = [
 ];
 
 const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: DocumentPanelProps) => {
+  const { projectId } = useParams();
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [nextHead, setNextHead] = useState<number>(documentSpace.head);
   const [changingHead, setChangingHead] = useState(false);
   const getUserName = useBindStore(state => state.getUserName);
   const changeDocumentSpaceHead = useBindStore(state => state.changeDocumentSpaceHead);
+  const getDocumentSpaces = useBindStore(state => state.getDocumentSpaces);
   const rowSelection = {
     getCheckboxProps: (record: TableDataType) => ({
       disabled: record.head
@@ -109,8 +112,8 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
             lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
             uploader: fileUploader
           });
-          setTableData(newList);
         }
+        setTableData(newList);
       };
       void setFile();
     });
@@ -119,6 +122,7 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
   const onClickChangeHead = async (): Promise<void> => {
     setChangingHead(true);
     await changeDocumentSpaceHead(documentSpace.id, nextHead);
+    await getDocumentSpaces(parseInt(projectId ?? '0'));
     setChangingHead(false);
   };
 
