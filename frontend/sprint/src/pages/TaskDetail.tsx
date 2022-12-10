@@ -13,6 +13,7 @@ const TaskDetail: React.FC = () => {
   const project = useBindStore(state => state.selectedProject);
   const task = useBindStore(state => state.selectedTask);
   const editTask = useBindStore(state => state.editTask);
+  const selectProject = useBindStore(state => state.selectProject);
   const selectTask = useBindStore(state => state.selectTask);
   const deleteTask = useBindStore(state => state.deleteTask);
 
@@ -36,6 +37,7 @@ const TaskDetail: React.FC = () => {
   const onSaveClicked = async (): Promise<void> => {
     setTaskInfo({ name: editedName, content: editedContent, dueDate: editedDate });
     await editTask(parseInt(taskId ?? '0'), editedName ?? '', editedContent ?? '', editedAssignee ?? 0, editedDate ?? '');
+    await selectProject(parseInt(projectId ?? '0'));
     await selectTask(parseInt(taskId ?? '0'));
     setEdit(false);
   };
@@ -74,7 +76,7 @@ const TaskDetail: React.FC = () => {
                   allowClear
                   style={{ width: 240, marginRight: 12 }}
                   defaultValue={task?.assignee?.id}
-                  options={project?.member_list.map(member => ({ value: member.id, label: member.username, key: member.id }))}
+                  options={[{ value: -1, key: -1, label: 'no assignee' }, ...(project?.member_list.map(member => ({ value: member.id, label: member.username, key: member.id })) ?? [])]}
                   onSelect={(value: number, _: any) => setEditedAssignee(value)}
                   onClear={() => setEditedAssignee(-1)}
                 />
