@@ -60,6 +60,8 @@ def edit_task_detail(task: Task, get_data: dict, requester):
         if assignee_id != -1 :
             user = get_user_model().objects.get(id=assignee_id)
             task.assignee = user
+        else :
+            task.assignee = None
 
     if 'name' in get_data :
         task.name = get_data['name']

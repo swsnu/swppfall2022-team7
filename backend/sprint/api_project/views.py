@@ -6,10 +6,8 @@ from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
-    return_bad_request_if_anonymous,
-    return_bad_request_if_exception,
+    return_bad_request_decorator,
     return_bad_request_if_not_authorized,
-    return_bad_request_if_does_not_exist,
     AuthType
 )
 from utility.serializers import (
@@ -33,7 +31,7 @@ from .serializers import (
 # Create your views here.
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 def user_project(request, user_id:int):
     user = get_user_by_id(user_id)
     if user is None :
@@ -52,8 +50,7 @@ def user_project(request, user_id:int):
 )
 @api_view(['POST'])
 @require_http_methods(['POST'])
-@return_bad_request_if_exception
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 def m_project(request: HttpRequest):
     data=json.loads(request.body.decode())
     project = create_project(data, request.user)
@@ -61,8 +58,7 @@ def m_project(request: HttpRequest):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_detail(request, project_id:int):
     project = get_project_by_id(project_id)
@@ -81,9 +77,7 @@ def project_detail(request, project_id:int):
 )
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-@return_bad_request_if_exception
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_project_detail(request: HttpRequest, project_id:int):
     # user = request.user
@@ -102,8 +96,7 @@ def m_project_detail(request: HttpRequest, project_id:int):
 
 @api_view(['PUT', 'DELETE'])
 @require_http_methods(['PUT', 'DELETE'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_member(request, project_id:int, member_id: int):
     # user = request.user
@@ -121,7 +114,7 @@ def m_member(request, project_id:int, member_id: int):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable(request, project_id:int):
     project = get_project_by_id(project_id)
@@ -132,7 +125,7 @@ def project_timetable(request, project_id:int):
 
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
+@return_bad_request_decorator
 @return_bad_request_if_not_authorized(AuthType.PROJECT)
 def project_timetable_detail(request, project_id:int, row:int, col:int):
     project = get_project_by_id(project_id)
