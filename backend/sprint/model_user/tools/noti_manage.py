@@ -13,7 +13,7 @@ def convert_upa_to_message(upa: UserProjectActivity) :
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_COMMENT :
         message = f"<b>{upa.user_project.user.username}</b> commented on <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.UPLOAD_DOCUMENT :
-        message = f"<b>{upa.user_project.user.username}</b> uploaded a new document <b>{upa.document.name}</b> to <b>{upa.user_project.project}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> uploaded a new document to <b>{upa.user_project.project}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.ASSIGNED_TASK :
         message = f"<b>{upa.user_project.user.username}</b> assigned to the task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.EDIT_TASK :

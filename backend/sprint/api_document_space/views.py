@@ -44,7 +44,7 @@ def list_docuspace(request, project_id:int):
 @api_view(['POST'])
 @require_http_methods(['POST'])
 @return_bad_request_decorator
-@return_bad_request_if_not_authorized(AuthType.DOCUMENT)
+@return_bad_request_if_not_authorized(AuthType.PROJECT)
 def m_docuspace(request, project_id:int):
     '''
     [POST] Create new document space
