@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import datetime
 from model_user.models import Timetable, get_user_model
 
 def get_timetable_of_user(user: get_user_model):
@@ -12,11 +12,11 @@ def get_timetable_of_user(user: get_user_model):
 def create_initial_timetable():
     ret = []
     week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    time = time(hour=9)
-    while time < time(hour=24):
+    ti = datetime.time(hour=9)
+    while ti < datetime.time(hour=24):
         ret.append({
-            'time': datetime.strftime(time, '%H:%M'),
+            'time': datetime.datetime.strftime(time, '%H:%M'),
             'board': { w:'Freetime' for w in week }
         })
-        time += timedelta(minutes=30)
+        time += datetime.timedelta(minutes=30)
     return ret
