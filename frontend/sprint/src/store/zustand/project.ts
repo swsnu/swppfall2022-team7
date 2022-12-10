@@ -34,6 +34,7 @@ export interface ProjectSlice {
   deleteProject: (projectId: number) => Promise<void>
   addMember: (projectId: number, idList: number[]) => Promise<void>
   deleteMember: (projectId: number, userId: number) => Promise<void>
+  assignManager: (projectId: number, userId: number) => Promise<void>
 };
 
 export const createProjectSlice: StateCreator<
@@ -69,5 +70,8 @@ ProjectSlice
   },
   deleteMember: async (projectId: number, userId: number) => {
     await axios.delete(UPDATE_MEMBER_URL(projectId, userId));
+  },
+  assignManager: async (projectId: number, userId: number) => {
+    await axios.put(UPDATE_PROJECT_URL(projectId), { manager: userId });
   }
 });
