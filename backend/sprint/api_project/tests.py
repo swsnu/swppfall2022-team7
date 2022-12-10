@@ -156,7 +156,7 @@ class ProjectTestCase(TestCase):
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
-        # Right Test
+        # Right Test good
         response = client.put(url)
         self.assertEqual(response.status_code, 401)
 
