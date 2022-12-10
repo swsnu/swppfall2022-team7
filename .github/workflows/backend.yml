@@ -35,10 +35,10 @@ jobs:
             echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
           fi
 
-      - name: Set up Python3.9.6
-        uses: actions/setup-python@v3
+      - name: Set up Python3.10.6
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.9.6
+          python-version: 3.10.6
 
       - name: Install
         run: |
