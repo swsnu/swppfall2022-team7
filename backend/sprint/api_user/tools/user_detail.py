@@ -30,6 +30,7 @@ def upload_profile(user: User, img):
     image = Image.objects.filter(user=user)
     if image.exists() :
         image = image.first()
+        os.remove(os.path.join(settings.MEDIA_ROOT, image.image.name))
         image.image = img
         image.save()
     else :
@@ -57,4 +58,4 @@ def get_image_path_of_user(user: User):
     img = get_profile(user)
     if img is None:
         return ''
-    return img.name
+    return img.image.name
