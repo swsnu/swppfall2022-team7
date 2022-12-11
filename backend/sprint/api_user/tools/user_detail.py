@@ -57,4 +57,4 @@ def get_image_path_of_user(user: User):
     img = get_profile(user)
     if img is None:
         return ''
-    return img.name
+    return img.image.name
