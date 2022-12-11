@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from model_project.models import Task, Project, TaskDocumentSpace, DocumentSpace, UserProject, UserProjectActivity
-from model_user.models import get_user_model
+from model_user.models import get_user_model, Image
 from utility.date_string import date_to_string, string_to_date, date_to_string_day
 from model_project.tools.activity_manage import push_activity
 from model_project.tools.project_manage import get_task_document_space_list
@@ -41,7 +41,7 @@ def get_task_detail(task: Task):
         'id': task.id,
         'projectId': task.project.id,
         'project': task.project.name,
-        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
+        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username, 'image': Image.objects.get(user=task.assignee).image.name } if task.assignee is not None else {'id': -1, 'username': 'none', 'image': ''},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),

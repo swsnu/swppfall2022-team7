@@ -1,5 +1,6 @@
 from model_project.models import Comment, Reaction, UserProject, UserProjectActivity
 from model_project.tools.activity_manage import push_activity
+from model_user.models import Image
 
 def get_reaction_list_by_comment_id(comment_id): 
     comment = Comment.objects.get(id = comment_id)
@@ -10,6 +11,7 @@ def get_reaction_list_by_comment_id(comment_id):
             "id": reaction.user.id,
             "username": reaction.user.username,
             "email": reaction.user.email,
+            "image": Image.objects.get(user=reaction.user).image.name
         },
         "created_at": reaction.created_at,
         "emoji": reaction.emoji

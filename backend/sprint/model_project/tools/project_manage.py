@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from model_project.models import Project, UserProject, Task, DocumentSpace, TaskDocumentSpace
+from model_user.models import Image
 from utility.date_string import date_to_string
 
 def get_project_by_id(id: int) :
@@ -18,7 +19,8 @@ def get_project_member_list(project: Project) :
         member_list.append({
             "id": member.id,
             "username": member.username,
-            "email": member.email
+            "email": member.email,
+            'image': Image.objects.get(user=member).image.name
         })
     return member_list
 
