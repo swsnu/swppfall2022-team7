@@ -34,6 +34,7 @@ export interface UserSlice {
   getUserName: (userId: string) => Promise<string>
   editUser: (userName: string) => Promise<void>
   uploadImage: (file: RcFile) => Promise<void>
+  deleteImage: () => Promise<void>
 };
 
 export const createUserSlice: StateCreator<
@@ -93,5 +94,8 @@ UserSlice
   },
   uploadImage: async (file: RcFile) => {
     await axios.post(EDIT_IMAGE_URL, { image: file }, { headers: { 'Content-Type': 'multipart/form-data' } });
+  },
+  deleteImage: async () => {
+    await axios.delete(EDIT_IMAGE_URL);
   }
 });
