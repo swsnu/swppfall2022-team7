@@ -52,3 +52,9 @@ def delete_profile(user: User):
         img = img.first()
         os.remove(os.path.join(settings.MEDIA_ROOT, img.image.name))
         img.delete()
+
+def get_image_path_of_user(user: User):
+    img = get_profile(user)
+    if img is None:
+        return ''
+    return img.name

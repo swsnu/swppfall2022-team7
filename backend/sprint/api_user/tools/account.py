@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.db.models import Q
 from django.core.mail import EmailMessage
 
-from model_user.models import UserVerification, Image
+from model_user.models import UserVerification, Image, get_user_model
 from model_project.models import Project, UserProject
 
 def send_email(email: str, title: str, content: str): 
@@ -105,5 +105,5 @@ def listup_user_by_query(query: str, project_id = -1) :
     return [{
         "email": user['email'],
         "username": user['username'],
-        "id": user['id']
+        "id": user['id'],
     } for user in user_list]
