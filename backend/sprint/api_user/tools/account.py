@@ -94,16 +94,9 @@ def listup_user_by_query(query: str, project_id = -1) :
             Q(user__is_active=True) & 
             (Q(user__email__contains=query) | Q(user__username__contains=query))
         ).select_related('user')
-        user_list = [{
-            "email": user_project.user.email,
-            "username": user_project.user.username,
-            "id": user_project.user.id
-        } for user_project in user_projects]
+        user_list = [convert_user_to_dict(user_project.user) for user_project in user_projects]
     else :
-        user_list = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username').values()
+        users = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username')
+        user_list = [convert_user_to_dict(user) for user in users]
 
-    return [{
-        "email": user['email'],
-        "username": user['username'],
-        "id": user['id'],
-    } for user in user_list]
+    return user_list
