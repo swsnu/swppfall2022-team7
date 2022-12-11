@@ -1,8 +1,7 @@
 import useBindStore from '@store/zustand';
-import { Avatar, Button, Input, message, Upload } from 'antd';
+import { Button, Input, message, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { useState, useEffect } from 'react';
-import { iconString, parseUrl } from '@utils/utils';
 import UserAvatar from '@components/UserAvatar';
 
 const UserProfile: React.FC = () => {
@@ -23,17 +22,15 @@ const UserProfile: React.FC = () => {
 
   const beforeUpload = async (file: RcFile): Promise<boolean> => {
     const isJpgorPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isJpgorPng) {
       void message.error('You can only upload JPG/PNG file');
-      return false;
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
+    } else if (!isLt2M) {
       void message.error('Image must be smaller than 2MB');
-      return false;
+    } else {
+      await uploadImage(file);
+      await getUser();
     }
-    await uploadImage(file);
-    await getUser();
     return false;
   };
 
