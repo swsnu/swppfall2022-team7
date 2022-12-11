@@ -1,9 +1,9 @@
 import { UserType } from '@store/zustand/user';
 import { iconString, parseUrl } from '@utils/utils';
-import { Avatar, Image } from 'antd';
+import { Avatar } from 'antd';
 
 interface UserAvatarProps {
-  className?: string | undefined
+  className?: string
   size?: 'small' | number
   user: Omit<UserType, 'email' | 'id'>
 };
