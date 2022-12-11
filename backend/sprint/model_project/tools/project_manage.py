@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from model_project.models import Project, UserProject, Task, DocumentSpace, TaskDocumentSpace
-from model_user.models import Image
+from api_user.tools.user_detail import get_image_path_of_user
 from utility.date_string import date_to_string
 
 def get_project_by_id(id: int) :
@@ -20,7 +20,7 @@ def get_project_member_list(project: Project) :
             "id": member.id,
             "username": member.username,
             "email": member.email,
-            'image': Image.objects.get(user=member).image.name
+            'image': get_image_path_of_user(member)
         })
     return member_list
 

@@ -1,13 +1,13 @@
 from model_project.models import UserProject, Project, Task, Comment, UserProjectActivity
 from model_project.tools.activity_manage import push_activity
-from model_user.models import Image
+from api_user.tools.user_detail import get_image_path_of_user
 from api_reaction.tools.reaction_manage import get_reaction_list_by_comment_id
 from utility.date_string import date_to_string
 
 def convert_comment_to_dict(comment: Comment): 
     return {
         "id": comment.pk,
-        "writer": { "id": comment.user.id, "username": comment.user.username, "image": Image.objects.get(user=comment.user).image.name },
+        "writer": { "id": comment.user.id, "username": comment.user.username, "image": get_image_path_of_user(comment.user) },
         "content": comment.content,
         "created_at": date_to_string(comment.created_at),
         "reaction_list": get_reaction_list_by_comment_id(comment.id)
