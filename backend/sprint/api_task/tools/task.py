@@ -6,6 +6,7 @@ from utility.date_string import date_to_string, string_to_date, date_to_string_d
 from model_project.tools.activity_manage import push_activity
 from model_project.tools.project_manage import get_task_document_space_list
 from api_comment.tools.comment_manage import get_comment_list_by_task_id
+from api_user.tools.user_detail import get_image_path_of_user
 
 def get_task_list(project: Project, user: get_user_model()):
     tasks = Task.objects.filter(project=project)
@@ -41,7 +42,7 @@ def get_task_detail(task: Task):
         'id': task.id,
         'projectId': task.project.id,
         'project': task.project.name,
-        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username } if task.assignee is not None else {'id': -1, 'username': 'none'},
+        'assignee': { 'id': task.assignee.id, 'username': task.assignee.username, 'image': get_image_path_of_user(task.assignee) } if task.assignee is not None else {'id': -1, 'username': 'none', 'image': ''},
         'name': task.name,
         'content': task.content,
         'createdAt': date_to_string(task.created_at),

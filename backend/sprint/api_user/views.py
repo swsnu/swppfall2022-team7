@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
 from model_user.tools.user_manage import get_user_by_id
+from api_user.tools.user_detail import get_image_path_of_user
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
@@ -90,7 +91,8 @@ def signin(request: Request):
             "token" : token,
             "id" : user.id,
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            'image': get_image_path_of_user(user)
         })
     return Response(status=401)
 
