@@ -70,7 +70,7 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
     onChange: (selectedRowKeys: React.Key[], _: TableDataType[]) => {
       const fileName = selectedRowKeys[0] as string;
       const fileId = parseDocId(fileName);
-      setNextHead(parseInt(fileId ?? '0'));
+      setNextHead(parseInt(fileId));
     }
   };
   AWS.config.region = 'ap-northeast-2';
@@ -103,12 +103,12 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
           });
           const parsedUserId = parseUserId(file.Key ?? '');
           const parsedDocId = parseDocId(file.Key ?? '');
-          const fileUploader = await getUserName(parsedUserId ?? '0');
+          const fileUploader = await getUserName(parsedUserId);
           newList.unshift({
             key: file.Key ?? 'undefined',
             filename: file.Key ?? 'undefined',
             url,
-            head: parseInt(parsedDocId ?? '0') === documentSpace.head,
+            head: parseInt(parsedDocId) === documentSpace.head,
             lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
             uploader: fileUploader
           });
