@@ -10,6 +10,7 @@ const UserProfile: React.FC = () => {
   const editUser = useBindStore(state => state.editUser);
   const getUser = useBindStore(state => state.getUser);
   const uploadImage = useBindStore(state => state.uploadImage);
+  const deleteImage = useBindStore(state => state.deleteImage);
   const [editedName, setEditedName] = useState('');
   const onSaveClick = async (): Promise<void> => {
     await editUser(editedName);
@@ -36,6 +37,11 @@ const UserProfile: React.FC = () => {
     return false;
   };
 
+  const onDeleteClick = async (): Promise<void> => {
+    await deleteImage();
+    await getUser();
+  };
+
   return (
     <div className="user-profile">
       <Upload
@@ -44,7 +50,7 @@ const UserProfile: React.FC = () => {
       >
         {user !== null && <UserAvatar className="profile-image" size={256} user={user} />}
       </Upload>
-      <Button className="delete-image">Delete Image</Button>
+      <Button className="delete-image" onClick={() => { void onDeleteClick(); }}>Delete Image</Button>
       <div className="name-edit">
         Username
         <div className="name-flex">
