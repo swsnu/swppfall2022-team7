@@ -9,7 +9,7 @@ def convert_upa_to_message(upa: UserProjectActivity) :
     if upa.activity_type == UserProjectActivity.ActivityType.CREATE_TASK :
         message = f"<b>{upa.user_project.user.username}</b> created a new task <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_DOCUMENT_SPACE :
-        message = f"<b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.user_project.project}</b>"
+        message = f"<b>{upa.user_project.user.username}</b> created a new document space <b>{upa.document_space.name}</b> to <b>{upa.user_project.project.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.CREATE_COMMENT :
         message = f"<b>{upa.user_project.user.username}</b> commented on <b>{upa.task.name}</b>"
     elif upa.activity_type == UserProjectActivity.ActivityType.UPLOAD_DOCUMENT :
