@@ -1,6 +1,5 @@
 import useBindStore from '@store/zustand';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { renderWithProviders } from '@utils/mocks';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { fakeProject1, fakeProject2 } from '@utils/testDummy';
 import axios from 'axios';
 import Home from './Home';
@@ -15,7 +14,20 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
+jest.mock('../components/NewProjectCard.tsx', () => ()=> {
+  return <div>newProjectCard</div>;
+});
+
+jest.mock('../components/ProjectCard.tsx', () => ()=> {
+  return <div>ProjectCard</div>;
+});
+
+jest.mock('../components/MyTasks.tsx', () => ()=> {
+  return <div>MyTasks</div>;
+});
+
 describe('<Home />', () => {
+  let AD: JSX.Element;
   function createMockLocalStorage (storage: any): void {
     const localStorageMock = (function () {
       let store: any = storage;
@@ -36,6 +48,7 @@ describe('<Home />', () => {
     });
   };
   beforeAll(() => {
+    AD = <Home />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -43,13 +56,28 @@ describe('<Home />', () => {
       };
     };
   });
-  it('should render', () => {
+  it('should render', async () => {
     createMockLocalStorage({ userId: 'a' });
     axios.get = jest.fn().mockResolvedValue({ data: { project_list: [fakeProject1, fakeProject2] } });
-    const AD = <Home />;
     const i = useBindStore.getState();
-    i.selectedProject = fakeProject1;
     useBindStore.setState(i, true);
-    render(AD);
+    await act(async () => { render(AD); });
+  });
+  it('should handle navigate to new project', async () => {
+    createMockLocalStorage({ userId: 'a' });
+    axios.get = jest.fn().mockResolvedValue({ data: { project_list: [fakeProject1, fakeProject2] } });
+    const i = useBindStore.getState();
+    i.projects = [fakeProject1, fakeProject2];
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const button = screen.getByRole('button');
+    await act(async () => { fireEvent.click(button); });
+  });
+  it('should handle no userId', async () => {
+    localStorage.clear();
+    const i = useBindStore.getState();
+    i.projects = [fakeProject1, fakeProject2];
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
   });
 });
