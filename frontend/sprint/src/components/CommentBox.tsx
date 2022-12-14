@@ -1,10 +1,10 @@
 import useBindStore from '@store/zustand';
 import { CommentType, ReactionType } from '@store/zustand/task';
-import { iconString } from '@utils/utils';
-import { Avatar, Button, Comment, Input } from 'antd';
+import { Button, Comment, Input } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Reaction from './Reaction';
+import UserAvatar from './UserAvatar';
 
 interface CommentProps {
   commentList: CommentType[] | undefined
@@ -59,13 +59,13 @@ const CommentBox: React.FC<CommentProps> = ({ commentList }: CommentProps) => {
               : null
           ]}
           author={<a>{comment.writer.username}</a>}
-          avatar={<Avatar>{iconString(comment.writer.username)}</Avatar>}
+          avatar={<UserAvatar user={comment.writer} />}
           content={<p>{comment.content}</p>}
           datetime={comment.created_at}
         />
       ))}
       <Comment
-        avatar={<Avatar>{iconString(user?.username ?? '')}</Avatar>}
+        avatar={user !== null ? <UserAvatar user={user} /> : null}
         content={Editor}
       />
     </div>

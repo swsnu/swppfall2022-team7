@@ -139,20 +139,20 @@ class UserTestCase(TestCase):
 
     def test_image(self):
         client = Client()
-        url = self.url+'image/1/'
+        url = self.url+'image/'
         # Wrong Method Test
         response = client.post(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_m_image(self):
         client = Client()
-        url = self.url+'image/1/m/'
+        url = self.url+'image/m/'
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
         # Right Test
         response = client.post(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)

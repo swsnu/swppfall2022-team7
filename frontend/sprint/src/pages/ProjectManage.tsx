@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import { List, Avatar, Button, Modal, AutoComplete, Input, message } from 'antd';
+import { ReactNode, useEffect, useState } from 'react';
+import { List, Button, Modal, AutoComplete, Input, message, Tag } from 'antd';
 import AutoOption from '@components/AutoOption';
 import { UserType } from '@store/zustand/user';
 import useBindStore from '@store/zustand';
 import { BaseOptionType } from 'antd/lib/select';
 import UserCard from '@components/UserCard';
 import { useNavigate, useParams } from 'react-router-dom';
-import { iconString } from '@utils/utils';
+import UserAvatar from '@components/UserAvatar';
+import { items } from '@routes/menuconfig';
 
 const ProjectManage: React.FC = () => {
   const { projectId } = useParams();
@@ -28,14 +29,20 @@ const ProjectManage: React.FC = () => {
   const selectProject = useBindStore(state => state.selectProject);
   const editProject = useBindStore(state => state.editProject);
   const deleteProject = useBindStore(state => state.deleteProject);
+  const assignManager = useBindStore(state => state.assignManager);
   const isManager = project?.manager === user?.id;
   const [projectName, setProjectName] = useState(project?.name);
   const [projectSubject, setProjectSubject] = useState(project?.subject);
 
   useEffect(() => {
+    setProjectName(project?.name);
+    setProjectSubject(project?.subject);
+  }, [project]);
+
+  useEffect(() => {
     const asyncGetAutoComplete = async (): Promise<void> => {
       if (query === '') return;
-      const autoComplete = await getAutoComplete(query);
+      const autoComplete = await getAutoComplete(query, -1);
       setQueryList(autoComplete);
     };
     void asyncGetAutoComplete();
@@ -67,7 +74,18 @@ const ProjectManage: React.FC = () => {
     await selectProject(parseInt(projectId));
   };
 
+  const onDelegateClick = async (userId: number): Promise<void> => {
+    if (!window.confirm('Do you want to give the manager to this user? Your authorities will be lost.')) return;
+    if (projectId === undefined) return;
+    await assignManager(parseInt(projectId), userId);
+    await selectProject(parseInt(projectId));
+  };
+
   const onLeaveClick = async (userId: number): Promise<void> => {
+    if (isManager) {
+      alert('You should assign a manager before leaving the project');
+      return;
+    }
     if (!window.confirm('Do you want to leave this project?')) return;
     if (projectId === undefined) return;
     await deleteMember(parseInt(projectId), userId);
@@ -104,6 +122,19 @@ const ProjectManage: React.FC = () => {
     setDissolve('');
   };
 
+  const memberActions = (item: UserType): ReactNode[] => {
+    if (user?.id === item.id) return [<a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>];
+    else if (isManager) {
+      return [
+        <>
+          <a className="give-manager" onClick={() => { void onDelegateClick(item.id); }}>delegate</a>
+          <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a>
+        </>
+      ];
+    }
+    return [null];
+  };
+
   return (
     <>
       <div className="project-manage">
@@ -137,14 +168,16 @@ const ProjectManage: React.FC = () => {
               dataSource={project?.member_list}
               renderItem={item => (
                 <List.Item
-                  actions={[user?.id !== item.id
-                    ? isManager ? <a key="list-delete" onClick={() => { void onDeleteClick(item.id); }}>delete</a> : null
-                    : <a key="list-delete" onClick={() => { void onLeaveClick(item.id); }}>leave</a>
-                  ]}
+                  actions={memberActions(item)}
                 >
                   <List.Item.Meta
-                    avatar={<Avatar>{iconString(item.username)}</Avatar>}
-                    title={item.username}
+                    avatar={<UserAvatar user={item} />}
+                    title={
+                    <div>
+                      {item.username}
+                      {item.id === project?.manager ? <Tag className="manager-tag">Manager</Tag> : null}
+                    </div>
+                    }
                     description={item.email}
                   />
                 </List.Item>

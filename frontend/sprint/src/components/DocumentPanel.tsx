@@ -1,9 +1,11 @@
 import useBindStore from '@store/zustand';
 import { DocumentSpaceType } from '@store/zustand/documentSpace';
+import { parseDocId, parseUserId } from '@utils/utils';
 import { Button, message, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AWS from 'aws-sdk';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface DocumentPanelProps {
   documentSpace: DocumentSpaceType
@@ -54,19 +56,21 @@ const columns: ColumnsType<TableDataType> = [
 ];
 
 const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: DocumentPanelProps) => {
+  const { projectId } = useParams();
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [nextHead, setNextHead] = useState<number>(documentSpace.head);
   const [changingHead, setChangingHead] = useState(false);
   const getUserName = useBindStore(state => state.getUserName);
   const changeDocumentSpaceHead = useBindStore(state => state.changeDocumentSpaceHead);
+  const getDocumentSpaces = useBindStore(state => state.getDocumentSpaces);
   const rowSelection = {
     getCheckboxProps: (record: TableDataType) => ({
       disabled: record.head
     }),
     onChange: (selectedRowKeys: React.Key[], _: TableDataType[]) => {
       const fileName = selectedRowKeys[0] as string;
-      const fileId = fileName.split(/[/,_]/)[2];
-      setNextHead(parseInt(fileId ?? '0'));
+      const fileId = parseDocId(fileName);
+      setNextHead(parseInt(fileId));
     }
   };
   AWS.config.region = 'ap-northeast-2';
@@ -97,14 +101,14 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
             Expires: 604799,
             ResponseContentDisposition: `attachment; filename ="${file.Key ?? 'asdf.txt'}"`
           });
-          const parsedUserId = file.Key?.split(/[/,_]/)[1];
-          const parsedDocId = file.Key?.split(/[/,_]/)[2];
-          const fileUploader = await getUserName(parsedUserId ?? '0');
+          const parsedUserId = parseUserId(file.Key ?? '');
+          const parsedDocId = parseDocId(file.Key ?? '');
+          const fileUploader = await getUserName(parsedUserId);
           newList.unshift({
             key: file.Key ?? 'undefined',
             filename: file.Key ?? 'undefined',
             url,
-            head: parseInt(parsedDocId ?? '0') === documentSpace.head,
+            head: parseInt(parsedDocId) === documentSpace.head,
             lastmodified: file.LastModified?.toISOString().replace('T', ' ').replace('Z', '') ?? 'undefined',
             uploader: fileUploader
           });
@@ -118,6 +122,7 @@ const DocumentPanel: React.FC<DocumentPanelProps> = ({ documentSpace }: Document
   const onClickChangeHead = async (): Promise<void> => {
     setChangingHead(true);
     await changeDocumentSpaceHead(documentSpace.id, nextHead);
+    await getDocumentSpaces(parseInt(projectId ?? '0'));
     setChangingHead(false);
   };
 

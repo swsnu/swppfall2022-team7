@@ -1,12 +1,11 @@
 import { UserType } from '@store/zustand/user';
-import { iconString } from '@utils/utils';
-import { Avatar } from 'antd';
+import UserAvatar from './UserAvatar';
 
 const AutoOption: React.FC<{ member: UserType }> = ({ member }: { member: UserType }) => {
   return (
     <div className="auto-option">
       <div className="avatar">
-        <Avatar size="small" className="profile-image">{iconString(member.username)}</Avatar>
+        <UserAvatar size="small" className="profile-image" user={member} />
         {member.username}
       </div>
       <div className="email">

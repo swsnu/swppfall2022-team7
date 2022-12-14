@@ -8,6 +8,7 @@ import MenuRouter from '@layouts/MenuRouter';
 import Login from '@pages/Login';
 import SignUp from '@pages/SignUp';
 import PrivateRoute from '@layouts/PrivateRoute';
+import UserProfile from '@pages/UserProfile';
 
 export const routes: RouteObject[] = [
   {
@@ -20,6 +21,13 @@ export const routes: RouteObject[] = [
     children: [
       { path: '/login', element: <Login /> },
       { path: '/signup', element: <SignUp /> },
+      {
+        path: '/profile',
+        element: <PrivateRoute />,
+        children: [
+          { path: '/profile', element: <UserProfile /> }
+        ]
+      },
       {
         path: '/projects',
         element: <PrivateRoute />,

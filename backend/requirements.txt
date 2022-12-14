@@ -2,6 +2,7 @@ asgiref==3.5.2
 astroid==2.12.12
 certifi==2022.9.24
 charset-normalizer==2.1.1
+colorama==0.4.6
 coreapi==2.3.3
 coreschema==0.0.4
 coverage==6.5.0
@@ -23,6 +24,7 @@ MarkupSafe==2.1.1
 mccabe==0.7.0
 mysqlclient==2.1.1
 packaging==21.3
+Pillow==9.3.0
 platformdirs==2.5.2
 pylint==2.15.5
 pylint-django==2.5.3
@@ -35,7 +37,8 @@ ruamel.yaml.clib==0.2.7
 sqlparse==0.4.3
 tomli==2.0.1
 tomlkit==0.11.5
-typing_extensions==4.4.0
+typing-extensions==4.4.0
+tzdata==2022.7
 uritemplate==4.1.1
 urllib3==1.26.12
 wrapt==1.14.1

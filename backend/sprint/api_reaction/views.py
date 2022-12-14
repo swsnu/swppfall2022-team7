@@ -5,9 +5,7 @@ from django.views.decorators.http import require_http_methods
 from drf_yasg.utils import swagger_auto_schema
 
 from utility.custom_decorator import (
-    return_bad_request_if_anonymous,
-    return_bad_request_if_exception,
-    return_bad_request_if_does_not_exist
+    return_bad_request_decorator
 )
 
 from utility.serializers import (
@@ -26,9 +24,7 @@ from .tools.reaction_manage import (
 # Create your views here.
 @api_view(['GET'])
 @require_http_methods(['GET'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
-@return_bad_request_if_exception
+@return_bad_request_decorator
 def reaction(request: Request, comment_id:int):
     '''
     [GET] Get reaction list of the comment
@@ -44,9 +40,7 @@ def reaction(request: Request, comment_id:int):
 )
 @api_view(['POST'])
 @require_http_methods(['POST'])
-@return_bad_request_if_anonymous
-@return_bad_request_if_does_not_exist
-@return_bad_request_if_exception
+@return_bad_request_decorator
 def m_reaction(request: Request, comment_id:int):
     '''
     [POST] Create new reaction for the comment

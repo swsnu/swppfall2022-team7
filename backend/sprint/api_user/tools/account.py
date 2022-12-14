@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate
 from django.db.models import Q
 from django.core.mail import EmailMessage
 
-from model_user.models import UserVerification
+from model_user.models import UserVerification, Image, get_user_model
+from model_project.models import Project, UserProject
 
 def send_email(email: str, title: str, content: str): 
     email = EmailMessage(
@@ -57,10 +58,16 @@ def get_user(data: dict) -> User:
     return user
 
 def convert_user_to_dict(user: User) :
+    image = Image.objects.filter(user=user)
+    if image.exists():
+        image=image.first()
+    else :
+        image=None
     return {
         'email': user.email,
         'username': user.username,
-        'id': user.id
+        'id': user.id,
+        'image': image.image.name if image is not None else ""
     }
 
 def edit_user(data: dict, user: User) -> User :
@@ -79,11 +86,17 @@ def send_invite_email(user_email: str, project) :
     # )
     return
 
-def listup_user_by_query(query: str) :
-    user_list = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username').values()
-    
-    return [{
-        "email": user['email'],
-        "username": user['username'],
-        "id": user['id']
-    } for user in user_list]
+def listup_user_by_query(query: str, project_id = -1) :
+    if project_id != -1 :
+        project = Project.objects.get(id=project_id)
+        user_projects = UserProject.objects.filter(
+            Q(project=project) & 
+            Q(user__is_active=True) & 
+            (Q(user__email__contains=query) | Q(user__username__contains=query))
+        ).select_related('user')
+        user_list = [convert_user_to_dict(user_project.user) for user_project in user_projects]
+    else :
+        users = User.objects.filter((Q(email__contains=query) | Q(username__contains=query)) & Q(is_active=True)).order_by('username')
+        user_list = [convert_user_to_dict(user) for user in users]
+
+    return user_list
