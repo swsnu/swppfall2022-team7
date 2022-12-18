@@ -1,8 +1,9 @@
 import DocUploader from './DocUploader';
-import { fakeDocumentSpaceCard1 } from '@utils/testDummy';
+import { fakeDocumentSpaceCard1, fakeProject1, fakeTask1 } from '@utils/testDummy';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
+import useBindStore from '@store/zustand';
 
 describe('<DocUploader />', () => {
   let AD: JSX.Element;
@@ -17,6 +18,10 @@ describe('<DocUploader />', () => {
     };
   });
   it('should render without error', async () => {
+    const i = useBindStore.getState();
+    i.selectedTask = fakeTask1;
+    i.selectedProject = fakeProject1;
+    useBindStore.setState(i, true);
     axios.get = jest.fn().mockResolvedValueOnce({ data: { username: 'a' } }).mockResolvedValueOnce({ data: { username: 'a' } }).mockResolvedValueOnce({ data: { username: 'a' } });
     axios.post = jest.fn().mockResolvedValueOnce({ data: { id: 3 } });
     const { container } = render(AD);

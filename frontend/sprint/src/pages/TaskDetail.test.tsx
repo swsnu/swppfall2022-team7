@@ -4,8 +4,6 @@ import TaskDetail from './TaskDetail';
 import ReactRouter from 'react-router';
 import useBindStore from '@store/zustand';
 import { fakeProject1, fakeTask1 } from '@utils/testDummy';
-import DocSpaceCollapse from '@components/DocSpaceCollapse';
-import CommentBox from '@components/CommentBox';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
@@ -36,7 +34,7 @@ describe('<DocUploader />', () => {
     i.selectedProject = fakeProject1;
     i.selectedTask = fakeTask1;
     useBindStore.setState(i, true);
-    render(AD);
+    await act(async () => { render(AD); });
     const buttons = screen.getAllByRole('button');
     await act(async () => { fireEvent.click(buttons[0]); });
     await act(async () => { fireEvent.click(screen.getAllByRole('button')[1]); });
@@ -59,7 +57,7 @@ describe('<DocUploader />', () => {
     i.selectedProject = fakeProject1;
     i.selectedTask = fakeTask1;
     useBindStore.setState(i, true);
-    render(AD);
+    await act(async () => { render(AD); });
     const b = screen.getAllByRole('button');
     await act(async () => { fireEvent.click(b[1]); });
     await act(async () => { fireEvent.click(b[1]); });
