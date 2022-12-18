@@ -17,9 +17,6 @@ jest.mock('../components/CommentBox', () => () => {
   return <></>;
 });
 
-DocSpaceCollapse.displayName = 'docspacesollapse';
-CommentBox.displayName = 'CommentBox';
-
 describe('<DocUploader />', () => {
   let AD: JSX.Element;
   beforeAll(() => {

@@ -3,14 +3,12 @@ import { fakeDocumentSpace1, fakeDocumentSpaceCard1, fakeDocumentSpaceCard2 } fr
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 import DocSpaceCollapse from './DocSpaceCollapse';
-import DocUploader from './DocUploader';
 
 jest.useFakeTimers();
 
 jest.mock('./DocUploader', () => () => {
   return <></>;
 });
-DocUploader.displayName = 'asdf';
 
 describe('<DocSpaceCollapse />', () => {
   let AD: JSX.Element;

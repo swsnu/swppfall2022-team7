@@ -36,13 +36,6 @@ jest.mock('../pages/ProjectManage', () => () => {
   return <div>ProjectManage</div>;
 });
 
-TaskDetail.displayName = 'TaskDetail';
-AddTask.displayName = 'AddTask';
-ProjectDocument.displayName = 'ProjectDocument';
-ProjectContribution.displayName = 'projectContrib';
-ProjectCalendar.displayName = 'ProjectCalen';
-ProjectManage.displayName = 'ProjectManage';
-
 describe('<MenuRouter />', () => {
   let AD: JSX.Element;
   beforeAll(() => {

@@ -29,10 +29,6 @@ jest.mock('../components/MyTasks.tsx', () => () => {
   return <div>MyTasks</div>;
 });
 
-NewProjectCard.displayName = 'newProjectcard';
-ProjectCard.displayName = 'ProjectCard';
-MyTasks.displayName = 'MyTasks';
-
 describe('<Home />', () => {
   let AD: JSX.Element;
   function createMockLocalStorage (storage: any): void {

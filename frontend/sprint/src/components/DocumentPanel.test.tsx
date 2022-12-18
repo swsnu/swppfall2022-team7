@@ -3,13 +3,10 @@ import { fakeDocumentSpace1 } from '@utils/testDummy';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 import DocumentPanel from './DocumentPanel';
-import DocUploader from './DocUploader';
 
 jest.mock('./DocUploader', () => () => {
   return <></>;
 });
-
-DocUploader.displayName = 'asdf';
 
 describe('<DocumentPanel />', () => {
   let AD: JSX.Element;

@@ -24,7 +24,8 @@ module.exports = {
     '@typescript-eslint/semi': [2, 'always'],
     '@typescript-eslint/triple-slash-reference': 'off',
     'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-unused-vars': 'off'
+    '@typescript-eslint/no-unused-vars': 'off',
+    'react/display-name': 'off'
   },
   settings: {
     react: {

@@ -11,8 +11,6 @@ jest.mock('./Notification', () => () => {
   return <div>Noti</div>;
 });
 
-Notification.displayName = 'asdf';
-
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
 
