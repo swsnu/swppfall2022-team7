@@ -101,7 +101,7 @@ const TaskDetail: React.FC = () => {
                 {task?.status !== undefined ? <StatusTag status={task?.status} /> : null}
               </div>
               <div className="task-content">
-                <p dangerouslySetInnerHTML={{ __html: taskInfo.content?.replaceAll('\n', '<br/>') ?? '' }} />
+                <p dangerouslySetInnerHTML={{ __html: taskInfo.content?.replace(/\\n/g, '<br/>') ?? '' }} />
               </div>
             </div>
       }

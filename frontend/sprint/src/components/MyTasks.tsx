@@ -58,7 +58,7 @@ const MyTasks: React.FC = () => {
             <List
               dataSource={doneTasks}
               renderItem={(item, i) => (
-                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.project}/tasks/${item.id}`)}>
+                <List.Item key={i} className="my-task-list" onClick={() => navigate(`/projects/${item.projectId}/tasks/${item.id}`)}>
                   <List.Item.Meta
                     title={item.name}
                     description={item.project}

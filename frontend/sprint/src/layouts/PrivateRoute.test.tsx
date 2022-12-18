@@ -1,6 +1,10 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { act, render } from '@testing-library/react';
+import ReactRouter, { MemoryRouter, Route, Routes } from 'react-router';
 import PrivateRoute from './PrivateRoute';
+
+import useBindStore from '@store/zustand';
+import { fakeProject1, fakeUser1 } from '@utils/testDummy';
+import axios from 'axios';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
@@ -12,7 +16,7 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
-describe('project main test', () => {
+describe('<PrivateRoute />', () => {
   function createMockLocalStorage (storage: any): void {
     const localStorageMock = (function () {
       let store: any = storage;
@@ -45,8 +49,22 @@ describe('project main test', () => {
   it('should render without render', () => {
     render(AD);
   });
-  it('if exists token', () => {
+  it('if exists token', async () => {
     createMockLocalStorage({ token: 'asdf' });
-    render(AD);
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    axios.get = jest.fn().mockResolvedValue({ data: { project_list: [fakeProject1] } });
+    const i = useBindStore.getState();
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+  });
+  it('if exists token', async () => {
+    createMockLocalStorage({ token: 'asdf' });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: 'a' });
+    axios.get = jest.fn().mockResolvedValue({ data: { project_list: [fakeProject1] } });
+    const i = useBindStore.getState();
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
   });
 });

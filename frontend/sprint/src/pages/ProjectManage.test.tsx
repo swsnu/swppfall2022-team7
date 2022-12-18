@@ -1,84 +1,18 @@
-import { renderWithProviders } from '@utils/mocks';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import useBindStore from '@store/zustand';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fakeProject1, fakeProject3, fakeUser1, fakeUser2 } from '@utils/testDummy';
+import axios from 'axios';
 import ProjectManage from './ProjectManage';
-import { choi, dummyProjects, DProjectType } from '@utils/testDummy';
-import { fireEvent, screen } from '@testing-library/react';
+import ReactRouter from 'react-router';
 
-const stubInitialState: DProjectType[] = dummyProjects;
+const mockNavigate = jest.fn();
+jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
+jest.spyOn(global.window, 'alert').mockImplementation(() => {});
 
-const stubInitialState2: DProjectType[] = [{
-  id: 1,
-  updatedAt: '1 hour ago',
-  description: 'test',
-  documents: 0,
-  name: 'Summary of Thousand Brains',
-  subject: 'Scientific Tech and Writing',
-  members: [choi],
-  documentSpaces: [],
-  tasks: [
-    {
-      name: 'Task 1',
-      id: 1,
-      updatedAt: '2 days ago',
-      members: [],
-      description: 'Description 1',
-      documentSpaces: [
-        {
-          name: 'Space 1',
-          updatedAt: '1 hour ago',
-          id: 1
-        },
-        {
-          name: 'Space 2',
-          updatedAt: '2022.10.25',
-          id: 2
-        }
-      ],
-      comments: [],
-      dueDate: '',
-      status: ''
-    },
-    {
-      name: 'Task 2',
-      id: 2,
-      updatedAt: '1 hour ago',
-      members: [],
-      description: 'Description 2',
-      documentSpaces: [
-        {
-          name: 'Space 2',
-          updatedAt: '2022.10.25',
-          id: 2
-        },
-        {
-          name: 'Space 3',
-          updatedAt: '2022.10.23',
-          id: 3
-        }
-      ],
-      comments: [],
-      dueDate: '',
-      status: ''
-    }
-  ]
-}];
-
-const mockState = {
-  preloadedState: {
-    project: stubInitialState
-  }
-};
-
-const mockState2 = {
-  preloadedState: {
-    project: stubInitialState2
-  }
-};
-
-describe('project manage page test', () => {
+describe('<ProjectManage />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
-    AD = <MemoryRouter initialEntries={['/1']}><Routes><Route path='/:projectId' element={<ProjectManage />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
+    AD = <ProjectManage />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -86,49 +20,241 @@ describe('project manage page test', () => {
       };
     };
   });
-  it('should be render without render', () => {
-    renderWithProviders(AD, mockState);
+  it('should render without error/handle dissolve', async () => {
+    axios.delete = jest.fn();
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject3;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    const { container } = render(AD);
+    await waitFor(() => { expect(container.getElementsByClassName('invite-email')[0]).not.toBeTruthy(); }); ;
+    const dissolveButton = screen.getAllByRole('button')[2];
+    fireEvent.click(dissolveButton);
+    await waitFor(() => { expect(container.getElementsByClassName('dissolve-desc')[0]).toBeInTheDocument(); });
+    const buttons = screen.getAllByRole('button');
+    const di = screen.getAllByRole('textbox')[2];
+    fireEvent.change(di, { target: { value: 'a' } });
+    await waitFor(() => { expect(buttons[5]).toBeEnabled(); });
+    fireEvent.click(buttons[5]);
+    await waitFor(() => { expect(mockNavigate).toBeCalled(); });
   });
-  it('should be render without render', () => {
-    renderWithProviders(AD, mockState2);
-  });
-  it('should handle invite', () => {
-    renderWithProviders(AD, mockState2);
-    const Addbutton = screen.getByText('Add a new member');
-    fireEvent.click(Addbutton);
-    const emailInput = screen.getAllByRole('combobox');
-    fireEvent.change(emailInput[0], { target: { value: 'poding84@snu.ac.kr' } });
-    const inviteButton = screen.getByText('Invite');
+  it('should handle add new member', async () => {
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject3;
+    useBindStore.setState(i, true);
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    const { container } = render(AD);
+    await waitFor(() => { expect(container.getElementsByClassName('invite-email')[0]).not.toBeTruthy(); });
+    axios.get = jest.fn().mockResolvedValueOnce({ data: [fakeUser1, fakeUser2] }).mockResolvedValueOnce({ data: [fakeUser2] }).mockResolvedValueOnce({ data: fakeProject3 });
+    const addButton = screen.getByText('Add a new member');
+    fireEvent.click(addButton);
+    const emailInput = screen.getByRole('combobox');
+    fireEvent.change(emailInput, { target: { value: 'asdf' } });
+    await waitFor(() => { expect(axios.get).toBeCalled(); });
+    await waitFor(() => { expect(screen.getAllByText('fakeUser2@fake.com')[1]).toBeTruthy(); });
+    const optionButton = screen.getAllByText('fakeUser2@fake.com')[1];
+    await act(async () => { fireEvent.click(optionButton); });
+    const buttons = screen.getAllByRole('button');
+    const inviteButton = buttons[4];
     fireEvent.click(inviteButton);
-    fireEvent.change(emailInput[0], { target: { value: '*' } });
+    axios.put = jest.fn();
+    const confirmButton = buttons[6];
+    axios.delete = jest.fn();
+    await act(async () => { fireEvent.click(confirmButton); });
+  });
+  it('should handle member delete', async () => {
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValueOnce({ data: { fakeProject1 } });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(true);
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const deletes = screen.getAllByText('delete');
+    await act(async () => { fireEvent.click(deletes[0]); });
+  });
+  it('should handle cancel member delete', async () => {
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValueOnce({ data: { fakeProject1 } });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(false);
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const deletes = screen.getAllByText('delete');
+    await act(async () => { fireEvent.click(deletes[0]); });
+  });
+  it('should handle cancel in add new memeber', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const addButton = screen.getByText('Add a new member');
+    fireEvent.click(addButton);
+    const buttons = screen.getAllByRole('button');
+    fireEvent.click(buttons[5]);
+  });
+  it('should handle cancel in dissolve', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const dissolveButton = screen.getAllByRole('button')[2];
+    fireEvent.click(dissolveButton);
+    const buttons = screen.getAllByRole('button');
+    fireEvent.click(buttons[4]);
+  });
+  it('should handle undefined projectId with add', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject3;
+    useBindStore.setState(i, true);
+    const { container } = render(AD);
+    await waitFor(() => { expect(container.getElementsByClassName('invite-email')[0]).not.toBeTruthy(); });
+    axios.get = jest.fn().mockResolvedValueOnce({ data: [fakeUser1, fakeUser2] }).mockResolvedValueOnce({ data: [fakeUser2] }).mockResolvedValueOnce({ data: fakeProject3 });
+    const addButton = screen.getByText('Add a new member');
+    fireEvent.click(addButton);
+    const emailInput = screen.getByRole('combobox');
+    fireEvent.change(emailInput, { target: { value: 'asdf' } });
+    await waitFor(() => { expect(axios.get).toBeCalled(); });
+    await waitFor(() => { expect(screen.getAllByText('fakeUser2@fake.com')[1]).toBeTruthy(); });
+    const optionButton = screen.getAllByText('fakeUser2@fake.com')[1];
+    await act(async () => { fireEvent.click(optionButton); });
+    const buttons = screen.getAllByRole('button');
+    const inviteButton = buttons[4];
     fireEvent.click(inviteButton);
-    const confirmButton = screen.getByText('Confirm');
-    fireEvent.click(confirmButton);
+    axios.put = jest.fn();
+    const confirmButton = buttons[6];
+    axios.delete = jest.fn();
+    await act(async () => { fireEvent.click(confirmButton); });
   });
-  it('should handle invite cancel', () => {
-    renderWithProviders(AD, mockState2);
-    const Addbutton = screen.getByText('Add a new member');
-    fireEvent.click(Addbutton);
-    const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
+  it('should handle undefined projectId in dissolve', async () => {
+    axios.delete = jest.fn();
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject3;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined });
+    await act(async () => { render(AD); });
+    const dissolveButton = screen.getAllByRole('button')[2];
+    await act(async () => { fireEvent.click(dissolveButton); });
+    const buttons = screen.getAllByRole('button');
+    const di = screen.getAllByRole('textbox')[2];
+    await act(async () => { fireEvent.change(di, { target: { value: 'a' } }); });
+    await waitFor(() => { expect(buttons[5]).toBeEnabled(); });
+    await act(async () => { fireEvent.click(buttons[5]); });
   });
-  it('should handle dissolve project', () => {
-    renderWithProviders(AD, mockState2);
-    const dissolveButton = screen.getAllByText('Dissolve Project');
-    fireEvent.click(dissolveButton[1]);
-    const warningInput = screen.getAllByRole('textbox');
-    fireEvent.change(warningInput[0], { target: { value: 'SPRINT' } });
-    const dissolveB = screen.getByText('Dissolve');
-    fireEvent.click(dissolveB);
+  it('should handle undefined projectId in delete', async () => {
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValueOnce({ data: { fakeProject1 } });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(true);
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const deletes = screen.getAllByText('delete');
+    await act(async () => { fireEvent.click(deletes[0]); });
   });
-  it('should handle dissolve project', () => {
-    renderWithProviders(AD, mockState2);
-    const dissolveButton = screen.getAllByText('Dissolve Project');
-    fireEvent.click(dissolveButton[1]);
-    const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
+  it('should handle no delete when not manager', async () => {
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser2;
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    await act(async () => { render(AD); });
   });
-  it('should handle when no params', () => {
-    renderWithProviders(<MemoryRouter initialEntries={['/']}><Routes><Route path='/' element={<ProjectManage />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>, mockState2);
+  it('should handle change project name and subject', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(true);
+    axios.put = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const texts = screen.getAllByRole('textbox');
+    await act(async () => { fireEvent.change(texts[0], { target: { value: 'asdf' } }); });
+    await act(async () => { fireEvent.change(texts[1], { target: { value: 'asdf' } }); });
+    const buttons = screen.getAllByRole('button');
+    await act(async () => { fireEvent.click(buttons[0]); });
+  });
+  it('should handle cancel change project name and subject', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(false);
+    axios.put = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const texts = screen.getAllByRole('textbox');
+    await act(async () => { fireEvent.change(texts[0], { target: { value: 'asdf' } }); });
+    await act(async () => { fireEvent.change(texts[1], { target: { value: 'asdf' } }); });
+    const buttons = screen.getAllByRole('button');
+    await act(async () => { fireEvent.click(buttons[0]); });
+  });
+  it('should handle change project name and subject when projectId undefined', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined });
+    axios.put = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = null;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const texts = screen.getAllByRole('textbox');
+    await act(async () => { fireEvent.change(texts[0], { target: { value: 'asdf' } }); });
+    await act(async () => { fireEvent.change(texts[1], { target: { value: 'asdf' } }); });
+    const buttons = screen.getAllByRole('button');
+    await act(async () => { fireEvent.click(buttons[0]); });
+  });
+  it('should handle leave click', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(true);
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const leave = screen.getByText('leave');
+    await act(async () => { fireEvent.click(leave); });
+  });
+  it('should handle cancel leave click', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(false);
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const leave = screen.getByText('leave');
+    await act(async () => { fireEvent.click(leave); });
+  });
+  it('should handle leave click when projectId undefined', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined });
+    jest.spyOn(global.window, 'confirm').mockReturnValue(true);
+    axios.delete = jest.fn();
+    axios.get = jest.fn().mockResolvedValue({ data: fakeProject1 });
+    const i = useBindStore.getState();
+    i.selectedProject = fakeProject1;
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(async () => { render(AD); });
+    const leave = screen.getByText('leave');
+    await act(async () => { fireEvent.click(leave); });
   });
 });

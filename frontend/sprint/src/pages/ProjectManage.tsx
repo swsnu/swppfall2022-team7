@@ -199,7 +199,6 @@ const ProjectManage: React.FC = () => {
       <Modal
         open={openAdd}
         title={<div style={{ fontWeight: 'bold' }}>Add a new member</div>}
-        onOk={() => { void onAddConfirmClicked(); }}
         onCancel={onAddCancelClicked}
         footer={[
           <Button key="cancel" onClick={onAddCancelClicked}>Cancel</Button>,

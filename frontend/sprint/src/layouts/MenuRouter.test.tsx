@@ -1,22 +1,45 @@
-import { renderWithProviders } from '@utils/mocks';
-import { dummyProjects, DProjectType } from '@utils/testDummy';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import MenuRouter from './MenuRouter';
+import ReactRouter from 'react-router';
+import { render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import TaskDetail from '@pages/TaskDetail';
+import AddTask from '@pages/AddTask';
+import ProjectDocument from '@pages/ProjectDocument';
+import ProjectContribution from '@pages/ProjectContribution';
+import ProjectCalendar from '@pages/ProjectCalendar';
+import ProjectManage from '@pages/ProjectManage';
 
-const stubInitialState: DProjectType[] = dummyProjects;
+const mockNavigate = jest.fn();
+jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
 
-const mockState = { preloadedState: { project: stubInitialState } };
+jest.mock('../pages/TaskDetail', () => () => {
+  return <div>TaskDetail</div>;
+});
 
-const TaskDetail = (): JSX.Element => <div />;
-jest.mock('../pages/TaskDetail', () => TaskDetail);
+jest.mock('../pages/AddTask', () => () => {
+  return <div>AddTask</div>;
+});
 
-const ProjectDocument = (): JSX.Element => <div />;
-jest.mock('../pages/ProjectDocument', () => ProjectDocument);
+jest.mock('../pages/ProjectDocument', () => () => {
+  return <div>ProjectDocument</div>;
+});
+
+jest.mock('../pages/ProjectContribution', () => () => {
+  return <div>ProjectContribution</div>;
+});
+
+jest.mock('../pages/ProjectCalendar', () => () => {
+  return <div>ProjectCalendar</div>;
+});
+
+jest.mock('../pages/ProjectManage', () => () => {
+  return <div>ProjectManage</div>;
+});
 
 describe('<MenuRouter />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
-    jest.useFakeTimers();
+    AD = <MenuRouter />;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -24,28 +47,32 @@ describe('<MenuRouter />', () => {
       };
     };
   });
-  it('should show menu router without taskId', () => {
-    AD = <MemoryRouter initialEntries={['/1/1']}><Routes><Route path="/:projectId/:menuId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router addTask', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'add_task' });
+    await act(async () => { render(AD); });
   });
-  it('should show menu router with taskId', () => {
-    AD = <MemoryRouter initialEntries={['/1/1/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router docs', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'docs' });
+    await act(async () => { render(AD); });
   });
-  it('should show menu router when menuId is add_task', () => {
-    AD = <MemoryRouter initialEntries={['/1/add_task/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router contrib', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'contrib' });
+    await act(async () => { render(AD); });
   });
-  it('should show menu router when menuId is docs', () => {
-    AD = <MemoryRouter initialEntries={['/1/docs/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router cal', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'cal' });
+    await act(async () => { render(AD); });
   });
-  it('should show menu router when menuId is cal', () => {
-    AD = <MemoryRouter initialEntries={['/1/cal/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router settings', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'settings' });
+    await act(async () => { render(AD); });
   });
-  it('should show menu router when menuId is contrib', () => {
-    AD = <MemoryRouter initialEntries={['/1/contrib/1']}><Routes><Route path="/:projectId/:menuId/:taskId" element={<MenuRouter />} /><Route path='*' element={<div />} /></Routes></MemoryRouter>;
-    renderWithProviders(AD, mockState);
+  it('should show menu router task undefined', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'asdf', taskId: undefined });
+    await act(async () => { render(AD); });
+  });
+  it('should show menu router task', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'asdf', taskId: '1' });
+    await act(async () => { render(AD); });
   });
 });
