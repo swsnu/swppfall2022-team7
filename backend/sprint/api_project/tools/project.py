@@ -14,8 +14,7 @@ from model_user.tools.noti_manage import (
 )
 
 from model_user.tools.user_manage import get_user_by_id
-from api_user.tools.account import send_invite_email, convert_user_to_dict
-from api_user.tools.user_detail import get_timetable_of_user
+from api_user.tools.account import send_invite_email
 
 def get_project_list(user: User):
     qs_project_list=UserProject.objects.select_related('project').filter(user=user)
@@ -114,24 +113,3 @@ def delete_project_member(project: Project, member_id: int) :
         
     UserProject.objects.filter(user = member, project = project).delete()
     return
-
-def get_project_timetable(project: Project):
-    userlist = [user.user for user in UserProject.objects.filter(project=project)]
-    tts = [get_timetable_of_user(user) for user in userlist]
-    ret = tts[0]
-    for tt in tts:
-        for i, t in enumerate(tt):
-            for key, val in t['board'].items():
-                if val=='Occupied':
-                    ret[i]['board'][key] = 'Occupied'
-    return ret
-
-def get_project_timetable_detail(project: Project, row: int, col: int):
-    userlist = [user for user in UserProject.objects.filter(project=project)]
-    week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    ret = []
-    for user in userlist:
-        tt = get_timetable_of_user(user)
-        if tt[row]['board'][week[col]] == 'Occupied':
-            ret.append(convert_user_to_dict(user))
-    return ret
