@@ -89,7 +89,6 @@ const ProjectManage: React.FC = () => {
     if (!window.confirm('Do you want to leave this project?')) return;
     if (projectId === undefined) return;
     await deleteMember(parseInt(projectId), userId);
-    await selectProject(parseInt(projectId));
     navigate('/projects');
   };
 

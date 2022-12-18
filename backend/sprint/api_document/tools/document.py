@@ -8,6 +8,8 @@ def get_document_list(docuspace: DocumentSpace):
 
 def create_document(docuspace: DocumentSpace, user_project: UserProject):
     docs = Document.objects.create(space=docuspace)
+    docuspace.head = docs.id
+    docuspace.save()
     push_activity(user_project, None, UserProjectActivity.ActivityType.UPLOAD_DOCUMENT, document=docs)
     return get_document_detail(docs)
 
