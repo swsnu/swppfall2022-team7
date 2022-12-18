@@ -28,7 +28,7 @@ jobs:
     - cd ../..
     - cd backend/sprint
     - pylint **/*.py --load-plugins pylint_django
-    - coverage run --source='.' manage.py test --keepdb
+    - coverage run --source='.' --omit='manage.py','*/wsgi.py','*/asgi.py','*/__init__.py' manage.py test --keepdb
     - coverage xml
     - coveralls --merge=../../frontend/coverage.json
     - cd ../..
