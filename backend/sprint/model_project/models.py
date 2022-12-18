@@ -79,7 +79,7 @@ class UserProjectActivity(models.Model) :
         DOCUMENT_SPACE_RELATED_ACTIVITY = [CREATE_DOCUMENT_SPACE]
 
     user_project = models.ForeignKey(UserProject, on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
     document_space = models.ForeignKey(DocumentSpace, on_delete=models.CASCADE, null=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null = True)

@@ -3,6 +3,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Header from './Header';
 import { act } from 'react-dom/test-utils';
+import useBindStore from '@store/zustand';
+import { fakeUser1 } from '@utils/testDummy';
 
 jest.mock('./Notification', () => () => {
   return <div>Noti</div>;
@@ -69,5 +71,18 @@ describe('<Header />', () => {
     await act(() => { render(AD); });
     const button = screen.getByRole('button');
     await act(async () => { fireEvent.click(button) });
+  });
+  it('should handle userMenu', async () => {
+    createMockLocalStorage({ token: 'asdf' });
+    axios.get = jest.fn().mockResolvedValueOnce({ data: { new_notification_num: 0 } });
+    const i = useBindStore.getState();
+    i.user = fakeUser1;
+    useBindStore.setState(i, true);
+    await act(() => { render(AD); });
+    const user = screen.getByText('F');
+    await act(async () => { fireEvent.click(user); });
+    const buttons = screen.getAllByRole('button');
+    await act(async () => { fireEvent.click(buttons[1]); });
+    await act(async () => { fireEvent.click(buttons[2]); });    
   });
 });

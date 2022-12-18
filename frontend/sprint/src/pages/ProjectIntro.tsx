@@ -1,3 +1,4 @@
+import ProfileModal from '@components/ProfileModal';
 import RandomRole from '@components/RandomRole';
 import SpaceCard from '@components/SpaceCard';
 import UserCard from '@components/UserCard';
@@ -49,10 +50,6 @@ const ProjectIntro: React.FC = () => {
     <>
       <div className="project-intro">
         <div className="project-info">{project?.name}: {project?.subject}</div>
-        {/* <div className="project-header">Description</div>
-        <div className="project-description">
-          {project?.description}
-        </div> */}
         <div className="project-flex">
           <div className="team-members">
             <div className="team-members-title">
@@ -106,6 +103,7 @@ const ProjectIntro: React.FC = () => {
         />
       </div>
       <RandomRole randomIdList={randomIdList} setRandomIdList={setRandomIdList} showModal={showModal} setShowModal={setShowModal} />
+      <ProfileModal />
     </>
   );
 };

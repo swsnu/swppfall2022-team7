@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
 from model_user.tools.user_manage import get_user_by_id
+from api_user.tools.user_detail import get_image_path_of_user
 from utility.custom_decorator import (
     return_bad_request_if_anonymous,
     return_bad_request_if_exception
@@ -32,6 +33,12 @@ from .tools.account import (
 from .tools.notification import (
     get_notification_list,
     get_notification_list_short
+)
+
+from .tools.user_detail import (
+    upload_profile,
+    get_profile,
+    delete_profile
 )
 
 from .serializers import (
@@ -84,7 +91,8 @@ def signin(request: Request):
             "token" : token,
             "id" : user.id,
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            'image': get_image_path_of_user(user)
         })
     return Response(status=401)
 
@@ -134,6 +142,12 @@ def info(request: Request, user_id:int):
 def auto_compelete(request: Request, query: str) :
     return Response(status=200, data=listup_user_by_query(query))
 
+@api_view(['GET'])
+@require_http_methods(['GET'])
+@return_bad_request_if_anonymous
+def auto_compelete_member(request: Request, project_id: int, query: str) :
+    return Response(status=200, data=listup_user_by_query(query, project_id))
+
 
 @require_http_methods(['GET'])
 def timetable(request, user_id:int):
@@ -164,23 +178,31 @@ def noti(request: Request):
 def noti_short(request: Request, num: int):
     return Response(status=200, data=get_notification_list_short(request.user, num))
 
+@api_view(['GET'])
 @require_http_methods(['GET'])
-def image(request, user_id:int):
+@return_bad_request_if_anonymous
+def image(request):
     '''
     [GET] Get the image of the user
     '''
-    # TODO
-    return HttpResponse(status=200)
+    get_profile(request.user)
+    return Response(status=200, data=convert_user_to_dict(request.user))
 
-@require_http_methods(['POST', 'PUT', 'DELETE'])
-def m_image(request, user_id:int):
+@api_view(['POST', 'DELETE'])
+@require_http_methods(['POST', 'DELETE'])
+@return_bad_request_if_anonymous
+def m_image(request: Request):
     '''
     [POST] Set User image
     [PUT] Change User image
     [DELETE] Delete User image
     '''
-    # TODO
-    return HttpResponse(status=200)
+    if request.method == 'POST':
+        upload_profile(request.user, request.data["image"])
+        return Response(status=201, data=convert_user_to_dict(request.user))
+    elif request.method == 'DELETE':
+        delete_profile(request.user)
+        return Response(status=204)
 
 @ensure_csrf_cookie
 @require_http_methods(['GET'])

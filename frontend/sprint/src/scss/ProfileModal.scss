@@ -1,0 +1,31 @@
+.user-profile-modal{
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  .name{
+    margin-top: 24px;
+    text-align: center;
+    font-size: 24px;
+  }
+  .email{
+    margin-top: 5px;
+    text-align: center;
+    font-size: 15px;
+    color: grey;
+  }
+  .profile-image:before { 
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: none;
+    transition: all .2s linear;
+    font-size: 24px;
+    z-index: 2;
+  }
+}

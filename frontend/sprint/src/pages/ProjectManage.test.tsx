@@ -7,6 +7,7 @@ import ReactRouter from 'react-router';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
+jest.spyOn(global.window, 'alert').mockImplementation(() => {});
 
 describe('<ProjectManage />', () => {
   let AD: JSX.Element;

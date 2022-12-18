@@ -106,7 +106,7 @@ class ProjectTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = client.get(url2, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 404)
 
     def test_m_project_detail(self):
         client = Client()
@@ -145,7 +145,7 @@ class ProjectTestCase(TestCase):
 
         response = client.put(url2, data = json.dumps({
         }), content_type='application/json', **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 404)
 
         response = client.delete(url3)
 
@@ -156,13 +156,13 @@ class ProjectTestCase(TestCase):
         # Wrong Method Test
         response = client.get(url)
         self.assertEqual(response.status_code, 405)
-        # Right Test
+        # Right Test good
         response = client.put(url)
         self.assertEqual(response.status_code, 401)
 
         client = self.login(client)
         response = client.put(url2, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 404)
 
         response = client.put(url, **{'HTTP_AUTHORIZATION': "Token " + self.token1})
         self.assertEqual(response.status_code, 201)
