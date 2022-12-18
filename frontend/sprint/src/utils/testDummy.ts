@@ -92,7 +92,7 @@ export const fakeDocumentSpaceCard2: DocumentSpaceCardType = {
 
 export const fakeTask1: TaskType = {
   assignee: fakeUser1,
-  content: 'a',
+  content: 'the asdfasdf asd asdf asdfasdfads f \n asdfasdfasdf',
   createdAt: 'a',
   id: 1,
   name: 'a',

@@ -15,7 +15,7 @@ jest.mock('../components/CommentBox', () => () => {
   return <></>;
 });
 
-describe('<DocUploader />', () => {
+describe('<TaskDetail />', () => {
   let AD: JSX.Element;
   beforeAll(() => {
     AD = <TaskDetail />;
