@@ -18,12 +18,6 @@ const SignUp: React.FC = () => {
     password !== ''
   );
   const handleSignup = async (): Promise<void> => {
-    const re = /^\S+@\S+$/;
-    const isValidEmail = re.test(email);
-    if (!isValidEmail) {
-      await message.error('Invalid email');
-      return;
-    }
     setLoading(true);
     try {
       await signUp(name, email, password);
