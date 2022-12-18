@@ -5,10 +5,13 @@ import Header from './Header';
 import { act } from 'react-dom/test-utils';
 import useBindStore from '@store/zustand';
 import { fakeUser1 } from '@utils/testDummy';
+import Notification from './Notification';
 
 jest.mock('./Notification', () => () => {
   return <div>Noti</div>;
 });
+
+Notification.displayName = 'asdf';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
@@ -35,7 +38,7 @@ describe('<Header />', () => {
     });
   }
   beforeAll(() => {
-    AD = <MemoryRouter><Routes><Route path="" element={<Header />} /></Routes></MemoryRouter>;
+    AD = <MemoryRouter><Routes><Route path='' element={<Header />} /></Routes></MemoryRouter>;
     global.matchMedia = global.matchMedia ?? function () {
       return {
         addListener: jest.fn(),
@@ -61,16 +64,16 @@ describe('<Header />', () => {
     axios.get = jest.fn().mockResolvedValue({ data: { new_notification_num: 5 } });
     await act(() => { render(AD); });
     const button = screen.getByRole('button');
-    await act(async () => { fireEvent.click(button) });
+    await act(async () => { fireEvent.click(button); });
     const nbutton = screen.getByRole('button');
-    await act(async () => { fireEvent.click(button) });
+    await act(async () => { fireEvent.click(button); });
   });
   it('should handle noti when no noti', async () => {
     createMockLocalStorage({ token: 'asdf' });
     axios.get = jest.fn().mockResolvedValue({ data: { new_notification_num: 0 } });
     await act(() => { render(AD); });
     const button = screen.getByRole('button');
-    await act(async () => { fireEvent.click(button) });
+    await act(async () => { fireEvent.click(button); });
   });
   it('should handle userMenu', async () => {
     createMockLocalStorage({ token: 'asdf' });
@@ -83,6 +86,6 @@ describe('<Header />', () => {
     await act(async () => { fireEvent.click(user); });
     const buttons = screen.getAllByRole('button');
     await act(async () => { fireEvent.click(buttons[1]); });
-    await act(async () => { fireEvent.click(buttons[2]); });    
+    await act(async () => { fireEvent.click(buttons[2]); });
   });
 });

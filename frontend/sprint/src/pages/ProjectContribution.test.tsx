@@ -25,7 +25,7 @@ describe('<ProjectContribution />', () => {
     axios.get = jest.fn().mockResolvedValueOnce({ data: [fakeQuest1] }).mockResolvedValueOnce({ data: [fakeTimeline1] });
     const i = useBindStore.getState();
     i.selectedProject = fakeProject1;
-    i.quest = [fakeQuest1]
+    i.quest = [fakeQuest1];
     render(AD);
   });
 });

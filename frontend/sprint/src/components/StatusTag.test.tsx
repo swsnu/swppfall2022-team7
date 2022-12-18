@@ -16,7 +16,7 @@ describe('<StatusTag />', () => {
     };
   });
   it('should render on-going', async () => {
-    AD = <MemoryRouter initialEntries={['/1']} ><Routes><Route element={<StatusTag status="on-going"/>} path='/:taskId'/></Routes></MemoryRouter>;
+    AD = <MemoryRouter initialEntries={['/1']} ><Routes><Route element={<StatusTag status='on-going'/>} path='/:taskId'/></Routes></MemoryRouter>;
     axios.put = jest.fn();
     axios.get = jest.fn().mockResolvedValue({ data: fakeTask1 });
     render(AD);
@@ -25,7 +25,7 @@ describe('<StatusTag />', () => {
     await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1); });
   });
   it('should render done', async () => {
-    AD = <MemoryRouter initialEntries={['/1']} ><Routes><Route element={<StatusTag status="done" />} path='/:taskId'/></Routes></MemoryRouter>;
+    AD = <MemoryRouter initialEntries={['/1']} ><Routes><Route element={<StatusTag status='done' />} path='/:taskId'/></Routes></MemoryRouter>;
     axios.put = jest.fn();
     axios.get = jest.fn().mockResolvedValue({ data: fakeTask1 });
     render(AD);
@@ -34,7 +34,7 @@ describe('<StatusTag />', () => {
     await waitFor(() => { expect(useBindStore.getState().selectedTask).toEqual(fakeTask1); });
   });
   it('should render without taskId', async () => {
-    AD = <StatusTag status="done"/>;
+    AD = <StatusTag status='done'/>;
     axios.put = jest.fn();
     axios.get = jest.fn().mockResolvedValue({ data: fakeTask1 });
     render(AD);

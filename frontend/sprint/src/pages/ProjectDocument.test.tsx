@@ -34,7 +34,7 @@ describe('<ProjectDocument />', () => {
     const addButton = screen.getAllByRole('button')[0];
     await act(async () => { fireEvent.click(addButton); });
     const spacename = screen.getByRole('textbox');
-    await act(async () => { fireEvent.change(spacename, { target: { value: "testspacename" } }); });
+    await act(async () => { fireEvent.change(spacename, { target: { value: 'testspacename' } }); });
     const okbutton = screen.getAllByRole('button')[4];
     await act(async () => { fireEvent.click(okbutton); });
   });
@@ -49,7 +49,7 @@ describe('<ProjectDocument />', () => {
     const addButton = screen.getAllByRole('button')[0];
     await act(async () => { fireEvent.click(addButton); });
     const spacename = screen.getByRole('textbox');
-    await act(async () => { fireEvent.change(spacename, { target: { value: "testspacename" } }); });
+    await act(async () => { fireEvent.change(spacename, { target: { value: 'testspacename' } }); });
     const okbutton = screen.getAllByRole('button')[3];
     await act(async () => { fireEvent.click(okbutton); });
   });
@@ -65,8 +65,8 @@ describe('<ProjectDocument />', () => {
     const addButton = screen.getAllByRole('button')[0];
     await act(async () => { fireEvent.click(addButton); });
     const spacename = screen.getByRole('textbox');
-    await act(async () => { fireEvent.change(spacename, { target: { value: "testspacename" } }); });
-    await act(async () => { fireEvent.keyPress(spacename, { key: 'p', code: 112, charCode: 112 }); })
-    await act(async () => { fireEvent.keyPress(spacename, { key: 'Enter', code: 13, charCode: 13 }); })
+    await act(async () => { fireEvent.change(spacename, { target: { value: 'testspacename' } }); });
+    await act(async () => { fireEvent.keyPress(spacename, { key: 'p', code: 112, charCode: 112 }); });
+    await act(async () => { fireEvent.keyPress(spacename, { key: 'Enter', code: 13, charCode: 13 }); });
   });
 });

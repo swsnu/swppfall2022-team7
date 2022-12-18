@@ -1,9 +1,11 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import axios from 'axios';
 import TaskDetail from './TaskDetail';
 import ReactRouter from 'react-router';
 import useBindStore from '@store/zustand';
 import { fakeProject1, fakeTask1 } from '@utils/testDummy';
+import DocSpaceCollapse from '@components/DocSpaceCollapse';
+import CommentBox from '@components/CommentBox';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
@@ -14,6 +16,9 @@ jest.mock('../components/DocSpaceCollapse', () => () => {
 jest.mock('../components/CommentBox', () => () => {
   return <></>;
 });
+
+DocSpaceCollapse.displayName = 'docspacesollapse';
+CommentBox.displayName = 'CommentBox';
 
 describe('<DocUploader />', () => {
   let AD: JSX.Element;

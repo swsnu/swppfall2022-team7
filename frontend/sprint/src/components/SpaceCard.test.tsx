@@ -16,11 +16,11 @@ describe('<SpaceCard />', () => {
     };
   });
   it('should render space card', async () => {
-    AD = <SpaceCard name="tester" email="test@test.com" />;
+    AD = <SpaceCard name='tester' email='test@test.com' />;
     render(AD);
   });
   it('should handle onClick', async () => {
-    AD = <SpaceCard name="tester" email="test@test.com" />;
+    AD = <SpaceCard name='tester' email='test@test.com' />;
     const { container } = render(AD);
     await act(async () => { fireEvent.click(container.getElementsByClassName('member-card-container')[0]); });
   });

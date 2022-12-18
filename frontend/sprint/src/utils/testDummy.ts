@@ -23,8 +23,20 @@ export const fakeReaction1: ReactionType = {
 };
 
 export const fakeReaction2: ReactionType = {
-  created_at: 'a',
+  created_at: 'b',
   emoji: 'heart',
+  user: fakeUser2
+};
+
+export const fakeReaction3: ReactionType = {
+  created_at: 'v',
+  emoji: 'bad',
+  user: fakeUser2
+};
+
+export const fakeReaction4: ReactionType = {
+  created_at: 'd',
+  emoji: 'eyes',
   user: fakeUser2
 };
 
@@ -202,10 +214,10 @@ export const fakeNoti2: NotificationType = {
 
 export const fakeQuest1: QuestContribType = {
   board: {
-    "Complete a task": 'Done',
-    "Compose a comment": 'On Going',
-    "React to a comment": 'Done',
-    "Upload a document": 'On Going'
+    'Complete a task': 'Done',
+    'Compose a comment': 'On Going',
+    'React to a comment': 'Done',
+    'Upload a document': 'On Going'
   },
   user: fakeUser1
 };

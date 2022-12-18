@@ -33,9 +33,9 @@ describe('test Login page', () => {
     AD = <MemoryRouter><Login /></MemoryRouter>;
   });
   it('should handle login success', async () => {
-    axios.post = jest.fn().mockResolvedValue({ data: { token: "1", ...fakeUser1 } });
+    axios.post = jest.fn().mockResolvedValue({ data: { token: '1', ...fakeUser1 } });
     localStorage.setItem = jest.fn();
-    createMockLocalStorage({ token: "a" });
+    createMockLocalStorage({ token: 'a' });
     render(AD);
     const email = screen.getByPlaceholderText('Example@snu.ac.kr');
     const password = screen.getByPlaceholderText('Password');

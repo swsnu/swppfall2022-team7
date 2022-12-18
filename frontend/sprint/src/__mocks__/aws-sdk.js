@@ -1,10 +1,8 @@
 class ManagedUpload {
-  constructor() {};
   promise = jest.fn();
 };
 
 class MockS3 {
-  constructor() {};
   getSignedUrl = jest.fn();
   listObjects = jest.fn().mockImplementationOnce((params, callback) => {
     callback(null, { Contents: [{ Key: 'file1.csv' }] });
@@ -16,7 +14,7 @@ class MockS3 {
 MockS3.ManagedUpload = ManagedUpload;
 
 class MockCognitoIdentityCredentials {
-  constructor() {
+  constructor () {
     this.k = 'a';
   };
 };

@@ -1,9 +1,9 @@
-import useBindStore from "@store/zustand";
-import { fakeComment1, fakeComment2, fakeTask1, fakeUser1 } from "@utils/testDummy";
-import CommentBox from "./CommentBox";
+import useBindStore from '@store/zustand';
+import { fakeComment1, fakeComment2, fakeTask1, fakeUser1 } from '@utils/testDummy';
+import CommentBox from './CommentBox';
 import ReactRouter from 'react-router';
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import axios from "axios";
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import axios from 'axios';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));

@@ -1,3 +1,6 @@
+import MyTasks from '@components/MyTasks';
+import NewProjectCard from '@components/NewProjectCard';
+import ProjectCard from '@components/ProjectCard';
 import useBindStore from '@store/zustand';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { fakeProject1, fakeProject2 } from '@utils/testDummy';
@@ -14,17 +17,21 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate
 }));
 
-jest.mock('../components/NewProjectCard.tsx', () => ()=> {
+jest.mock('../components/NewProjectCard.tsx', () => () => {
   return <div>newProjectCard</div>;
 });
 
-jest.mock('../components/ProjectCard.tsx', () => ()=> {
+jest.mock('../components/ProjectCard.tsx', () => () => {
   return <div>ProjectCard</div>;
 });
 
-jest.mock('../components/MyTasks.tsx', () => ()=> {
+jest.mock('../components/MyTasks.tsx', () => () => {
   return <div>MyTasks</div>;
 });
+
+NewProjectCard.displayName = 'newProjectcard';
+ProjectCard.displayName = 'ProjectCard';
+MyTasks.displayName = 'MyTasks';
 
 describe('<Home />', () => {
   let AD: JSX.Element;

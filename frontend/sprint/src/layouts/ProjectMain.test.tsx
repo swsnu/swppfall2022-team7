@@ -5,6 +5,8 @@ import { Route, Routes, MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
 import ProjectMain from './ProjectMain';
 import { fakeProject1, fakeProject2 } from '@utils/testDummy';
+import { act } from 'react-dom/test-utils';
+import ReactRouter from 'react-router';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
@@ -49,5 +51,14 @@ describe('ProjectMain Test', () => {
     const nButtons = screen.getAllByRole('menuitem');
     fireEvent.click(nButtons[2]);
     await waitFor(() => { expect(mockNavigate).toBeCalled(); });
+  });
+  it('should render without error', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: undefined, menuId: undefined, taskId: undefined });
+    const i = useBindStore.getState();
+    i.projects = fakeProjects;
+    useBindStore.setState(i, true);
+    axios.get = jest.fn().mockResolvedValue(fakeProjectReturn);
+    AD = <ProjectMain />;
+    await act(async () => { render(AD); });
   });
 });

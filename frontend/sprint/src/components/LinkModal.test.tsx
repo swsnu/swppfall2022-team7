@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import axios from 'axios';
-import { fakeDocumentSpace1, fakeDocumentSpace2, fakeProject1, fakeTask1 } from '@utils/testDummy';
+import { fakeDocumentSpace1, fakeDocumentSpace2, fakeTask1 } from '@utils/testDummy';
 import useBindStore from '@store/zustand';
 import { act } from 'react-dom/test-utils';
 import LinkModal from './LinkModal';

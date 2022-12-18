@@ -39,4 +39,3 @@ describe('<Notification />', () => {
     await act(async () => { fireEvent.click(noti[0]); });
   });
 });
-

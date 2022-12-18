@@ -1,12 +1,9 @@
-import moment from 'moment';
 import ProjectCalendar from './ProjectCalendar';
-import ReactRouter from 'react-router';
 import { render } from '@testing-library/react';
 import useBindStore from '@store/zustand';
 import { fakeProject1 } from '@utils/testDummy';
 
 const now = new Date();
-const nowDate = moment(now).format('YYYY-MM-DD');
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));

@@ -2,11 +2,17 @@ import MenuRouter from './MenuRouter';
 import ReactRouter from 'react-router';
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import TaskDetail from '@pages/TaskDetail';
+import AddTask from '@pages/AddTask';
+import ProjectDocument from '@pages/ProjectDocument';
+import ProjectContribution from '@pages/ProjectContribution';
+import ProjectCalendar from '@pages/ProjectCalendar';
+import ProjectManage from '@pages/ProjectManage';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({ ...jest.requireActual('react-router'), useNavigate: () => mockNavigate }));
 
-jest.mock('../pages/TaskDetail', () => ()=> {
+jest.mock('../pages/TaskDetail', () => () => {
   return <div>TaskDetail</div>;
 });
 
@@ -29,6 +35,13 @@ jest.mock('../pages/ProjectCalendar', () => () => {
 jest.mock('../pages/ProjectManage', () => () => {
   return <div>ProjectManage</div>;
 });
+
+TaskDetail.displayName = 'TaskDetail';
+AddTask.displayName = 'AddTask';
+ProjectDocument.displayName = 'ProjectDocument';
+ProjectContribution.displayName = 'projectContrib';
+ProjectCalendar.displayName = 'ProjectCalen';
+ProjectManage.displayName = 'ProjectManage';
 
 describe('<MenuRouter />', () => {
   let AD: JSX.Element;
@@ -66,7 +79,7 @@ describe('<MenuRouter />', () => {
     await act(async () => { render(AD); });
   });
   it('should show menu router task', async () => {
-    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'asdf', taskId: "1" });
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ menuId: 'asdf', taskId: '1' });
     await act(async () => { render(AD); });
   });
 });

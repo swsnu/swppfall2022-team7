@@ -60,4 +60,8 @@ describe('<MyTask />', () => {
     const task = screen.getByRole('listitem');
     fireEvent.click(task);
   });
+  it('should handle userId null', async () => {
+    localStorage.clear();
+    render(AD);
+  });
 });

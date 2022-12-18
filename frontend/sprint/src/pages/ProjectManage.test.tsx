@@ -1,8 +1,8 @@
-import useBindStore from "@store/zustand";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { fakeProject1, fakeProject3, fakeUser1, fakeUser2 } from "@utils/testDummy";
-import axios from "axios";
-import ProjectManage from "./ProjectManage";
+import useBindStore from '@store/zustand';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fakeProject1, fakeProject3, fakeUser1, fakeUser2 } from '@utils/testDummy';
+import axios from 'axios';
+import ProjectManage from './ProjectManage';
 import ReactRouter from 'react-router';
 
 const mockNavigate = jest.fn();
@@ -28,14 +28,14 @@ describe('<ProjectManage />', () => {
     useBindStore.setState(i, true);
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ projectId: '1' });
     const { container } = render(AD);
-    await waitFor(() => { expect(container.getElementsByClassName('invite-email')[0]).not.toBeTruthy(); });;
+    await waitFor(() => { expect(container.getElementsByClassName('invite-email')[0]).not.toBeTruthy(); }); ;
     const dissolveButton = screen.getAllByRole('button')[2];
     fireEvent.click(dissolveButton);
     await waitFor(() => { expect(container.getElementsByClassName('dissolve-desc')[0]).toBeInTheDocument(); });
     const buttons = screen.getAllByRole('button');
     const di = screen.getAllByRole('textbox')[2];
     fireEvent.change(di, { target: { value: 'a' } });
-    await waitFor(() => { expect(buttons[5]).toBeEnabled() });
+    await waitFor(() => { expect(buttons[5]).toBeEnabled(); });
     fireEvent.click(buttons[5]);
     await waitFor(() => { expect(mockNavigate).toBeCalled(); });
   });
@@ -54,14 +54,14 @@ describe('<ProjectManage />', () => {
     await waitFor(() => { expect(axios.get).toBeCalled(); });
     await waitFor(() => { expect(screen.getAllByText('fakeUser2@fake.com')[1]).toBeTruthy(); });
     const optionButton = screen.getAllByText('fakeUser2@fake.com')[1];
-    await act( async () => { fireEvent.click(optionButton); });
+    await act(async () => { fireEvent.click(optionButton); });
     const buttons = screen.getAllByRole('button');
     const inviteButton = buttons[4];
     fireEvent.click(inviteButton);
     axios.put = jest.fn();
     const confirmButton = buttons[6];
     axios.delete = jest.fn();
-    await act( async () => { fireEvent.click(confirmButton); });
+    await act(async () => { fireEvent.click(confirmButton); });
   });
   it('should handle member delete', async () => {
     axios.delete = jest.fn();
@@ -126,14 +126,14 @@ describe('<ProjectManage />', () => {
     await waitFor(() => { expect(axios.get).toBeCalled(); });
     await waitFor(() => { expect(screen.getAllByText('fakeUser2@fake.com')[1]).toBeTruthy(); });
     const optionButton = screen.getAllByText('fakeUser2@fake.com')[1];
-    await act( async () => { fireEvent.click(optionButton); });
+    await act(async () => { fireEvent.click(optionButton); });
     const buttons = screen.getAllByRole('button');
     const inviteButton = buttons[4];
     fireEvent.click(inviteButton);
     axios.put = jest.fn();
     const confirmButton = buttons[6];
     axios.delete = jest.fn();
-    await act( async () => { fireEvent.click(confirmButton); });
+    await act(async () => { fireEvent.click(confirmButton); });
   });
   it('should handle undefined projectId in dissolve', async () => {
     axios.delete = jest.fn();
@@ -148,7 +148,7 @@ describe('<ProjectManage />', () => {
     const buttons = screen.getAllByRole('button');
     const di = screen.getAllByRole('textbox')[2];
     await act(async () => { fireEvent.change(di, { target: { value: 'a' } }); });
-    await waitFor(() => { expect(buttons[5]).toBeEnabled() });
+    await waitFor(() => { expect(buttons[5]).toBeEnabled(); });
     await act(async () => { fireEvent.click(buttons[5]); });
   });
   it('should handle undefined projectId in delete', async () => {

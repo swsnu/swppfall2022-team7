@@ -1,5 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 import useBindStore from '@store/zustand';
@@ -52,7 +51,7 @@ describe('<UserProfile />', () => {
     i.user = fakeUser1;
     useBindStore.setState(i, true);
     const { container } = render(AD);
-    const file = new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" });
+    const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
     const upload = container.getElementsByTagName('input')[0];
     await act(async () => { userEvent.upload(upload, file); });
     const username = container.getElementsByTagName('input')[1];
@@ -80,7 +79,7 @@ describe('<UserProfile />', () => {
     i.user = fakeUser1;
     useBindStore.setState(i, true);
     const { container } = render(AD);
-    const file = new File(["(⌐□_□)"], "chucknorris", { type: "asdf" });
+    const file = new File(['(⌐□_□)'], 'chucknorris', { type: 'asdf' });
     const upload = container.getElementsByTagName('input')[0];
     await act(async () => { userEvent.upload(upload, file); });
   });
